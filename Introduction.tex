@@ -97,11 +97,12 @@ Lambdas werden auch als Closures, anonyme Functions oder Blocks genannt. Lambdas
 Closures können auf lokale Variablen zugreifen. Das bedeutet dass eine Closure auf alle Variablen im aktuellen Kontext zugriff haben. In der Sprache Ruby werden Closures unter anderem mit geschwungenen Klammeren erstellt. \cite[]{fow04} 
 
 \begin{lstlisting}[
-	caption={\cite[]{fow04}},
+	caption={},
 	label=listing:closures
 ]
 	File.open(filename) {|f| doSomethingWithFile(f)}
 \end{lstlisting}
+\cite[]{fow04}
 
 In Listing \ref{listing:closures} wird eine Datei vom lokalem Filesystem geöffnet. Die Funktion open in der File Klasse akzeptiert einen Block als Argument. Die Funktion open öffnet die Datei, führt den angegebenen Block aus und schließt nach Ausführung des Blocks die Datei. Blöcke können unter anderem in Transaktionen verwendet werden. \cite[]{fow04}
 
