@@ -1,14 +1,14 @@
 \subsection{Reactor Pattern}
 \label{section:Reactor Pattern}
 
-Das Reactor Pattern ist ein Design Pattern bei dem asynchrone auftretende Events, synchron abgearbeitet werden können. Eingehnde Nachrichten/Events von mehreren Clients werden sequentiell abgearbeitet. Dadurch werden Event getriebene Applicationen vereinfacht da das demultiplexen der einzelnen Events vom Reactor übernommen wird. \cite[p. 1]{Sch95}
+Das Reactor Pattern ist ein Design Pattern bei dem asynchrone auftretende Events, synchron abgearbeitet werden können. Dabei werden eingehende Nachrichten/Events von mehreren Clients werden sequentiell abgearbeitet. Dadurch werden Event getriebene Applicationen vereinfacht da das demultiplexen der einzelnen Events vom Reactor übernommen wird. \cite[p. 1]{Sch95}
 
 
 \subsubsection{Motivation}
 
-Douglas C. Schmidt beschreibt einen Anwendungsfall für das Reactor Pattern, bei dem Logging Informationen in einem Verteilten System an einen zentralen Server gesendet und gespeichert werden. Der Server soll in der Lage sein Logging informationen zu jederzeit speichern zu können und Logging Informationen können auch von mehreren Clients gleichzeitig an den Server gesendet werden. Jeder Client besitzt hierbei einen eigenen I/O Handler. Der Server akzeptiert neue Verbindungen über einen eigenen I/O handler. Auf einem Single Threaded Server kann ein I/O Read Vorgang den Response von anderen Clients verzögern da das Lesen und Schreiben den Thread blockiert. \cite[p. 1]{Sch95}
+Douglas C. Schmidt beschreibt einen Anwendungsfall für das Reactor Pattern, bei dem Logging Informationen in einem Verteilten System an einen zentralen Server gesendet und gespeichert werden. Der Server soll in der Lage sein Logging informationen zu jederzeit speichern zu können und Logging Informationen können auch von mehreren Clients gleichzeitig an den Server gesendet werden. Der Server akzeptiert neue Verbindungen über einen eigenen I/O handler. Auf einem Single Threaded Server kann ein I/O Read Vorgang den Response von anderen Clients verzögern da das Lesen und Schreiben den Thread blockiert. \cite[p. 1]{Sch95}
 
-Eine Möglichkeit Problem zu lösen ist Multithreading. Laut D. Schmidt birgt die Lösung jedoch einige Nachteile \cite[p. 2]{Sch95}:
+Eine Möglichkeit dieses Problem zu lösen ist Multithreading. Laut D. Schmidt birgt diese Lösung jedoch folgende Nachteile \cite[p. 2]{Sch95}:
 
 \begin{itemize}
   \item Benötigt ein komplexes concurrency Schema
@@ -18,7 +18,9 @@ Eine Möglichkeit Problem zu lösen ist Multithreading. Laut D. Schmidt birgt di
 
 Die Nachteile 2 und 3 können 20 Jahre nach dem erscheinen dieses Papers als hinfällig angesehen werden. (TODO: Ask if I can write this sentense) Das Problem Nummer 1 mit dem komplexen concurrency Schema bei der Verwendung von Multithreading bleibt bis heute bestehen. 
 
-Das Reactor Pattern implementiert eine Event Loop welche sich um das event demultiplexen und das event handler dispatchen kümmert. Durch das Reactor Pattern wird eine enge Koppelung zwischen unabhängigen Teilen der Applikation und Applikations abhängigen teilen gelöst. Dadurch werden die Tief liegenden und komplexen Componenten wie das Demultiplexing von Events von der Event Loop übernommen und der Programmierer kann sich auf die eigentliche Applikation konzentrieren. \cite[p. 2]{Sch95}
+Das Reactor Pattern implementiert eine Event Loop welche sich um das event demultiplexen und das event handler dispatchen kümmert. 
+
+Durch das Reactor Pattern wird eine enge Koppelung zwischen unabhängigen Teilen der Applikation und Applikations abhängigen teilen gelöst. Dadurch werden die Tief liegenden und komplexen Componenten wie das Demultiplexing von Events von der Event Loop übernommen und der Programmierer kann sich auf die eigentliche Applikation konzentrieren. \cite[p. 2]{Sch95}
 
 
 \subsubsection{Reactor - Design Pattern}
