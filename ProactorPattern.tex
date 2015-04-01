@@ -3,4 +3,65 @@
 
 Das Proactor Pattern ist ein Designpattern um asynchrone Events durch einem Pool von einem oder mehreren Threads zu bearbeiten. Durch das verwenden von Threads kann das Proactor Pattern Anfragen parallel verarbeiten. 
 
+\subsubsection{Motivation}
+Das Proactor Pattern kann als eine Erweiterung des Reaktor Pattern verstanden werden. Der unterschied zwischen Proactor und Reactor ist dass das Reactor Pattern die I/O Operationen im eigenen Thread ausführt und das Proactor Pattern die I/O Operationen an das Betriebssystem weiterleitet. Dabei wartet das Proactor Pattern auf Callback Funktionen und das Reactor Pattern wartet auf Events. \cite[p. 7]{CZY2009}
+
+Das Reactor Pattern findes seine Anwendung in Applikationen welche davon profitieren asynchrone Operationen gleichzeitig auszuführen. Durch das Reactor Pattern können Applikationen entwickelt werden welche keine Rücksicht auf die Beschränkungen (TODO: write about constraints of reactive/multithreaded programming) von Multithreaded Programming nehmen. (Die Einschränkungen von Multithreading werden in \ref{subsection: multithreading pitfalls} näher erläutert.) \cite[p. 1]{Sch97}
+
+\subsubsection{Funktionsweise}
+
+Der Initialisierungsvorgang:
+
+(TODO: write about initialisation)
+\cite[p. 3]{Sch97})
+
+
+Die Funktionsweise eines Webservers welcher mit dem Proaktor Patterns implementiert ist wird in 8 Schritten unterteilt: 
+(TODO: Add Image from \cite[p. 4]{Sch97})
+
+1: Der Client sendet einen HTTP GET Request (z.B. index.html)(TODO: ask Hannes if should i write about HTTP GET Requests) an den Webserver.  
+
+2: Das Betriebssystem beendet den Lesevorgang des HTTP Requests und ruft die Completion Dispatch Methode auf. 
+
+3: Der Completion Dispatcher benachrichtigt den HTTP Handler, dass es einen neuen HTTP Get Request gibt. 
+
+4: Der HTTP Handler analysiert den HTTP Request.
+
+5: Der HTTP Handler liest die Datei index.html synchron vom Dateisystem ein.
+
+6: Der HTTP Handler initialisiert eine asynchrone Operation um die Datei in die Client Connection zu schreiben. Dabei gibt er sich selbst als Completion Handler an. Weiters referenziert der HTTP Handler den Completion Dispatcher, welcher benachrichtigt wird, wenn die Datei an den Client geschrieben worden ist. 
+
+7: Wenn der Schreibvorgang abgeschlossen ist wird der Completion Dispatcher benachrichtigt. 
+
+8: Der Completion Dispatcher benachrichtigt den Completion Handler. 
+
+
 \subsubsection{Anwendungsgebiete}
+
+Doughlas C. Schmidt et al. beschreibt folgende Anwendungesgebiete für das Proaktor Pattern \cite[p. 5]{Sch97}):
+
+\begin{itemize}
+  \item Die Applikation muss eine oder mehrere asynchrone Operationen ausführen ohne den Thread zu Blockieren.
+  \item Die Applikation muss benachrichtigt werden wenn eine asynchrone Operation beendet ist. 
+  \item Die Applikation profitiert von einer losen Koppelung zwischen der abhängigen und unabhängigen Logik der Applikation
+  \item Die Applikation ist mit Multithreading oder dem Reactor Pattern implementiert und liefert eine schlechte Performance. 
+\end{itemize}
+
+\subsubsection{Struktur des Patterns}
+
+(TODO: add image \cite[Figure 8]{Sch97}))
+
+\empf{Proactive Initiators initiates operation}
+	Der Proaktiv Initiator registriert die asynchronous operation processor, den Completion Dispatcher und den Completion Handler. 
+
+\empf{Asynchronous Operation Processor}
+	
+
+
+
+Im folgenden wird das Proactor Design Pattern in der OTM Notation vorgestellt. \footnote[0]{Mehr Informationen zur OTM Notation: \url{http://www.uml.org/}}
+
+(TODO: add image \cite[Figure 7]{Sch97}))
+
+\emph{Proactor Initiator}
+	Der Proactor Initiator ist der Teil des Proactor Patterns welcher asynchrone Operationen initialisiert. Der Initiator erstellt den \emph{Completion Dispatcher}, welcher ein asynchrone Operation beinhaltet. Des weiteren erstellt er 
