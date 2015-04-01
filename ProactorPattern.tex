@@ -6,7 +6,7 @@ Das Proactor Pattern ist ein Designpattern um asynchrone Events durch einem Pool
 \subsubsection{Motivation}
 Das Proactor Pattern kann als eine Erweiterung des Reaktor Pattern verstanden werden. Der unterschied zwischen Proactor und Reactor ist dass das Reactor Pattern die I/O Operationen im eigenen Thread ausführt und das Proactor Pattern die I/O Operationen an das Betriebssystem weiterleitet. Dabei wartet das Proactor Pattern auf Callback Funktionen und das Reactor Pattern wartet auf Events. \cite[p. 7]{CZY2009}
 
-Das Reactor Pattern findes seine Anwendung in Applikationen welche davon profitieren asynchrone Operationen gleichzeitig auszuführen. Durch das Reactor Pattern können Applikationen entwickelt werden welche keine Rücksicht auf die Beschränkungen (TODO: write about constraints of reactive/multithreaded programming) von Multithreaded Programming nehmen. (Die Einschränkungen von Multithreading werden in \ref{subsection: multithreading pitfalls} näher erläutert.) \cite[p. 1]{Sch97}
+Das Proactor Pattern findes seine Anwendung in Applikationen welche davon profitieren asynchrone Operationen gleichzeitig auszuführen. Durch das Reactor Pattern können Applikationen entwickelt werden welche keine Rücksicht auf die Beschränkungen (TODO: write about constraints of reactive/multithreaded programming) von Multithreaded Programming nehmen. (Die Einschränkungen von Multithreading werden in \ref{subsection: multithreading pitfalls} näher erläutert.) \cite[p. 1]{Sch97}
 
 \subsubsection{Funktionsweise}
 
@@ -55,7 +55,7 @@ Doughlas C. Schmidt et al. beschreibt folgende Anwendungesgebiete für das Proak
 	Der Proaktiv Initiator registriert die asynchronous operation processor, den Completion Dispatcher und den Completion Handler. 
 
 \emph{Asynchronous Operation Processor}
-	
+
 
 
 

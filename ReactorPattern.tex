@@ -3,6 +3,8 @@
 
 Das Reactor Pattern ist ein Design Pattern bei dem asynchrone auftretende Events, synchron abgearbeitet werden können. Dabei werden eingehende Nachrichten/Events von mehreren Clients werden sequentiell abgearbeitet. Dadurch werden Event getriebene Applicationen vereinfacht da das demultiplexen der einzelnen Events vom Reactor übernommen wird. \cite[p. 1]{Sch95}
 
+Die Hauptidee hinter dem Reactor Pattern ist die von Non-Blocking operationen. Der Reactor versendet Benachrichtigungen wenn eine operation abgearbeitet werden kann ohne dass er den Hauptthread blockiert wird.
+
 
 \subsubsection{Motivation}
 
@@ -44,8 +46,12 @@ Im folgenden wird das Reactor Design Pattern in der OTM Notation vorgestellt. \f
 \subsubsection{Funktionsweise}
 Event Handler werden beim eintreten eines Events aufgerufen. Diese Events werden über Callback Methoden auf die jeweiligen Betriebssystem I/O Handlern gebunden. Um einen Eventhandler mit dem Reactor zu verbinden muss die Subklasse von Event Handler die Methode \emph{getHandler()} implementieren. Bei der Initialisierung ruft der Reactor die \emph{getHandler()} Methode auf und benutzt diese um auf ein Ereignis zu warten. Der Reactor verwaltet eine Liste mit allen registrieren Event Handler und beim eintreten eines Events löst er das Ereignis aus und ruft die registrierte Callback Funktion auf \cite[p. 5]{Sch95}. (TODO: refactor)
 
-
+(TODO: what is thread blocking)
 (TODO: Add Image)
+
+Ein Beispiel für das Reactor Pattern ist die Kommunikation zwischen einem File System und der Applikation.
+
+
 
 
 \subsubsection{Anwendungsgebiete}
