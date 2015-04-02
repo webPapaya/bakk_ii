@@ -17,12 +17,24 @@ Prozess ist eine squentielle folge von Operationen welche keinen Speicher mit an
 Threads sind Prozesse die sequentiell abgearbeitet werden jedoch den selben Speicher verwenden. \cite[p. 2]{Lee06} Es gibt Applikationen welche Threads
 
 
-
-
-
 \subsection{Probleme bei verwendung von Multithreading}
 
 \subsection{Race Conditions}
+
+In mehrere parallel laufende Prozessen mit einem geteilten Speicher können Race Conditions auftreten, wenn dies Prozesse probieren auf die selbe Speicherstelle zu schreiben. Das kann zu unerwarteten Resultaten in der Programmierung führen wie der folgende Pseudocode zeigt. \ref[]{Net92}
+
+\begin{lstlisting}[
+	caption={},
+	label=listing:race_conditions
+]
+if x == 10
+	# Ein anderer Prozess verändert die Variable x auf 12
+	puts x # Output ist 12 
+end
+\end{lstlisting}
+
+In Listing \ref{listing:race_conditions} ist zu sehen, dass durch einen anderen Prozess die Variable x auf einen anderen Wert gesetzt wird. Ob dieses Verhalten auftritt ist vom internen Scheduling der Prozesse abhängig. \ref[]{Net92}
+
 
 \subsection{Deadlocks}
 
@@ -59,8 +71,6 @@ Das \emph{Dining Philosophers Problem} kann auf die Informatik angewendet werden
 
 
 \subsection{Context Switching}
-
-
 
 \url{https://wiki.haskell.org/Parallelism_vs._Concurrency}
 
