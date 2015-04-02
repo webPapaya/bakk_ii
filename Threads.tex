@@ -1,6 +1,54 @@
 \section{Threads}
 \label{section: Threads}
 
+
+(TODO: maybe cover those topics:)
+https://www.wikiwand.com/en/Parallel_Virtual_Machine
+https://www.wikiwand.com/de/Message_Passing_Interface
+http://www.open-mpi.org/
+
+
+
+Prozess ist eine squentielle folge von Operationen welche keinen Speicher mit anderen Operationen teilen. (TODO: add to own subheading - maybe to introduction)
+
+
+(TODO: was ist eine operation was ist ein prozess)
+
+Threads sind Prozesse die sequentiell abgearbeitet werden jedoch den selben Speicher verwenden. \cite[p. 2]{Lee06} Es gibt Applikationen welche Threads
+
+
+
+
+
+
+
+
+\subsection{Probleme bei verwendung von Multithreading}
+
+\subsection{Race Conditions}
+
+\subsection{Deadlocks}
+
+\subsubsection{The Dining Philosophers Problem}
+
+\blockquote[{\footcite[S. 21]{dij71}}]{
+	Five pholosophers numberd 0 through 4 are living in a house where the table laid for them, each philosopher has his own place hat the table. Their only problem - besides those of philosophy - is that the dish served is very difficult kind of spaghetti, that has to be eaten with two forks. There are two forks next to each plate, so that presents no difficulty: as a consequence, however, no two neighbours may be eating simultaniously.
+} 
+
+
+Edsger Dijkstra beschreibt in seiner Thesis ``Hierarchical ordering of sequential processes'' das Problem des Deadlocks. Dabei geht er von einem Haus aus in dem 5 Philosophen wohnen, die gemeinsam auf einem runden Tisch sitzen. Jeder Philosoph hat seinen eigenen Sessel und seinen eigenen Teller. 
+
+
+
+\cite[p. 21]{dij71}
+
+
+
+
+\subsection{Context Switching}
+
+
+
 \url{https://wiki.haskell.org/Parallelism_vs._Concurrency}
 
 Green Threads vs System Threads
