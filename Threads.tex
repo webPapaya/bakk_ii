@@ -31,16 +31,30 @@ Threads sind Prozesse die sequentiell abgearbeitet werden jedoch den selben Spei
 
 \subsubsection{The Dining Philosophers Problem}
 
+Edsger Dijkstra beschreibt in seiner Thesis ``Hierarchical ordering of sequential processes'' das Problem des Deadlocks. Dabei beschreibt er folgendes problem:
+
 \begin{quote}
 	Five pholosophers numberd 0 through 4 are living in a house where the table laid for them, each philosopher has his own place hat the table. Their only problem - besides those of philosophy - is that the dish served is very difficult kind of spaghetti, that has to be eaten with two forks. There are two forks next to each plate, so that presents no difficulty: as a consequence, however, no two neighbours may be eating simultaniously. \cite[p. 21]{dij71}
 \end{quote} 
 
+Alle Philosophen sind mit ihren Gedanken so beschäftigt, dass sie nicht miteinander kommunizieren können. Damit einer der Philosophen essen kann benötigt er beide Gabeln. Eine mögliche Reihenfolge der Operationen die nötig sind damit ein Philosoph essen kann lauten wie folgt \cite[p. 21]{dij71}:
 
-Edsger Dijkstra beschreibt in seiner Thesis ``Hierarchical ordering of sequential processes'' das Problem des Deadlocks. Dabei geht er von einem Haus aus in dem 5 Philosophen wohnen, die gemeinsam auf einem runden Tisch sitzen. Jeder Philosoph hat seinen eigenen Sessel und seinen eigenen Teller. 
+\begin{itemize}
+  \item Denke nach
+  \item Ist der Philosoph nicht hungrig? Gehe zu Schritt 1
+  \item Ist die rechte Gabel nicht frei, Gehe zu Schritt 1
+  \item Nimm die rechte Gabel
+  \item Ist die linke Gabel nicht frei, Denke Nach und wiederhole diesen Schritt
+  \item Nimm die linke Gabel
+  \item Esse
+  \item Lege rechte Gabel auf den Tisch  
+  \item Lege linke Gabel auf den Tisch
+  \item Gehe zu Schritt 1
+\end{itemize}
 
+Das Problem bei dieser Implementierung ist die Möglichkeit eines Deadlocks. Dieses kann entstehen wenn alle Philosophen zur gleichen Zeit hungrig werden und die jeweils rechte Gabel in die Hand nehmen. Nachdem die jeweils linke Gabel vom rechten Philosophen bereits besetzt ist, denken alle Philosophen so lange nach bis die rechte Gabel frei wird. In diesem Zustand wird keiner der Philosophen jemals satt werden \cite[p. 21]{dij71}. 
 
-
-\cite[p. 21]{dij71}
+Das \emph{Dining Philosophers Problem} kann auf die Informatik angewendet werden bei dem mehrere parallel laufende Threads auf einen geteilten Speicher warten der vom jeweilig anderen Thread blockiert wird. 
 
 
 
