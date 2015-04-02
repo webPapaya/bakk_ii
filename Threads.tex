@@ -20,18 +20,17 @@ Threads sind Prozesse die sequentiell abgearbeitet werden jedoch den selben Spei
 
 
 
-
-
-
 \subsection{Probleme bei verwendung von Multithreading}
 
 \subsection{Race Conditions}
 
 \subsection{Deadlocks}
 
+In einem Deadlock befinden sich mehrere Prozesse die jeweils auf eine Ressource warten, welche vom jeweilig anderen Prozess gesperrt ist. \cite[p. 1]{Jah04}
+
 \subsubsection{The Dining Philosophers Problem}
 
-Edsger Dijkstra beschreibt in seiner Thesis ``Hierarchical ordering of sequential processes'' das Problem des Deadlocks. Dabei beschreibt er folgendes problem:
+Edsger Dijkstra beschreibt in seiner Thesis \emph{Hierarchical ordering of sequential processes} das Problem des Deadlocks anhand 5 Philosophen die gemeinsam an einem Tisch sitzen. Dabei beschreibt er folgendes problem:
 
 \begin{quote}
 	Five pholosophers numberd 0 through 4 are living in a house where the table laid for them, each philosopher has his own place hat the table. Their only problem - besides those of philosophy - is that the dish served is very difficult kind of spaghetti, that has to be eaten with two forks. There are two forks next to each plate, so that presents no difficulty: as a consequence, however, no two neighbours may be eating simultaniously. \cite[p. 21]{dij71}
