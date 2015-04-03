@@ -26,7 +26,7 @@ In mehrere parallel laufende Prozessen mit einem geteilten Speicher können Race
 	label=listing:race_conditions
 ]
 if x == 10
-	# Ein anderer Prozess verändert die Variable x auf 12
+	# Ein anderer Prozess veraendert die Variable x auf 12
 	puts x # Output ist 12 
 end
 \end{lstlisting}
@@ -66,6 +66,8 @@ Das Problem bei dieser Implementierung ist die Möglichkeit eines Deadlocks. Die
 Das \emph{Dining Philosophers Problem} kann auf die Informatik angewendet werden bei dem mehrere parallel laufende Threads auf einen geteilten Speicher warten der vom jeweilig anderen Thread blockiert wird. 
 
 \subsection{Threadsafety}
+
+
 
 
 \subsection{Context Switching}
