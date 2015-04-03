@@ -1,0 +1,20 @@
+\section{Asynchrone Programmierung}
+
+In diesem Kapitel wird der Begriff Asynchrone Programmierung anhand eines Beispiels erklärt. Dabei werden unterschiedliche Modelle miteinander verglichen um den Begriff asynchrone Programmierung zu erklären.
+
+In dem Beispiel sollten drei voneinander unabhängige Aufgaben von einem Computer ausgeführt werden. Alle drei Aufgaben müssen abgeschlossen sein, damit das Program abgeschlossen ist \cite[]{Pet2015}. 
+
+\subsection{Das Synchrone Model}
+
+In diesem Model werden alle drei Tasks sequentiell abgearbeitet. Dabei wird die erste Aufgabe gestartet und sobald die erste Aufgabe abgeschlossen ist wird die zweite Aufgabe gestartet. Werden die drei Aufgaben sequentiell abgearbeitet so kann man davon ausgehen, dass das Programm zu Ende ist sobald die letzte Aufgabe abgeschlossen wurde \cite[]{Pet2015}.
+
+(TODO: add image)
+
+\subsection{Das Asynchrone Model}
+
+In diesem Model werden einzelne Operationen in kleinere Sektionen verpackt. Angenommen der Task 1 ist verantwortlich um auf Eingaben des Benutzers zu reagieren, so könnte das synchrone Model diese Eingaben nur in der ersten Phase annehmen. In den restlichen 2 drittel der Laufzeit könnten so keine Eingaben von einem Benutzer erfolgen.
+
+Ein Grund warum das asynchrone Model schneller sein kann als das synchrone Model sind I/O Operationen die den Prozess blockieren\ref{subsection: io_operationen}. Möchte die Aufgabe 2 eine Datei von der Festplatte einlesen so versetzt das den Prozess in einen Ruhezustand bis die Datei fertig eingelesen wurde. In einem synchronen Program können in dieser Zeit keine weiteren Operationen ausgeführt werden. Die Idee der asynchronen Programmierung ist diese Zeit zu nutzen um andere Aufgaben in der Zwischenzeit zu erledigen \cite[]{Pet2015}. 
+
+Asynchrone Programmierung führt eine Aufgabe so lange aus bis diese entweder abgeschlossen ist, oder blockiert. Dadurch können asynchrone Programme schneller sein als synchrone, weil sich diese weniger Zeit im Ruhezustand befinden.  
+
