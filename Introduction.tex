@@ -25,14 +25,8 @@ Eine Applikation ist performant wenn diese einem EndbenutzerIn ein Aufgabe ausf�
   \item \emph{Ressourcenverbauch:} Wie viel Prozent der Verfügbaren Ressourcen eine Applikation verwendet. 
 \end{itemize}
 
-
-
-
 (TODO: Threads add Time Slicing)
 Durch Time-Slicing kann eine pseudo Parallelität auf einem einzelnen Prozessor erreicht werden. Durch diese Definition schließt sich, dass eine richtige Parallelität nur dann existiert wenn mehrere Aufgaben auf der selben Anzahl an Prozessorkernen ausgeführt werden. 
-
-
-
 
 
 
@@ -62,8 +56,9 @@ Im allgemeinen können Operationen auf einem Computer in folgenden Umgebungen au
   \item Unterschiedliche Maschinen in einem Distributed System
 \end{itemize}
 
-Das Hauptziel von paralleler Programierung ist nach Robert Pike das gleichzeitige oder simultane ausführen von Operationen auf zwei oder mehreren CPUs.\cite[]{Pik2013} Parallelität kann demnach nur auf den Umgebungen 2-4 auftreten. 
- 
+Das Hauptziel von paralleler Programierung ist nach Robert Pike das gleichzeitige oder simultane ausführen von Operationen auf zwei oder mehreren CPUs.\cite[]{Pik2013} Parallelität kann demnach nur auf den Umgebungen 2-4 auftreten.
+
+Das gleichzeitige Ausführen von Operationen kann zu einer Steigerung der Performance einer Applikation führen \cite[p. 18]{Can08}. 
 
 \subsection{Concurrency vs. Parallelismus}
 
@@ -74,22 +69,8 @@ In der Literatur finden sich unterschiedliche Definitionen über Parallelismus u
 In dieser Thesis wird von Parallelität gesprochen wenn zwei Aufgaben auf zwei CPU parallel abgearbeitet werden. Virtueller Parallelismus bei dem Threads durch Time-Slicing abwechselnd ausgeführt werden, wird in dieser Thesis nicht als Parallelismus bezeichnet. Von Concurrency wird in dieser Thesis gesprochen wenn mindestens zwei Operationen auf der CPU sequenziell oder abwechselnd abgearbeitet werden.
 
 
-
 \subsection{Performance}
 (TODO: write/refactor)
-
-Das gleichzeitige Ausführen von Operationen kann zu einer Steigerung der Performance einer Applikation führen. Die Steigerung von Performance kann in drei Kategorien unterteilt werden \cite[p. 18]{Can08}:
-
-\emph{Reduzierte Latenzen}
-	Eine Aufgabe wird in schneller ausgeführt indem sie in kleinere Aufgaben unterteilt wird, welche gleichzeitig abgearbeitet werden können. \cite[p. 18]{Can08}
-
-\emph{Latenzen verstecken}
-	Lang andauernde Aufgaben werden gebündelt und abgearbeitet. Gleichzeitig können andere Aufgaben abgearbeitet werden bis die lang andauernden Aufgaben erledigt sind. Dies kann besonders bei Netzwerk oder Festplatten Operationen sinnvoll sein da diese ansonsten den Programfluss blockeren können.
-
-\emph{Die Menge an verarbeiteten Daten pro Zeiteinheit zu veringern}
-	Wenn mehrere Tasks gleichzeitig Ausgeführt werden kann die Menge an verarbeiten Daten pro Zeiteinheit erhöht werden.	
-
-In verteilten Systemen wie Web Applikationen ist die parallele Ausführung ein essentieller Bestandteil \cite[p. 14]{Erb2012}. 
 
 Teile einer Applikation welche keinen gemeinsamen Status besitzen und sequentiell abgearbeitet werden können mit wenig Aufwand parallel ausgeführt werden. \cite[p. 18]{Can08}
 
@@ -115,7 +96,6 @@ Für einen modernen Webserver müssen folgende Bedingungen erfüllt sein \cite[p
 (TODO: write Section)
 
 \subsection{Asynchrone Programmierung}
-
 
 
 (TODO: write Section)
@@ -156,33 +136,32 @@ In Listing \ref{listing:closures} wird eine Datei vom lokalem Filesystem geöffn
 
 
 
-(TODO: write Section)
+
 
 \subsubsection{Why I/O Speed Matters}
-\begin{tabu} to \textwidth {XXXX}
-   \toprule
-   \textbf{I/O Operation}                                                                                  & \textbf{Zeit in Nanosekunden} & \textbf{Zeit in ns mal 1 Mrd.} & \textbf{Vergleichswert}                                    &  \\ \midrule
-Holen aus dem L1 Cache                                                                                  & 0.5 ns                        & 0.5 s                          & Ein Herzschlag                                             &  \\
-\begin{tabular}[c]{@{}l@{}}Führe eine typische \\ Operation auf der CPU aus\end{tabular}                & 1 ns                          & 1 s                            & (TODO: finde Vergleich)                                    &  \\
-Holen aus dem L2 Cache                                                                                  & 7 ns                          & 7 s                            & Gähnen                                                     &  \\
-Mutex lock/unlock                                                                                       & 25 ns                         & 25 s                           & einen Kaffee Zubereiten                                    &  \\
-Holen vom Arbeitsspeicher                                                                               & 100 ns                        & 100 s                          & Zähneputzen                                                &  \\
-\begin{tabular}[c]{@{}l@{}}Sende 2K Bytes über \\ ein 1Gbps Netzwerk\end{tabular}                       & 20,000 ns                     & 5.5 h                          & mehr als ein halber Arbeitstag                             &  \\
-SSD random read                                                                                         & 150,000 ns                    & 1,7 d                          & ein Wochenende                                             &  \\
-\begin{tabular}[c]{@{}l@{}}Lese 1 MB sequentiell \\ vom Arbeitsspeicher\end{tabular}                    & 250,000 ns                    & 2.9 d                          & ein verlängertes Wochenende                                &  \\
-\begin{tabular}[c]{@{}l@{}}Round Trip Time im \\ selben Datencenter\end{tabular}                        & 500,000 ns                    & 5.8 d                          & Eine kurze Reise                                           &  \\
-\begin{tabular}[c]{@{}l@{}}Lese 1 MB sequentiell \\ von einer SSD\end{tabular}                          & 1,000,000 ns                  & 11.6 d                         & Eine lange Reise                                           &  \\
-\begin{tabular}[c]{@{}l@{}}Suche auf einer normalen \\ Festplatte\end{tabular}                          & 10,000,000 ns                 & 16.5 kw                        & Ein Semester an der Universität                            &  \\
-\begin{tabular}[c]{@{}l@{}}Lese 1 MB sequentiell von \\ einer Festplatte\end{tabular}                   & 20,000,000 ns                 & 7.8 m                          & Jänner bis ende August                                     &  \\
-\begin{tabular}[c]{@{}l@{}}Auf der Festplatte eine 1 \\ MB große Datei suchen \\ und lesen\end{tabular} & 21,000,000 ns                 & 1 y                            & Ein Jahr                                                   &  \\
-\begin{tabular}[c]{@{}l@{}}Sende ein Packet von Europa \\ nach Amerika und wieder zurück\end{tabular}   & 150,000,000 ns                & 4.8 y                          & Bachelor + Master an der FH Salzburg in Mindeststudienzeit &  \\
-   \bottomrule
-\end{tabu}
+Die Nachfolgende Tabelle gibt einen groben Überblick wie lange einzelne I/O Operationen benötigen. Diese Tabelle beruht auf keinen wissenschaftlichen Quellen und sollte lediglich als grobe Referenz für die Dauer von I/O Operationen dienen. Diese Tabelle beruht auf den Zahlen von Peter Norvig \cite[]{Nor98} einem Director of Research bei Google und den Vergleichen des Github Benutzers hellerbarde \cite[]{Gis15}: 
 
+(TODO: check table if it fits on the page)
+(TODO: ask Hannes if i can add this to my thesis)
 
+\begin{table}[h]
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{I/O Operation}                                     & \textbf{Zeit in Nanosekunden} & \textbf{Zeit in ns mal 1 Mrd.} & \textbf{Vergleichswert}                                    &  \\ \midrule
+Holen aus dem L1 Cache                                     & 0.5 ns                        & 0.5 s                          & Ein Herzschlag                                             &  \\
+Führe eine typische Operation auf der CPU aus              & 1 ns                          & 1 s                            & (TODO: finde Vergleich)                                    &  \\
+Holen aus dem L2 Cache                                     & 7 ns                          & 7 s                            & Gähnen                                                     &  \\
+Mutex lock/unlock                                          & 25 ns                         & 25 s                           & einen Kaffee Zubereiten                                    &  \\
+Holen vom Arbeitsspeicher                                  & 100 ns                        & 100 s                          & Zähneputzen                                                &  \\
+Sende 2K Bytes über ein 1Gbps Netzwerk                     & 20,000 ns                     & 5.5 h                          & mehr als ein halber Arbeitstag                             &  \\
+SSD random read                                            & 150,000 ns                    & 1,7 d                          & ein Wochenende                                             &  \\
+Lese 1 MB sequentiell vom Arbeitsspeicher                  & 250,000 ns                    & 2.9 d                          & ein verlängertes Wochenende                                &  \\
+Round Trip Time im selben Datencenter                      & 500,000 ns                    & 5.8 d                          & Eine kurze Reise                                           &  \\
+Lese 1 MB sequentiell von einer SSD                        & 1,000,000 ns                  & 11.6 d                         & Eine lange Reise                                           &  \\
+Suche auf einer normalen Festplatte                        & 10,000,000 ns                 & 16.5 kw                        & Ein Semester an der Universität                            &  \\
+Lese 1 MB sequentiell von einer Festplatte                 & 20,000,000 ns                 & 7.8 m                          & Jänner bis ende August                                     &  \\
+Auf der Festplatte eine 1 MB große Datei suchen und lesen  & 21,000,000 ns                 & 1 y                            & Ein Jahr                                                   &  \\
+Sende ein Packet von Europa nach Amerika und wieder zurück & 150,000,000 ns                & 4.8 y                          & Bachelor + Master an der FH Salzburg in Mindeststudienzeit &  \\ \bottomrule
+\end{tabular}
+\end{table}
 
-
-
-
-
-(TODO: add statistiks about Disk I/O, Network I/O, Memory I/O)
