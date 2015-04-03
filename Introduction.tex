@@ -160,9 +160,8 @@ In Listing \ref{listing:closures} wird eine Datei vom lokalem Filesystem geöffn
 
 \subsubsection{Why I/O Speed Matters}
 
+\begin{tabular*}{\textwidth}{c @{\extracolsep{\fill}} ccccc}
 
-\begin{table}[h]
-\begin{tabular}{@{}lllll@{}}
 \toprule
 \textbf{I/O Operation}                                                                                  & \textbf{Zeit in Nanosekunden} & \textbf{Zeit in ns mal 1 Mrd.} & \textbf{Vergleichswert}                                    &  \\ \midrule
 Holen aus dem L1 Cache                                                                                  & 0.5 ns                        & 0.5 s                          & Ein Herzschlag                                             &  \\
@@ -179,8 +178,8 @@ SSD random read                                                                 
 \begin{tabular}[c]{@{}l@{}}Lese 1 MB sequentiell von \\ einer Festplatte\end{tabular}                   & 20,000,000 ns                 & 7.8 m                          & Jänner bis ende August                                     &  \\
 \begin{tabular}[c]{@{}l@{}}Auf der Festplatte eine 1 \\ MB große Datei suchen \\ und lesen\end{tabular} & 21,000,000 ns                 & 1 y                            & Ein Jahr                                                   &  \\
 \begin{tabular}[c]{@{}l@{}}Sende ein Packet von Europa \\ nach Amerika und wieder zurück\end{tabular}   & 150,000,000 ns                & 4.8 y                          & Bachelor + Master an der FH Salzburg in Mindeststudienzeit &  \\ \bottomrule
-\end{tabular}
-\end{table}
+\end{tabular*}
+
 
 
 (TODO: add statistiks about Disk I/O, Network I/O, Memory I/O)
