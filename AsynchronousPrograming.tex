@@ -18,17 +18,18 @@ Im synchronen Model werden Aufgaben sequentiell abgearbeitet. Dabei wird eine In
 
 Im asynchronen Model kehren Aufgaben sofort zum Ursprung zurück ohne dass die Aufgabe tatsächlich abgeschlossen ist. In der Zwischenzeit kann die Applikation weitere Aufgaben ausführen. 
 
+\subsection{Das blockierenden und synchrone Model}
+Im blockierenden und synchronen Model werden einzelne Operationen sequentiell abgearbeitet. Wird in diesem Model eine I/O Operation an das Betriebssystem geschickt, wird der Prozess so lange pausiert bis die I/O Operation abgeschlossen ist. Dannach wird der Programfluss weiter ausgeführt bis die nächste I/O Operation auftritt oder das Programm terminiert. Durch das blockierende und synchrone Model wird die CPU nicht optimal ausgelastet. In vielen Applikationen spielen I/O Operationen nur eine nebensächliche Rolle. Im Bereich der Webserver sind I/O Operationen jedoch ein wichtiger Bestandteil wodurch dieses Model für den Einsatz bei Webserver nur bedingt geeignet ist \cite[p. 48]{Erb2012}. 
 
-\subsection{Das blockierenden und synchron Model}
-Im blockierenden und synchronen Model werden einzelne Operationen sequentiell abgearbeitet. Wird in diesem Model eine I/O Operation an das Betriebssystem geschickt, wird der Prozess so lange pausiert bis die I/O Operation abgeschlossen ist. Dannach wird 
+\subsection{Das nicht blockierende synchrone Model}
+Bei diesem Model werden I/O Operationen nicht blockiert. Das bedeutet, dass eine I/O Operation an das Betriebssystem gesendet wird und sofort zur aufrufenden Methode zurückkehrt. Nachdem die Daten der I/O Operation zum aktuellen Zeitpunkt noch nicht fertig eingelesen wurde muss die Applikation auf das einlesen warten. Nachdem die Applikation einen synchronen Programfluss besitzt, muss die Applikation auf das einlesen der Daten warten. Das nicht blockierende synchrone Model führt zu unnötigen Ressourcenverbauch da die Applikation zwar prinzipiell nicht blockiert, jedoch trotzdem auf die I/O Operation warten muss. Eine Möglichkeit der Implementierung wäre eine Schleife zu verwenden welche abbricht, wenn die I/O Operation abgeschlossen ist.\cite[p. 48]{Erb2012}
 
+\subsection{Das blockierende asynchrone Model}
+(TODO: write section, write about unix select(), poll(), etc.) 
 
+\subsection{Das nicht blockierende asynchrone Model}
+Beim nicht blockierenden asynchronen Model kehrt der I/O aufruf sofort an die aufrufende Funktion zurück. Ist die I/O Operation abgeschlossen wird entweder ein Ereignis getriggert oder eine Callback Funktion ausgeführt. Durch das nicht blockierende asynchrone Model wird die I/O Operation direkt im Kernel des Betriebssystems abgearbeitet. Dadurch kann die Applikation die Zeit in der die I/O Operation ausgeführt wird für andere Aufgaben nutzen.
 
+Ein Grund warum das asynchrone nicht blockierende Model schneller sein kann als die beiden synchronen Modelle sind I/O Operationen die den Prozess blockieren\ref{subsection: io_operationen}. Angenommen eine Applikation möchte 2 Aufgaben erledigen bei der die erste Aufgabe eine Datei vom Dateisystem einliest. Im Falle der beiden synchronen Modelle müssten die Aufgabe 1 auf das fertige Einlesen der Datei warten. Dies kann entweder auf Kernelebene Funktionieren (= synchrones blockierendes Model) oder auf Applikationsebene (= synchrones nicht blockierendes Model) passieren. 
 
-
-In diesem Model werden einzelne Operationen in kleinere Sektionen verpackt. Angenommen der Task 1 ist verantwortlich um auf Eingaben des Benutzers zu reagieren, so könnte das synchrone Model diese Eingaben nur in der ersten Phase annehmen. In den restlichen 2 drittel der Laufzeit könnten so keine Eingaben von einem Benutzer erfolgen.
-
-Ein Grund warum das asynchrone Model schneller sein kann als das synchrone Model sind I/O Operationen die den Prozess blockieren\ref{subsection: io_operationen}. Möchte die Aufgabe 2 eine Datei von der Festplatte einlesen so versetzt das den Prozess in einen Ruhezustand bis die Datei fertig eingelesen wurde. In einem synchronen Program können in dieser Zeit keine weiteren Operationen ausgeführt werden. Die Idee der asynchronen Programmierung ist diese Zeit zu nutzen um andere Aufgaben in der Zwischenzeit zu erledigen \cite[]{Pet2015}. 
-
-Asynchrone Programmierung führt eine Aufgabe so lange aus bis diese entweder abgeschlossen ist, oder blockiert. Dadurch können asynchrone Programme schneller sein als synchrone, weil sich diese weniger Zeit im Ruhezustand befinden.  
-
+Im asynchronen nicht blockierenden Model kann die Applikation die Aufgabe 1 ausführen bis die operation blockiert. Während der Kernel die Datei einliest kann die Applikation die Aufgabe 2 ausführen und nach dem terminieren der Aufgabe 2 wird die Aufgabe 1 abgeschlossen. Dadurch macht das Program immer eine fortschritt ohne dass es auf auf Daten vom Kernel warten muss.
