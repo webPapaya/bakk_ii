@@ -1,16 +1,30 @@
 \section{Asynchrone Programmierung}
 
-In diesem Kapitel wird der Begriff Asynchrone Programmierung anhand eines Beispiels erklärt. Dabei werden unterschiedliche Modelle miteinander verglichen um den Begriff asynchrone Programmierung zu erklären.
+In der Literatur wird zwischen den Begriffen Blocking und Synchrone Programmierung und den Begriffen Non-Blocking und Asynchrone Programmierung oft keine differenzierung getroffen. In diesem Kapitel werden die Begriffe Blocking, Non-Blocking, Synchrone Programmierung und Asynchrone Programmierung näher erläutert. Als Grundlage für die Beschreibung der einzelnen Begriffe dient ein Beispiel aus der Informatik. 
 
-In dem Beispiel sollten drei voneinander unabhängige Aufgaben von einem Computer ausgeführt werden. Alle drei Aufgaben müssen abgeschlossen sein, damit das Program abgeschlossen ist \cite[]{Pet2015}. 
+Drei voneinander unabhängige Aufgaben sollen von einem Computer ausgeführt werden. Alle drei Aufgaben müssen abgeschlossen sein, damit das Program abgeschlossen ist \cite[]{Pet2015}. 
 
-\subsection{Das Synchrone Model}
+\subsection{Blocking vs Non-Blocking}
 
-In diesem Model werden alle drei Tasks sequentiell abgearbeitet. Dabei wird die erste Aufgabe gestartet und sobald die erste Aufgabe abgeschlossen ist wird die zweite Aufgabe gestartet. Werden die drei Aufgaben sequentiell abgearbeitet so kann man davon ausgehen, dass das Programm zu Ende ist sobald die letzte Aufgabe abgeschlossen wurde \cite[]{Pet2015}.
+Beim behandeln von I/O Operationen kann eine Applikation dem Betriebssystem mitteilen wie die I/O Operation ausgeführt werden soll. Wird der Blocking Modus verwendet, so wartet das Program so lange bis alle Daten eingelesen wurden und bereit für die Weiterverarbeitung sind. Im Unterschied zum Blocking Mode wartet die Applikation nicht bis alle Daten eingelesen wurden. Die Funktion welche die I/O Operation ausführt leitet die Aufgabe (z.B. das einlesen einer Datei) an das Betriebssystem weiter und kehrt sofort zur aufrufenden Funktion zurück \cite[p. 47]{Erb2012}. Im Fall von NodeJS wird eine Callback Funktion hinterlegt, welche aufgerufen wird, wenn die I/O Operation abgeschlossen ist. Dadurch kann NodeJS in der Zwischenzeit andere Operationen ausführen. 
+
+\subsection{Das synchrone Model}
+
+Im synchronen Model werden Aufgaben sequentiell abgearbeitet. Dabei wird eine Initialaufgabe aufgerufen und von dieser ausgehend alle anderen Aufgaben sequentiell abgearbeitet. Ist eine Aufgabe fertig wird die nächste Aufgabe ausgeführt. Sind alle Aufgaben abgeschlossen so terminiert das Program. Der Programverlauf ist im synchronen Model Linear und kann in einer Zeitachse wie in Abbildung (TODO: add Image) dargestellt werden \cite[]{Pet2015}.
 
 (TODO: add image)
 
-\subsection{Das Asynchrone Model}
+\subsection{Das asynchrone Model}
+
+Im asynchronen Model kehren Aufgaben sofort zum Ursprung zurück ohne dass die Aufgabe tatsächlich abgeschlossen ist. In der Zwischenzeit kann die Applikation weitere Aufgaben ausführen. 
+
+
+\subsection{Das blockierenden und synchron Model}
+Im blockierenden und synchronen Model werden einzelne Operationen sequentiell abgearbeitet. Wird in diesem Model eine I/O Operation an das Betriebssystem geschickt, wird der Prozess so lange pausiert bis die I/O Operation abgeschlossen ist. Dannach wird 
+
+
+
+
 
 In diesem Model werden einzelne Operationen in kleinere Sektionen verpackt. Angenommen der Task 1 ist verantwortlich um auf Eingaben des Benutzers zu reagieren, so könnte das synchrone Model diese Eingaben nur in der ersten Phase annehmen. In den restlichen 2 drittel der Laufzeit könnten so keine Eingaben von einem Benutzer erfolgen.
 
