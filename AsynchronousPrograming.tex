@@ -28,8 +28,26 @@ Bei diesem Model werden I/O Operationen nicht blockiert. Das bedeutet, dass eine
 (TODO: write section, write about unix select(), poll(), etc.) 
 
 \subsection{Das nicht blockierende asynchrone Model}
-Beim nicht blockierenden asynchronen Model kehrt der I/O aufruf sofort an die aufrufende Funktion zurück. Ist die I/O Operation abgeschlossen wird entweder ein Ereignis getriggert oder eine Callback Funktion ausgeführt. Durch das nicht blockierende asynchrone Model wird die I/O Operation direkt im Kernel des Betriebssystems abgearbeitet. Dadurch kann die Applikation die Zeit in der die I/O Operation ausgeführt wird für andere Aufgaben nutzen.
+Beim nicht blockierenden asynchronen Model kehrt der I/O aufruf sofort an die aufrufende Funktion zurück. Ist die I/O Operation abgeschlossen wird entweder ein Ereignis getriggert oder eine Callback Funktion ausgeführt. Durch das nicht blockierende asynchrone Model wird die I/O Operation direkt im Kernel des Betriebssystems abgearbeitet. Dadurch kann die Applikation die Zeit in der die I/O Operation ausgeführt wird für andere Aufgaben nutzen \cite[p. 48]{Erb2012}.
 
-Ein Grund warum das asynchrone nicht blockierende Model schneller sein kann als die beiden synchronen Modelle sind I/O Operationen die den Prozess blockieren\ref{subsection: io_operationen}. Angenommen eine Applikation möchte 2 Aufgaben erledigen bei der die erste Aufgabe eine Datei vom Dateisystem einliest. Im Falle der beiden synchronen Modelle müssten die Aufgabe 1 auf das fertige Einlesen der Datei warten. Dies kann entweder auf Kernelebene Funktionieren (= synchrones blockierendes Model) oder auf Applikationsebene (= synchrones nicht blockierendes Model) passieren. 
+Ein Grund warum das asynchrone nicht blockierende Model schneller sein kann als die beiden synchronen Modelle sind I/O Operationen die den Prozess blockieren\ref{subsection: io_operationen}. Angenommen eine Applikation möchte 2 Aufgaben erledigen bei der die erste Aufgabe eine Datei vom Dateisystem einliest. Im Falle der beiden synchronen Modelle müssten die Aufgabe 1 auf das fertige Einlesen der Datei warten. Dies kann entweder auf Kernelebene Funktionieren (= synchrones blockierendes Model) oder auf Applikationsebene (= synchrones nicht blockierendes Model) passieren \cite[]{Pet2015}. 
 
-Im asynchronen nicht blockierenden Model kann die Applikation die Aufgabe 1 ausführen bis die operation blockiert. Während der Kernel die Datei einliest kann die Applikation die Aufgabe 2 ausführen und nach dem terminieren der Aufgabe 2 wird die Aufgabe 1 abgeschlossen. Dadurch macht das Program immer eine fortschritt ohne dass es auf auf Daten vom Kernel warten muss.
+Im asynchronen nicht blockierenden Model kann die Applikation die Aufgabe 1 ausführen bis die operation blockiert. Während der Kernel die Datei einliest kann die Applikation die Aufgabe 2 ausführen und nach dem terminieren der Aufgabe 2 wird die Aufgabe 1 abgeschlossen. Dadurch macht das Program immer eine fortschritt ohne dass es auf auf Daten vom Kernel warten muss \cite[]{Pet2015}.
+
+\subsection{Zusammenfassung}
+
+In diesem Kapitel wurde das Prinzip der asynchronen Programmierung besprochen. Im Bezug auf asynchrone Programmierung kann man Programme in vier unterschiedliche Kategorien einteilen: 
+
+\begin{itemize}
+  \item blockierend und synchron
+  \item nicht blockierend und synchron
+  \item blockierend und asynchron
+  \item nicht blockierend und asynchron
+\end{itemize}    
+
+Viele Anwendungen welche nur wenige I/O Operationen besitzen verwenden das blockierende und synchrone Model da es einen sequentiellen Programmierfluss erlaubt. Das nicht blockierende und synchrone Model verlagert das Warten auf die I/O Operation vom Betriebssystem in die Applikation, was zu einem unnötigen Ressourcenverbauch führen kann. 
+
+(TODO: write about blockierend und asynchron)
+
+Das asynchrone und nicht blockierende Model bietet die Möglichkeit die CPU bestmöglich auszunutzen da die Applikation während der I/O Operation eine andere Aufgabe ausführen kann. 
+
