@@ -24,6 +24,9 @@
 \usepackage{booktabs}
 \usepackage{textcomp}
 
+\usepackage{chngcntr}
+\counterwithout{footnote}{chapter}
+
 \usepackage{tabu}
 \usepackage{booktabs}% for better rules in the table
 \usepackage{showframe,lipsum}
@@ -53,7 +56,7 @@
 \titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
 \setcounter{secnumdepth}{3}
-\setcounter{tocdepth}{3} 
+\setcounter{tocdepth}{3}
 
 
 \lstset{
@@ -103,13 +106,14 @@
 	\include{UseCases}
 \include{AsynchronousPrograming}
 \include{Threads}
-	\include{ThreadsInRuby}	
+	\include{ThreadsInRuby}
 \include{SingleThreaded}
 	\include{ReactorPattern}
 	\include{ProactorVSReactor}
 \include{MultiThreadedSulutions}
 	\include{ProactorPattern}
 	\include{ActorBasedModel}
+\include{InterpretersInRuby}
 \include{AsynchronousProgrammingRails}
 	\include{DelayedJobs}
 \include{Conclution}
@@ -125,7 +129,7 @@
 \listoftables
 
 \newpage
-\nocite{*} 
+\nocite{*}
 \bibliographystyle{chicago}
 \bibliography{Bibliography}
 
