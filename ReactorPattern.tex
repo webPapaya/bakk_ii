@@ -1,26 +1,26 @@
 \subsection{Reactor Pattern}
 \label{section:Reactor Pattern}
 
-Das Reactor Pattern ist ein Design Pattern bei dem asynchrone auftretende Events, synchron abgearbeitet werden können. Dabei werden eingehende Nachrichten/Events von mehreren Clients werden sequentiell abgearbeitet. Dadurch werden Event getriebene Applicationen vereinfacht da das demultiplexen der einzelnen Events vom Reactor übernommen wird. \cite[p. 1]{Sch95}
-
-Die Hauptidee hinter dem Reactor Pattern ist die von Non-Blocking operationen. Der Reactor versendet Benachrichtigungen wenn eine operation abgearbeitet werden kann ohne dass er den Hauptthread blockiert wird.
+Das Reactor Pattern ist ein Design Pattern bei dem asynchrone auftretende Events, synchron abgearbeitet werden können. Dabei werden eingehende Nachrichten/Events von mehreren Clients sequentiell abgearbeitet. Dadurch können nicht blockierende Webserver implementiert werden, da das lesen und schreiben von I/O vom Betriebssystem übernommen wird. Da das registrieren und aufrufen von Ereignissen vom Reactor Pattern übernommen wird gibt es eine lose Koppelung zwischen dem Lesen von I/O Operationen und der Applikation. \cite[p. 1]{Sch95}
 
 
 \subsubsection{Motivation}
 
-Douglas C. Schmidt beschreibt einen Anwendungsfall für das Reactor Pattern, bei dem Logging Informationen in einem Verteilten System an einen zentralen Server gesendet und gespeichert werden. Der Server soll in der Lage sein Logging informationen zu jederzeit speichern zu können und Logging Informationen können auch von mehreren Clients gleichzeitig an den Server gesendet werden. Der Server akzeptiert neue Verbindungen über einen eigenen I/O handler. Auf einem Single Threaded Server kann ein I/O Read Vorgang den Response von anderen Clients verzögern da das Lesen und Schreiben den Thread blockiert. \cite[p. 1]{Sch95}
+Douglas C. Schmidt beschreibt einen Anwendungsfall für das Reactor Pattern, bei dem Logging Informationen in einem Verteilten System an einen zentralen Server gesendet und gespeichert werden. Der Server soll in der Lage sein Logging informationen zu jederzeit speichern zu können und Logging Informationen können auch von mehreren Clients gleichzeitig an den Server gesendet werden. Möchte ein Client eine Verbindung zum Webserver aufbauen, wird der Thread des Webservers so lange blockiert, bis die Verbindung aufgebaut wurde und alle Daten übertragen wurden. Sektion \ref{subsection: i/o speed} vergleicht wie lange I/O Operationen benötigen \cite[p. 1]{Sch95}.
 
-Eine Möglichkeit dieses Problem zu lösen ist Multithreading. Laut D. Schmidt birgt diese Lösung jedoch folgende Nachteile \cite[p. 2]{Sch95}:
+Eine Möglichkeit um mehrere Verbindungen auf einmal zu verarbeiten bietet Multithreading. Laut D. Schmit bringt diese Lösung jedoch folgende Probleme mit sich \cite[p. 2]{Sch95}:
 
 \begin{itemize}
   \item Benötigt ein komplexes concurrency Schema
   \item Auf Single Core Prozessoren kann es zu einer schlechten Performance kommen
-  \item Es könnte nicht auf allen Betriebssystemen verfügbar sein. 
+  \item Es könnte nicht auf allen Betriebssystemen verfügbar sein.
 \end{itemize}
 
-Die Nachteile 2 und 3 können 20 Jahre nach dem erscheinen dieses Papers als hinfällig angesehen werden. (TODO: Ask if I can write this sentense) Das Problem Nummer 1 mit dem komplexen concurrency Schema bei der Verwendung von Multithreading bleibt bis heute bestehen. 
+Die Nachteile 2 und 3 können 20 Jahre nach dem erscheinen dieses Papers als hinfällig angesehen werden, da mittlerweile multicore Prozessoren im Consumer Bereich angekommen sind und jedes relevante Betriebssystem Threads unterstützt.
 
-Das Reactor Pattern implementiert eine Event Loop welche sich um das event demultiplexen und das event handler dispatchen kümmert. 
+Das Problem Nummer 1 mit dem komplexen concurrency Schema bei der Verwendung von Multithreading bleibt bis heute bestehen.
+
+Das Reactor Pattern implementiert eine Event Loop welche sich um das event demultiplexen und das event handler dispatchen kümmert.
 
 Durch das Reactor Pattern wird eine enge Koppelung zwischen unabhängigen Teilen der Applikation und Applikations abhängigen teilen gelöst. Dadurch werden die Tief liegenden und komplexen Componenten wie das Demultiplexing von Events von der Event Loop übernommen und der Programmierer kann sich auf die eigentliche Applikation konzentrieren. \cite[p. 2]{Sch95}
 
@@ -34,14 +34,13 @@ Im folgenden wird das Reactor Design Pattern in der OTM Notation vorgestellt. \f
 \cite[p. 2]{Sch95}
 
 \emph{Reactor}
-	Definiert ein Interface um EventHandler Objekte zu registrieren, entfernen und dispatchen. Der Reactor ist Applikationsunabhängig, kann jedoch Applikationsabhängige Ereignisse dispatchen und demultiplexen. 
+	Definiert ein Interface um EventHandler Objekte zu registrieren, entfernen und dispatchen. Der Reactor ist Applikationsunabhängig, kann jedoch Applikationsabhängige Ereignisse dispatchen und demultiplexen.
 
 \emph{Event Handler}
-	Definiert ein Interface um callback funktionen zu dispatchen. 
+	Definiert ein Interface um callback funktionen zu dispatchen.
 
 \emph{ConcreteEventHandler}
-	Definiert und Implementiert die Applikationsabhängigen Callback Methoden. 
-
+	Definiert und Implementiert die Applikationsabhängigen Callback Methoden.
 
 \subsubsection{Funktionsweise}
 Event Handler werden beim eintreten eines Events aufgerufen. Diese Events werden über Callback Methoden auf die jeweiligen Betriebssystem I/O Handlern gebunden. Um einen Eventhandler mit dem Reactor zu verbinden muss die Subklasse von Event Handler die Methode \emph{getHandler()} implementieren. Bei der Initialisierung ruft der Reactor die \emph{getHandler()} Methode auf und benutzt diese um auf ein Ereignis zu warten. Der Reactor verwaltet eine Liste mit allen registrieren Event Handler und beim eintreten eines Events löst er das Ereignis aus und ruft die registrierte Callback Funktion auf \cite[p. 5]{Sch95}. (TODO: refactor)
@@ -50,8 +49,6 @@ Event Handler werden beim eintreten eines Events aufgerufen. Diese Events werden
 (TODO: Add Image)
 
 Ein Beispiel für das Reactor Pattern ist die Kommunikation zwischen einem File System und der Applikation.
-
-
 
 
 \subsubsection{Anwendungsgebiete}
@@ -64,10 +61,6 @@ Douglas Schmidt beschreibt in seiner Thesis folgende Anwendungsgebiete für das 
   \item Die gesendeten Nachrichten können in relativ kurzer Zeit verarbeitet werden
   \item Wenn unabhängige Teile der Applikation (Event Demultiplexing/Dispatching) von den abhängigen getrennt werden sollen
 \end{itemize}
-
-
-\subsubsection{Aktuelle Einsatzgebiete}
-
 
 \subsubsection{Zusammenfassung}
 

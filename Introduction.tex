@@ -14,9 +14,9 @@ Eine Applikation ist performant wenn diese einem EndbenutzerIn ein Aufgabe ausf�
 
 \begin{itemize}
   \item {Verfügbarkeit:} beschreibt die Menge an Zeit in welcher eine Applikation für den EndbenutzerIn verfügbar ist.
-  \item \emph{Antwortzeit:} beschreibt die Zeit die eine Applikation für die Antwort auf eine Anfrage benötigt. 
-\end{itemize}    
-    
+  \item \emph{Antwortzeit:} beschreibt die Zeit die eine Applikation für die Antwort auf eine Anfrage benötigt.
+\end{itemize}
+
 
 \subsubsection{Effektiv orientierte Performance}
 
@@ -24,11 +24,11 @@ Eine Applikation ist performant wenn diese einem EndbenutzerIn ein Aufgabe ausf�
 
 \begin{itemize}
   \item \emph{Durchsatz:} Wie viele Anfragen eine Applikation in einer Zeiteinheit verarbeiten kann.
-  \item \emph{Ressourcenverbauch:} Wie viel Prozent der Verfügbaren Ressourcen eine Applikation verwendet. 
+  \item \emph{Ressourcenverbauch:} Wie viel Prozent der Verfügbaren Ressourcen eine Applikation verwendet.
 \end{itemize}
 
 (TODO: Threads add Time Slicing)
-Durch Time-Slicing kann eine pseudo Parallelität auf einem einzelnen Prozessor erreicht werden. Durch diese Definition schließt sich, dass eine richtige Parallelität nur dann existiert wenn mehrere Aufgaben auf der selben Anzahl an Prozessorkernen ausgeführt werden. 
+Durch Time-Slicing kann eine pseudo Parallelität auf einem einzelnen Prozessor erreicht werden. Durch diese Definition schließt sich, dass eine richtige Parallelität nur dann existiert wenn mehrere Aufgaben auf der selben Anzahl an Prozessorkernen ausgeführt werden.
 
 
 
@@ -60,7 +60,7 @@ Im allgemeinen können Operationen auf einem Computer in folgenden Umgebungen au
 
 Das Hauptziel von paralleler Programierung ist nach Robert Pike das gleichzeitige oder simultane ausführen von Operationen auf zwei oder mehreren CPUs.\cite[]{Pik2013} Parallelität kann demnach nur auf den Umgebungen 2-4 auftreten.
 
-Das gleichzeitige Ausführen von Operationen kann zu einer Steigerung der Performance einer Applikation führen \cite[p. 18]{Can08}. 
+Das gleichzeitige Ausführen von Operationen kann zu einer Steigerung der Performance einer Applikation führen \cite[p. 18]{Can08}.
 
 \subsection{Concurrency vs. Parallelismus}
 
@@ -78,13 +78,13 @@ Teile einer Applikation welche keinen gemeinsamen Status besitzen und sequentiel
 
 Ein konkretes Beispiel dazu bietet ein Webserver. Mehrere Anfragen werden von unterschiedlichen Clients an einen HTTP-Webserver gesendet, welcher die Anfragen gleichzeitig verarbeitet. Der Webserver leitet die Anfragen an ein das zugehörige Program weiter welches den jeweiligem HTTP-Response sequentiell generiert. \cite[p. 18]{Can08}
 
-Für einen modernen Webserver müssen folgende Bedingungen erfüllt sein \cite[p. 2]{Sch97}: 
+Für einen modernen Webserver müssen folgende Bedingungen erfüllt sein \cite[p. 2]{Sch97}:
 \label{Webserver_Requirements}
 \emph{Concurrency}
-	Ein Server muss mehrere Anfragen von Clients gleichzeitig verarbeiten können. 
+	Ein Server muss mehrere Anfragen von Clients gleichzeitig verarbeiten können.
 
 \emph{Efficiency}
-	Der Server muss Latenzen gering halten und die CPU nicht unnötig belasten. 
+	Der Server muss Latenzen gering halten und die CPU nicht unnötig belasten.
 
 \emph{Programming simplicity}
 	Der Server muss einfache Schnittstellen für Concurrent Programming bieten (TODO: concurrent programming?)
@@ -119,7 +119,7 @@ Lambdas werden auch als Closures, anonyme Functions oder Blocks genannt. Lambdas
   \item Smalltalk
 \end{itemize}
 
-Closures können auf lokale Variablen zugreifen. Das bedeutet dass eine Closure auf alle Variablen im aktuellen Kontext zugriff haben. In der Sprache Ruby werden Closures unter anderem mit geschwungenen Klammeren erstellt. \cite[]{fow04} 
+Closures können auf lokale Variablen zugreifen. Das bedeutet dass eine Closure auf alle Variablen im aktuellen Kontext zugriff haben. In der Sprache Ruby werden Closures unter anderem mit geschwungenen Klammeren erstellt. \cite[]{fow04}
 
 \begin{lstlisting}[
 	caption={},
@@ -132,6 +132,18 @@ Closures können auf lokale Variablen zugreifen. Das bedeutet dass eine Closure 
 In Listing \ref{listing:closures} wird eine Datei vom lokalem Filesystem geöffnet. Die Funktion open in der File Klasse akzeptiert einen Block als Argument. Die Funktion open öffnet die Datei, führt den angegebenen Block aus und schließt nach Ausführung des Blocks die Datei. Blöcke können unter anderem in Transaktionen verwendet werden. \cite[]{fow04}
 
 
+\subsection{select(2)}
+\emph{select(2)} ist ein Low Level System Aufruf der ein oder mehrere Dateien beobachten kann ob diese bereit für eine I/O Operation sind. Dabei wird überprüft ob eine Datei bereit zum Lesen oder Schreiben ist oder einen Fehler besitzt.
+
+
+Beim Lesen einer Datei werden der erste Charackter der Datei überprüft ob dieser bereit ist zum lesen. Dadurch kann bestimmt werden ob die Datei eingelesen werden kann, ohne dass die I/O Operation blockiert.
+
+
+
+
+
+\cite[]{select2}
+
 \subsection{I/O Operations}
 \label{subsection: io_operationen}
 
@@ -141,7 +153,8 @@ In Listing \ref{listing:closures} wird eine Datei vom lokalem Filesystem geöffn
 
 
 \subsubsection{Why I/O Speed Matters}
-Die Nachfolgende Tabelle gibt einen groben Überblick wie lange einzelne I/O Operationen benötigen. Diese Tabelle beruht auf keinen wissenschaftlichen Quellen und sollte lediglich als grobe Referenz für die Dauer von I/O Operationen dienen. Diese Tabelle beruht auf den Zahlen von Peter Norvig \cite[]{Nor98} einem Director of Research bei Google und den Vergleichen des Github Benutzers hellerbarde \cite[]{Gis15}: 
+\label{subsection: i/o speed}
+Die Nachfolgende Tabelle gibt einen groben Überblick wie lange einzelne I/O Operationen benötigen. Diese Tabelle beruht auf keinen wissenschaftlichen Quellen und sollte lediglich als grobe Referenz für die Dauer von I/O Operationen dienen. Diese Tabelle beruht auf den Zahlen von Peter Norvig \cite[]{Nor98} einem Director of Research bei Google und den Vergleichen des Github Benutzers hellerbarde \cite[]{Gis15}:
 
 (TODO: check table if it fits on the page)
 (TODO: ask Hannes if i can add this to my thesis)
@@ -166,4 +179,3 @@ Auf der Festplatte eine 1 MB große Datei suchen und lesen  & 21,000,000 ns     
 Sende ein Packet von Europa nach Amerika und wieder zurück & 150,000,000 ns                & 4.8 y                          & Bachelor + Master an der FH Salzburg in Mindeststudienzeit &  \\ \bottomrule
 \end{tabular}
 \end{table}
-
