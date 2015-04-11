@@ -38,6 +38,32 @@ Zu Begin bekommt er von einem entfernten Actor B die Nachricht `Start Inkrement'
 \subsection{Probleme}
 Auch wenn das Actor Based Model Probleme von paralleler Programmierung verhindern kann, können dennoch Deadlocks auftreten. So kann eine zyklische Abhängigkeit entstehen, wenn zwei Actoren jeweils auf eine Nachricht des anderen warten. In der Praxis kann jedoch ein Deadlock in einem Actor Based Model durch ein Timeout behoben werden. Durch die asynchrone Funktionsweise können nicht deterministische Algorithmen entstehen, welche bei falsche implementierung als eine Race Condition angesehen werden können \cite[]{Erb2012}. 
 
+\subsection{Implementierungen}
+Das Actor Based Model kann entweder Sprachkonzept direkt in eine Programmiersprache eingebaut werden oder als Bibliothek zu einer bestehenden Programmiersprache hinzugefügt werden. Die folgende Liste gibt einen Aufschluss über Programmiersprachen welche das Actor Based Model direkt in die Programmiersprache integriert haben \footnote{Eine erweiterte Liste findet sich auf: \url{http://en.wikipedia.org/wiki/Actor_model?oldformat=true#Programming_with_Actors}}:
+
+\begin{itemize}
+  \item Erlang
+  \item Elixir
+  \item Rust
+  \item D
+  \item E
+\end{itemize}
+
+Die folgende Liste gibt einen Überblick über einzelne Bibliotheken welche das Actor Based Model anbieten:
+
+\begin{itemize}
+  \item celluloid (ruby \url{https://celluloid.io/})
+  \item nactor (JavaScript \url{https://github.com/mental/webactors})
+  \item akka (Java und Scale \url{http://akka.io/})
+  \item Pykka (Python \url{https://www.pykka.org})
+\end{itemize}
+
+Die beiden vorherigen Listen erheben keinen Anspruch auf Vollständigkeit. 
 
 \subsubsection{Zusammenfassung}
-Das Actor Based Model ist ein Model bei dem einzelne Actors kein
+Das Actor Based Model ist ein Model welches auf drei Grundlegenden Komponenten der Informatik basiert (Datenverarbeitung, Datenspeicherung, Kommunikation). Dabei Kommunizieren Actors über Nachrichten miteinander, welche in der Mailbox des Empfängers ankommen und sequentiell abgearbeitet werden. Das Actor Based Model bestimmt nicht in welcher Art und Weise die Nachrichten übertragen werden. Das bedeutet das je nach Implementierung die Reihenfolge in welcher Nachrichten beim Empfänger ankommen nicht bestimmt ist. 
+
+Es gibt drei Möglichkeiten wie ein Actor eine Nachricht verarbeiten kann (Neue Actoren erstellen, Er kann eine Nachricht an andere Versenden, Er kann bestimmen wie er die nächste Nachricht verarbeiten möchte).
+
+Um Race Conditionen zu vermeiden dürfen Nachrichten nur aus unveränderbaren Daten bestehen. Das übermitteln von Referenzen oder Pointer zu anderen Actoren ist verboten. Dadurch entsteht eine innere Kapselung der Daten eines einzelnen Actors was dazu führt, dass sich das Actor Based Model für parallele Programmierung anbietet. Es können zwar Deadlocks oder Race Conditions entstehen wobei diese Hauptsächlich als Fehler in der Applikation gesehen werden können. 
+
