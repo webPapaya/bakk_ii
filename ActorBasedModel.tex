@@ -1,6 +1,10 @@
 \subsection{Actor Based Model}
 \label{section:Actor Based Model}
 
+Das Actor Based Model ist ein Model um Concurrent Applikation zu entwickeln, bei dem das Problem des Shared States durch das versenden und erhalten von Nachrichten behoben wird. 
+
+\subsubsection{Einführung}
+
 Das Actor Based Model basiert auf den drei Grundlegenden Elementen der Informatik:
 
 \begin{itemize}
@@ -17,11 +21,13 @@ Dabei sind Actors Zeitsensitiv, was bedeutet, dass sie Ihren Status über eine g
   \item Er kann bestimmen wie er die nächste Nachricht verarbeiten möchte
 \end{itemize}
 
-Um Nachrichten versenden zu können, benötigen Actoren eine Adresse. Dabei ist eine Adresse keine Identität eines Actors, da ein Actor keine, eine oder mehrere Adressen besitzen kann. Um anderen Actoren eine Nachricht zu senden muss der Sender die Adresse des Empfängers wissen. Dabei kann der Sender der selbe Actor sein wie der Empfänger. Das bedeutet, dass sich ein Actor selbst Nachrichten senden kann und diese in der Zukunft verarbeitet werden. \cite[]{Erb2012}
+Um Nachrichten versenden zu können, benötigen Actoren eine Adresse. Dabei ist eine Adresse keine Identität eines Actors, da ein Actor keine, eine oder mehrere Adressen besitzen kann. Um anderen Actoren eine Nachricht zu senden muss der Sender die Adresse des Empfängers wissen. Dabei kann der Sender der selbe Actor sein wie der Empfänger. Das bedeutet, dass sich ein Actor selbst Nachrichten senden kann und diese in der Zukunft verarbeitet werden. Dabei darf Actors keinen geteilten Status mit einem anderen Actor besitzten. Dadurch dürfen nur unveränderbare Daten (ummutable Data) von einem Actor zum anderen versendet werden. Pointer und Referenzen dürfen deshalb kein Teil der Nachricht sein. \cite[]{Erb2012}
 
-Nachrichten werden asynchron versendet und können beliebig lange für die Zustellung benötigen. Es wird keine Garantie über die Reihenfolge gegeben in der Nachrichten beim Empfänger ankommen. Um Race Conditions zu vermeiden müssen alle Nachrichten unveränderbar sein. Dies kann mit dem Begriff `Call by Value' verglichen werden, bei dem eine Variable bei einem Funktionsaufruf kopiert wird. Dadurch können keine Race Conditions auftreten da jeder Actor seine Mailbox squentiell abarbeitet und kein Speicher mit anderen Objekten teilt. Dadurch sind einzelne Actoren in einem System aus Actoren unabhängig da die Kommunikation nur über Nachrichten passiert. \cite[]{Erb2012}
+Nachrichten werden asynchron versendet und können beliebig lange für die Zustellung benötigen. Es wird keine Garantie über die Reihenfolge gegeben in der Nachrichten beim Empfänger ankommen. Es gibt jedoch Implementierungen des Actor Based Models, welche die Reihenfolge der versandten Nachrichten beibehält. Um Race Conditions zu vermeiden müssen alle Nachrichten unveränderbar sein. Dies kann mit dem Begriff `Call by Value' verglichen werden, bei dem eine Variable bei einem Funktionsaufruf kopiert wird. Dadurch können keine Race Conditions auftreten da jeder Actor seine Mailbox squentiell abarbeitet und kein Speicher mit anderen Objekten teilt. Dadurch sind einzelne Actoren in einem System aus Actoren unabhängig da die Kommunikation nur über Nachrichten passiert. \cite[]{Erb2012}
 
-Das Actor Based Model bestimmt nicht in welcher Art und Weise die Kommunikation zwischen den einzelnen Actoren passiert, da dies der jeweiligen Implementierung vorenthalten ist. Dadurch kann geschlossen werden, dass das Actor Based Model auch in verteilten Systemen zum Einsatz kommen kann.
+Das Actor Based Model bestimmt nicht in welcher Art und Weise die Kommunikation zwischen den einzelnen Actoren passiert, da dies der jeweiligen Implementierung vorenthalten ist. Dadurch kann geschlossen werden, dass das Actor Based Model auch in verteilten Systemen zum Einsatz kommen kann \cite[]{Erb2012}.
+
+Actors haben einen isolierten Zustand, welcher von keinem anderen Actor verändert werden kann. Dadurch benötigen viele Implementierungen keine Locks für geteilte Daten, weil nur unveränderbare Objekte verteilt werden können. 
 
 Dadurch das ein Actoren nur über Nachrichten miteinander kommunizieren können und die Reihenfolge und Zeit in der Nachrichten übermittelt werden nicht bestimmt ist, ist das Actor Based System nicht deterministisch \cite[]{Agh85}. Wenn ein Algorithmus nicht deterministisch ist bedeutet das, dass bei den exakt selben Eingabewerten bei mehreren durchgängen andere Resultate auftreten.
 
@@ -29,4 +35,9 @@ Ein Beispiel für einen nicht deterministischen Algorithmus in einem Actor Based
 
 Zu Begin bekommt er von einem entfernten Actor B die Nachricht `Start Inkrement'. Daraufhin schickt er sich selbst die Nachricht `Inkrement 1'. Beim erhalten der Nachricht wir diese in die Mailbox gepackt und abgearbeitet. Beim abarbeiten der Mailbox wird die lokale Variable x um 1 erhöht und besitzt somit den Wert 1. Nachdem der Wert erhöht wurde versendet der Actor A eine weitere Nachricht mit dem Inhalt `Inkrement 1' an sich selbst. Zum exact selben Zeitpunkt versendet der Actor B die Nachricht `Show Value'. Nachdem das Actor basierte Model die Reihenfolge der Nachrichten nicht behandelt kann die Nachricht `Show Value' entweder vor oder nach der Nachricht `Inkrement 1' ankommen. Kommt die Nachricht `Show Value' vor der Nachricht `Inkrement 1' an so wird der Wert 1 in der Konsole ausgegeben. Anderenfalls wird der Wert 2 ausgegeben.
 
-\subsubsection{Celluloid}
+\subsections{Probleme}
+Auch wenn das Actor Based Model Probleme von paralleler Programmierung verhindern kann, können dennoch Deadlocks auftreten. So kann eine zyklische Abhängigkeit entstehen, wenn zwei Actoren jeweils auf eine Nachricht des anderen warten. In der Praxis kann jedoch ein Deadlock in einem Actor Based Model durch ein Timeout behoben werden. Durch die asynchrone Funktionsweise können nicht deterministische Algorithmen entstehen, welche bei falsche implementierung als eine Race Condition angesehen werden können \cite[]{Erb2012}. 
+
+
+\subsubsection{Zusammenfassung}
+Das Actor Based Model ist ein Model bei dem einzelne Actors kein
