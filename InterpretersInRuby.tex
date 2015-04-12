@@ -124,9 +124,11 @@ end
 
 calculator = Calculator.new
 
-threads = []
-threads << Thread.new {100000.times { calculator.counter += 1 }}
-threads << Thread.new {100000.times { calculator.counter += 1 }}
+threads = Array.new(2) do
+  Thread.new do
+    100000.times { calculator.counter += 1 }
+  end
+end
 threads.each(&:join)
 
 puts calculator.counter
