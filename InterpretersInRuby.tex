@@ -57,9 +57,9 @@ In MRI (seit Version 1.9), Rubinius und JRuby werden Native Threads des Betriebs
 
 Der Conditional Assignment Operator in Ruby (||=) wird häufig verwendet um einer Variable einen Standardwert zu zuweisen. Dabei ist dieser Operator nicht Thread-Safe, da er keine Atomare Operation darstellt. Hinter diesem Operator steht eine Funktion welche wie folgt aussehen könnte \footnote{Die genaue Implementierung dieses Operators kann sich zwischen den einzelnen Ruby Implementierungen unterscheiden. Das Funktionsweise ist bei allen Implementierungen gleich}:
 
-,caption={\cite[p. 24]{Sto2013}}
 
-\begin{lstlisting}[language=Ruby,label={listing:conditional}]
+
+\begin{lstlisting}[language=Ruby,label={listing:conditional}, caption=Adaptiert von \cite[p. 24]{Sto2013}]
 	\# Dieser Ausdruck
 	@results ||= "test" 
 
