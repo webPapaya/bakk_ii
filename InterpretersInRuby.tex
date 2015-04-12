@@ -59,7 +59,7 @@ Der Conditional Assignment Operator in Ruby (||=) wird häufig verwendet um eine
 
 
 
-\begin{lstlisting}[language=Ruby,label={listing:conditional}, caption=Adaptiert von \cite[p. 24]{Sto2013}]
+\begin{lstlisting}[language=Ruby,label={listing:conditional}, caption=Adaptiert von \cite{Sto2013}, Seite 24]
 	\# Dieser Ausdruck
 	@results ||= "test" 
 
@@ -79,9 +79,7 @@ Der GIL (Global Interpeter Lock) ist ein globaler Lock um der das parallele Ausf
 
 Die Funktionsweise des MRI kann man anhand der Berechnung der Fibonacci Zahl \footnote{Weiter Informationen zur Fibonacci Zahlenfolge finden Sie auf \url{http://de.wikipedia.org/wiki/Fibonacci-Folge}} erklären. Bei diesem Beispiel sollten 4 mal die Fibonacci Zahlen bis 35 berechnet werden:
 
-caption={\cite[p. 21]{Sto2013}}
-
-\begin{lstlisting}[language=Ruby,label={listing:fibonacci}]
+\begin{lstlisting}[language=Ruby,label={listing:fibonacci},caption=Adaptiert von \cite{Sto2013}, Seite 21]
 class Fibonacci
   def initialize(threads, number)
     @threads = Array.new(threads) { Thread.new {calculate number}}
