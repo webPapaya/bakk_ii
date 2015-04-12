@@ -16,8 +16,10 @@ Ruby wurde im Jahr 2012 von der ISO (International Organization for Standardizat
 
 \subsection{Concurrency in Ruby}
 
-\subsubsection{Threads}
-Ruby besitzt als Concurrency Model Threads. Um einen Thread in Ruby zu erzeugen erstellt man ein neues Thread Objekt welches einen Block akzeptiert.  
+\subsubsection{Threads in Ruby}
+In Ruby wird jedes Program in einem Thread ausgeführt. Dieser Main Thread wird beim ausführen eines Ruby Programms automatisch erstellt und ausgeführt. Wird der Main Thread beendet, so werden gleichzeitig alle anderen Threads der Applikation beendet und der Ruby Prozess wird beendet \cite[p. 15]{Sto2013}.
+
+Um einen Thread in Ruby zu erzeugen erstellt man ein neues Thread Objekt und übergibt diesen einen Block. 
 
 \begin{lstlisting}[language=Ruby,label=lst:thread_example]
 def long_running
@@ -35,6 +37,132 @@ puts "first"
 \end{lstlisting}
 
 In Listing \ref{lst:thread_example} sieht man ein Ruby Script welches einen Thread verwendet. Durch die Methode \emph{sleep} wird die Methode \textit{long\_run\_running} zwei Sekunden gestoppt. Im Beispiel sieht man dass die Zeile 6 als erstes auf dem Monitor ausgegeben wird als die Zeile 3. 
+
+
+\begin{lstlisting}[language=Ruby,caption={\cite[p. 21]{Sto2013}}]
+  100.times do
+    Thread.new { sleep }
+  end
+  
+  puts  "ps -o nlwp #{Process.pid}"
+  sleep
+\end{lstlisting} 
+
+Dieses Programm erstellt 100 Threads und versetzt diese in einen schlafenden Zustand. Nachdem all Threads erstellt wurden wird der Main Thread in einen schlafenden Zustand versetzt. Daraus Resultiert, dass dieses Programm 101 Threads verwendet. 
+
+Vergleicht man die unterschiedlichen Implementierungen von Ruby so kann man erkennen dass MRI, Rubinius, und JRuby weitere Threads zum verwalten von Ruby verwenden. MRI verwendet 1 zusätzlichen Thread zum verwalten. Bei JRuby und Rubinius richtet sich die Anzahl an Threads zum verwalten von Ruby an die verwendete CPU.
+
+\subsubsubsection{Thread-Safety in Ruby}
+In MRI (seit Version 1.9), Rubinius und JRuby werden Native Threads des Betriebssystems verwendet. Dadurch verwenden diese Implementierungen den Scheduler des Betriebssystems. Aus diesem Grund hat die Ruby Implementierung keinen Einfluss auf den genauen Zeitpunkt der Context-Switches. Dadurch können Race Conditions entstehen, welche für falsche Daten verantwortlich sind.
+
+Der Conditional Assignment Operator in Ruby (\emph{\|\|\=}) wird häufig verwendet um einer Variable einen Standardwert zu zuweisen. Dabei ist dieser Operator nicht Thread-Safe, da er keine Atomare Operation darstellt. Hinter diesem Operator steht eine Funktion welche wie folgt aussehen könnte \footnote{Die genaue Implementierung dieses Operators kann sich zwischen den einzelnen Ruby Implementierungen unterscheiden. Das Funktionsweise ist bei allen Implementierungen gleich}:
+
+\begin{lstlisting}[language=Ruby,label={listing:conditional},caption={\cite[p. 24]{Sto2013}}]
+	\# Dieser Ausdruck
+	@results ||= "test" 
+
+	\# Ist gleich diesem Ausdruck
+	unless @results.defined?
+		@results = "test"
+	end
+\end{lstlisting} 
+
+In dem Listing \ref{listing:conditional} kann man erkennen das der Conditional Assignment Operator keine atomare Operation ist. Angenommen ein Programm möchte 10 Bilder aus dem Internet downloaden:
+
+(TODO: Continue to Write on this section)
+
+\subsubsubsection{The GIL in MRI}
+
+Der GIL (Global Interpeter Lock) ist ein globaler Lock um der das parallele Ausführen von Ruby Code in einem Ruby Prozess verhindert. Das bedeutet, dass immer nur ein Ruby Thread pro Prozess einen Fortschritt machen kann. Wenn ein Thread einen fortschritt machen möchte muss er den GIL erhalten und darf nur dann einen fortschritt machen. Das bedeutet nicht dass in Ruby keine concurrent Applikationen geschrieben werden können, denn sobald ein Thread auf eine blockierende Operation trifft (z.B. I/O) dann wird der GIL an einen anderen Thread vergeben. Zu einem späteren Zeitpunkt erhält der blockierte Thread den GIL wieder und kann die Daten weiterverarbeiten. Das bedeutet jedoch das in MRI Ruby Code nie parallel laufen kann \cite[p. 42]{Sto2013}. 
+
+Die Funktionsweise des MRI kann man anhand der Berechnung der Fibonacci Zahl \footnote{Weiter Informationen zur Fibonacci Zahlenfolge finden Sie auf \url{http://de.wikipedia.org/wiki/Fibonacci-Folge}} erklären. Bei diesem Beispiel sollten 4 mal die Fibonacci Zahlen bis 35 berechnet werden:
+
+
+\begin{lstlisting}[language=Ruby,label={listing:fibonacci}caption={\cite[p. 21]{Sto2013}}]
+class Fibonacci
+  def initialize(threads, number)
+    @threads = Array.new(threads) { Thread.new {calculate number}}
+    @threads.each(&:join)
+  end
+
+  #
+  def calculate(number)
+    return  number  if ( 0..1 ).include? number
+    ( calculate( number - 1 ) + calculate( number - 2 ) )
+  end
+end
+
+Fibonacci.new 4, 35
+\end{lstlisting}
+
+In Listing \ref{listing:fibonacci} wird die Fibonacci Zahl 4 mal berechnet. Dazu wird für jede Berechnung ein neuer Thread erstellt. Wird das Programm aus Listing \ref{listing:fibonacci} mit MRI ausgeführt so wird das Program wie folgt ausgeführt \footnote{Es wird nur die Funtionsweise der Zeilen 3-4 Beschrieben} \cite[p. 45-46]{Sto2013}: 
+
+\begin{itemize}
+  \item In Zeile 3 wird ein neues Array erstellt, welches mit 4 Threads initialisiert wird \footnote{Die Threads heißen in weiterer Folge Thread 1-4}.
+  \item Jedem dieser Threads wird ein Block übergeben in dem die Funktion \emph{calculate} aufgerufen wird. Diese Funktion berechnet die Fibonacci Zahlen bis 35.
+  \item Alle 4 Threads möchten einen Fortschritt machen. Jedoch darf nur der Thread einen Fortschritt machen, der den GIL besitzt. Aus diesem Grund werden alle Threads in einen Schlafzustand versetzt.
+  \item Der Ruby Interpeter entscheidet, dass der Thread 2 den GIL erhält und weckt den Thread auf.
+  \item Der Thread 2 berechnet die Zahlenfolge bis er fertig ist und gibt den GIL zurück an den Ruby Interpreter.
+  \item Dieser entscheidet dass Thread 3 den GIL bekommt.
+  \item Hat Thread 3 die Berechnung abgeschlossen wiederholt sich die selbe Prozedur für Thread 1 und Thread 4.
+  \item Haben alle Threads die Berechnung beendet, ist das Programm abgeschlossen.
+\end{itemize}
+
+Der GIL ist eine Beschränkung von Parallelem ausführen von Ruby Code. Rubinius und JRuby heben den GIL auf und können dadurch Code parallel ausführen. Auch wenn der GIL eine große Beschränkung für das parallele Ausführen von Ruby Code darstellt gibt es Gründe warum das Team von MRI am GIL festhalten möchte. Hauptsächlich möchte man das Problem von Race Conditionen vermeiden \cite[p. 48-49]{Sto2013\}.
+
+Angenommen man besitzt folgendes Program\footnote{Idee von: \url{http://stackoverflow.com/questions/19969551/why-no-race-condition-in-ruby}}: 
+
+\begin{lstlisting}[language=Ruby,label={listing:race condition},caption={\cite[p. 21]{Sto2013}}]
+
+class Calculator
+  attr_accessor :counter
+  def initialize
+    @counter = 0
+  end
+end
+
+calculator = Calculator.new
+
+threads = []
+threads << Thread.new {100000.times { calculator.counter += 1 }}
+threads << Thread.new {100000.times { calculator.counter += 1 }}
+threads.each(&:join)
+
+puts calculator.counter
+
+\end{lstlisting}
+
+In Listing \ref{listing:race condition} werden zwei Threads verwendet um eine Zahl 100000 mal zu erhöhen. Das Resultat der Berechnung sollte \emph{200 000} sein. Wird die Funktion mit MRI ausgeführt erhält man den Wert \emph{200 000}. Wird das Programm mit Rubinius oder JRuby ausgeführt erhält man den Wert \emph{200 000} nicht. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Die Klasse Thread bietet einige Methoden um mit Threads in Ruby zu arbeiten. \footnote{Eine genaue Dokumentation findet sich unter \url{http://ruby-doc.org/core-2.2.0/Thread.html}}
 

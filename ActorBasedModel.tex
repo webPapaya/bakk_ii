@@ -39,7 +39,7 @@ Zu Begin bekommt er von einem entfernten Actor B die Nachricht `Start Inkrement'
 Auch wenn das Actor Based Model Probleme von paralleler Programmierung verhindern kann, können dennoch Deadlocks auftreten. So kann eine zyklische Abhängigkeit entstehen, wenn zwei Actoren jeweils auf eine Nachricht des anderen warten. In der Praxis kann jedoch ein Deadlock in einem Actor Based Model durch ein Timeout behoben werden. Durch die asynchrone Funktionsweise können nicht deterministische Algorithmen entstehen, welche bei falsche implementierung als eine Race Condition angesehen werden können \cite[]{Erb2012}. 
 
 \subsection{Implementierungen}
-Das Actor Based Model kann entweder Sprachkonzept direkt in eine Programmiersprache eingebaut werden oder als Bibliothek zu einer bestehenden Programmiersprache hinzugefügt werden. Die folgende Liste gibt einen Aufschluss über Programmiersprachen welche das Actor Based Model direkt in die Programmiersprache integriert haben \footnote{Eine erweiterte Liste findet sich auf: \url{http://en.wikipedia.org/wiki/Actor_model?oldformat=true#Programming_with_Actors}}:
+Das Actor Based Model kann entweder Sprachkonzept direkt in eine Programmiersprache eingebaut werden oder als Bibliothek zu einer bestehenden Programmiersprache hinzugefügt werden. Die folgende Liste gibt einen Aufschluss über Programmiersprachen welche das Actor Based Model direkt in die Programmiersprache integriert haben \footnote{Eine erweiterte Liste findet sich auf  \cite[]{Erb2012}: \url{http://en.wikipedia.org/wiki/Actor_model?oldformat=true#Programming_with_Actors}}:
 
 \begin{itemize}
   \item Erlang
