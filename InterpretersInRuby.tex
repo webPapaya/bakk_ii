@@ -38,8 +38,8 @@ puts "first"
 
 In Listing \ref{lst:thread_example} sieht man ein Ruby Script welches einen Thread verwendet. Durch die Methode \emph{sleep} wird die Methode \textit{long\_run\_running} zwei Sekunden gestoppt. Im Beispiel sieht man dass die Zeile 6 als erstes auf dem Monitor ausgegeben wird als die Zeile 3. 
 
-
-\begin{lstlisting}[language=Ruby,caption={\cite[p. 21]{Sto2013}}]
+\cite[p. 21]{Sto2013}
+\begin{lstlisting}[language=Ruby]
   100.times do
     Thread.new { sleep }
   end
@@ -57,7 +57,9 @@ In MRI (seit Version 1.9), Rubinius und JRuby werden Native Threads des Betriebs
 
 Der Conditional Assignment Operator in Ruby (||=) wird häufig verwendet um einer Variable einen Standardwert zu zuweisen. Dabei ist dieser Operator nicht Thread-Safe, da er keine Atomare Operation darstellt. Hinter diesem Operator steht eine Funktion welche wie folgt aussehen könnte \footnote{Die genaue Implementierung dieses Operators kann sich zwischen den einzelnen Ruby Implementierungen unterscheiden. Das Funktionsweise ist bei allen Implementierungen gleich}:
 
-\begin{lstlisting}[language=Ruby,label={listing:conditional},caption={\cite[p. 24]{Sto2013}}]
+,caption={\cite[p. 24]{Sto2013}}
+
+\begin{lstlisting}[language=Ruby,label={listing:conditional}]
 	\# Dieser Ausdruck
 	@results ||= "test" 
 
@@ -77,8 +79,9 @@ Der GIL (Global Interpeter Lock) ist ein globaler Lock um der das parallele Ausf
 
 Die Funktionsweise des MRI kann man anhand der Berechnung der Fibonacci Zahl \footnote{Weiter Informationen zur Fibonacci Zahlenfolge finden Sie auf \url{http://de.wikipedia.org/wiki/Fibonacci-Folge}} erklären. Bei diesem Beispiel sollten 4 mal die Fibonacci Zahlen bis 35 berechnet werden:
 
+caption={\cite[p. 21]{Sto2013}}
 
-\begin{lstlisting}[language=Ruby,label={listing:fibonacci}caption={\cite[p. 21]{Sto2013}}]
+\begin{lstlisting}[language=Ruby,label={listing:fibonacci}]
 class Fibonacci
   def initialize(threads, number)
     @threads = Array.new(threads) { Thread.new {calculate number}}
@@ -112,7 +115,7 @@ Der GIL ist eine Beschränkung von Parallelem ausführen von Ruby Code. Rubinius
 
 Angenommen man besitzt folgendes Program\footnote{Idee von: \url{http://stackoverflow.com/questions/19969551/why-no-race-condition-in-ruby}}: 
 
-\begin{lstlisting}[language=Ruby,label={listing:race condition},caption={\cite[p. 21]{Sto2013}}]
+\begin{lstlisting}[language=Ruby,label={listing:race condition}]
 
 class Calculator
   attr_accessor :counter
