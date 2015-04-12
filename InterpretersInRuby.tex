@@ -137,10 +137,28 @@ puts calculator.counter
 
 In Listing \ref{listing:race condition} werden zwei Threads verwendet um eine Zahl 100000 mal zu erhöhen. Das Resultat der Berechnung sollte \emph{200 000} sein. Wird die Funktion mit MRI ausgeführt erhält man den Wert \emph{200 000}. Wird das Programm mit Rubinius oder JRuby ausgeführt erhält man den Wert \emph{200 000} nicht. 
 
+Obwohl MRI Race Conditionen vermeiden kann sind diese jedoch nicht ausgeschlossen wie folgendes Beispiel zeigt \footnote{Adaptiert von \url{http://stackoverflow.com/a/18576777/3002239}}:
 
+\begin{lstlisting}[language=Ruby,label={listing:race condition mri},caption={Race Condition in Ruby MRI}]
+$counter = 0
 
+100.times.map do
+  Thread.new do
+    100.times do
+      counter = $counter + 1
+      sleep 0.001
+      $counter = counter
+    end
+  end
+end.each(&:join)
 
+puts $counter
 
+\end{lstlisting}
+
+In Listing \ref{listing:race condition mri} wird eine Globale Variable \emph{\$counter} erstellt. Nun werden 100 Threads erzeugt, welche die Variable \emph{\$counter} 100 mal erhöht. Am Ende sollte das Programm 10000 ausgeben, jedoch enthält dieses Programm eine Race Condition und liefert daher meistens ein falsches Ergebnis. In diesem Fall ist die Zeile 6 eine blockierende Operation und MRI verwendet blockierende Operationen um einen anderen Thread den GIL zu erteilen. Erhält der blockierte Thread den GIL wieder so ist der Wert von counter nicht der aktuelle Wert von  \emph{\$counter + 1} sondern der veralteter Wert zum Zeitpunkt an dem der Thread pausiert wurde. Dadurch wird in Zeile 8 ein veralteter Wert an der Variable \emph{\$counter} zugewiesen. 
+
+Auch wenn ein solches Beispiel wie in Listing \ref{listing:race condition mri} in der Praxis eher selten auftreten wird, zeigt es dass auch mit einem GIL Race Conditions entstehen können.
 
 
 
@@ -210,6 +228,8 @@ Compiler wie Rubymotion \footnote{Cross Plattform Ruby Compiler für IOS und And
 
 
 \subsection{JRuby}
+
+(TODO: write about jruby does not support c extensions)
 
 
 \subsection{Rubinius}
