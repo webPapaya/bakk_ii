@@ -108,7 +108,7 @@ In Listing \ref{listing:fibonacci} wird die Fibonacci Zahl 4 mal berechnet. Dazu
   \item Haben alle Threads die Berechnung beendet, ist das Programm abgeschlossen.
 \end{itemize}
 
-Der GIL ist eine Beschränkung von Parallelem ausführen von Ruby Code. Rubinius und JRuby heben den GIL auf und können dadurch Code parallel ausführen. Auch wenn der GIL eine große Beschränkung für das parallele Ausführen von Ruby Code darstellt gibt es Gründe warum das Team von MRI am GIL festhalten möchte. Hauptsächlich möchte man das Problem von Race Conditionen vermeiden \cite[p. 48-49]{Sto2013\}.
+Der GIL ist eine Beschränkung von Parallelem ausführen von Ruby Code. Rubinius und JRuby heben den GIL auf und können dadurch Code parallel ausführen. Auch wenn der GIL eine große Beschränkung für das parallele Ausführen von Ruby Code darstellt gibt es Gründe warum das Team von MRI am GIL festhalten möchte. Hauptsächlich möchte man das Problem von Race Conditionen vermeiden \cite[p. 48-49]{Sto2013}.
 
 Angenommen man besitzt folgendes Program\footnote{Idee von: \url{http://stackoverflow.com/questions/19969551/why-no-race-condition-in-ruby}}: 
 
