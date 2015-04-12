@@ -71,7 +71,7 @@ In dem Listing \ref{listing:conditional} kann man erkennen das der Conditional A
 
 (TODO: Continue to Write on this section)
 
-\subsubsubsection{The GIL in MRI}
+\subsubsection{The GIL in MRI}
 
 Der GIL (Global Interpeter Lock) ist ein globaler Lock um der das parallele Ausführen von Ruby Code in einem Ruby Prozess verhindert. Das bedeutet, dass immer nur ein Ruby Thread pro Prozess einen Fortschritt machen kann. Wenn ein Thread einen fortschritt machen möchte muss er den GIL erhalten und darf nur dann einen fortschritt machen. Das bedeutet nicht dass in Ruby keine concurrent Applikationen geschrieben werden können, denn sobald ein Thread auf eine blockierende Operation trifft (z.B. I/O) dann wird der GIL an einen anderen Thread vergeben. Zu einem späteren Zeitpunkt erhält der blockierte Thread den GIL wieder und kann die Daten weiterverarbeiten. Das bedeutet jedoch das in MRI Ruby Code nie parallel laufen kann \cite[p. 42]{Sto2013}. 
 
