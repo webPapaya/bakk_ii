@@ -52,7 +52,7 @@ Dieses Programm erstellt 100 Threads und versetzt diese in einen schlafenden Zus
 
 Vergleicht man die unterschiedlichen Implementierungen von Ruby so kann man erkennen dass MRI, Rubinius, und JRuby weitere Threads zum verwalten von Ruby verwenden. MRI verwendet 1 zusätzlichen Thread zum verwalten. Bei JRuby und Rubinius richtet sich die Anzahl an Threads zum verwalten von Ruby an die verwendete CPU.
 
-\subsubsubsection{Thread-Safety in Ruby}
+\subsubsection{Thread-Safety in Ruby}
 In MRI (seit Version 1.9), Rubinius und JRuby werden Native Threads des Betriebssystems verwendet. Dadurch verwenden diese Implementierungen den Scheduler des Betriebssystems. Aus diesem Grund hat die Ruby Implementierung keinen Einfluss auf den genauen Zeitpunkt der Context-Switches. Dadurch können Race Conditions entstehen, welche für falsche Daten verantwortlich sind.
 
 Der Conditional Assignment Operator in Ruby (\emph{\|\|\=}) wird häufig verwendet um einer Variable einen Standardwert zu zuweisen. Dabei ist dieser Operator nicht Thread-Safe, da er keine Atomare Operation darstellt. Hinter diesem Operator steht eine Funktion welche wie folgt aussehen könnte \footnote{Die genaue Implementierung dieses Operators kann sich zwischen den einzelnen Ruby Implementierungen unterscheiden. Das Funktionsweise ist bei allen Implementierungen gleich}:
