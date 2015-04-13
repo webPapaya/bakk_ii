@@ -13,6 +13,35 @@ Im Kern ist Ruby eine rein Objekt Orientierte Programmiersprache. Dabei besteht 
 
 Ruby wurde im Jahr 2012 von der ISO (International Organization for Standardization) mit dem Standard ISO/IEC 30170 \footnote{Den Standard kann man der Website \url{http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=59579} erwerben} standardisiert. Die Referenzimplementierung von Ruby ist CRuby oder MRI (Matz's Ruby Interpreter) \footnote{Der Quellcode ist auf Github verfügbar: \url{https://github.com/ruby/ruby}}.
 
+\subsection{Ruby Implementierungen}
+
+Für die Programmiersprache Ruby gibt es unterschiedliche Implementierungen auf welche ich in diesem Kapitel eingehen möchte. Folgende Implementierungen werden in dieser Arbeit nicht behandelt da diese entweder nicht mehr aktiv Weiterentwickelt werden oder für diese Arbeit keine Relevanz besitzten:
+
+\begin{itemize}
+  \item MacRuby
+  \item MRuby
+  \item IronRuby
+  \item MegLev
+  \item Cardinal
+  \item Ruby Enterprise Edition
+\end{itemize}
+
+Compiler wie Rubymotion \footnote{Cross Plattform Ruby Compiler für IOS und Android \url{http://www.rubymotion.com/}}, welche Ruby Code in eine andere Programmiersprache kompilieren, werden in dieser Thesis ebenfalls nicht besprochen.
+
+\subsubsection{CRuby}
+
+
+\subsubsection{JRuby}
+
+(TODO: write about jruby does not support c extensions)
+
+
+\subsubsection{Rubinius}
+Rubinius ist eine Implementierung von Ruby welche sich auf Concurrency spezialisiert hat. Dabei verwendet es native Threads um Ruby Code auf allen CPUs laufen zu lassen. Rubinius wird nicht interpretiert sondern besitzt einen JIT (Just In Time) Compiler. Dabei wird der Ruby Code in Bytecode transformiert, welcher von der Ribinius Virtual Maschine ausgeführt wird. Die virtuelle Maschine ist in C und C++ geschrieben und verwendet Teile wie den Ruby Parser von MRI. Die Sprache Ruby ist selbst in Ruby implementiert und kann auf der Virtuellen Maschine ausgeführt werden. Dadurch ist Rubinius eine Implementierung die zu einem großen Teil in Ruby implementiert ist. 
+
+
+
+
 
 \subsection{Concurrency in Ruby}
 
@@ -56,7 +85,6 @@ Vergleicht man die unterschiedlichen Implementierungen von Ruby so kann man erke
 In MRI (seit Version 1.9), Rubinius und JRuby werden Native Threads des Betriebssystems verwendet. Dadurch verwenden diese Implementierungen den Scheduler des Betriebssystems. Aus diesem Grund hat die Ruby Implementierung keinen Einfluss auf den genauen Zeitpunkt der Context-Switches. Dadurch können Race Conditions entstehen, welche für falsche Daten verantwortlich sind.
 
 Der Conditional Assignment Operator in Ruby (||=) wird häufig verwendet um einer Variable einen Standardwert zu zuweisen. Dabei ist dieser Operator nicht Thread-Safe, da er keine Atomare Operation darstellt. Hinter diesem Operator steht eine Funktion welche wie folgt aussehen könnte \footnote{Die genaue Implementierung dieses Operators kann sich zwischen den einzelnen Ruby Implementierungen unterscheiden. Das Funktionsweise ist bei allen Implementierungen gleich}:
-
 
 
 \begin{lstlisting}[language=Ruby,label={listing:conditional}, caption={Adaptiert von \cite{Sto2013}, Seite 24}]
@@ -152,7 +180,7 @@ $counter = 0
   end
 end.each(&:join)
 
-puts $counter
+puts $counter 
 
 \end{lstlisting}
 
@@ -161,77 +189,78 @@ In Listing \ref{listing:race condition mri} wird eine Globale Variable \emph{\$c
 Auch wenn ein solches Beispiel wie in Listing \ref{listing:race condition mri} in der Praxis eher selten auftreten wird, zeigt es dass auch mit einem GIL Race Conditions entstehen können.
 
 
+\subsubsection{Mutex}
+Mutex bieten die Möglichkeit Daten verschiedene Threads zu synchronisieren. Der Name Mutex kommt aus dem Englischen \emph{Mutual Exception}. Das Bedeutet, dass eine Sektion welche von einem Mutex umschlossen wurde nur von einem Thread zum selben Zeitpunk ausgeführt werden darf \cite[p. 81]{Sto2013}. 
+
+In Ruby kann ein Mutex mit der Klasse Mutex\footnote{Dokumentation unter:  \url{http://ruby-doc.org/core-2.2.0/Mutex.html}} implementiert werden.
 
 
+\begin{lstlisting}[language=Ruby,label={listing:race condition mutex}]
+require 'thread'
 
+$counter = 0
+mutex = Mutex.new
 
+100.times.map do
+  Thread.new do
+    100.times do
+      mutex.lock
+      counter = $counter + 1
+      sleep 0.001
+      $counter = counter
+      mutex.unlock
+    end
+  end
+end.each(&:join)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Die Klasse Thread bietet einige Methoden um mit Threads in Ruby zu arbeiten. \footnote{Eine genaue Dokumentation findet sich unter \url{http://ruby-doc.org/core-2.2.0/Thread.html}}
-
-\subsubsection{Fibers}
-Fibers sind leichtgewichtige Objekte in Ruby welche Concurrency ermöglichen. Dabei akzeptieren Fibers Code Blöcke welche von der Applikation gestartet, pausiert und weitergeführt werden können. Im Unterschied zu Threads wird der Zeitplan von Fibers nicht von der Ausführenden Umgebung (Virtuellen Maschine) bestimmt sondern vom Programmierer. 
-
-Jede Fiber besitzt einen eigenen 4kb großen Call-Stack der das Pausieren eines Fibers ermöglicht. Fibers werden nicht automatisch gestartet und müssen manuell vom Programmierer gestartet werden.
-
-\begin{lstlisting}[language=Ruby,label=lst:thread_example]
-def long_running
-	sleep 2
-	puts "second"
-end
-Thread.new { long_running }
-puts "first"
-
-# Output
-#
-# => first
-# => second
-
+puts $counter # 10000
 \end{lstlisting}
 
-
-
-\subsection{Ruby Implementierungen}
-
-Für die Programmiersprache Ruby gibt es unterschiedliche Implementierungen auf welche ich in diesem Kapitel eingehen möchte. Folgende Implementierungen werden in dieser Arbeit nicht behandelt da diese entweder nicht mehr aktiv Weiterentwickelt werden oder für diese Arbeit keine Relevanz besitzten:
+In Listing \ref{listing:race condition mri} konnte eine Race Kondition in MRI, Rubinius und JRuby entdeckt werden. Durch das Sperren des kritischen Codes durch einen Mutex in Listing \ref{listing:race condition mutex} wird eine Race Condition verhindert. Die Funktionsweise des Mutex ist wie folgt \cite[p. 83-84]{Sto2013}: 
 
 \begin{itemize}
-  \item MacRuby
-  \item MRuby
-  \item IronRuby
-  \item MegLev
-  \item Cardinal
-  \item Ruby Enterprise Edition
+  \item Trifft der erste Thread auf den Mutex nimmt er diesen und sperrt die Ausführung des Codes und wird zum Besitzer des Mutex.
+  \item Solange der erste Thread den Mutex besitzt darf kein andere Thread den Mutex für sich sperren. Dadurch kann kein anderer Thread den vom Mutex umschlossenen Code ausführen. 
+  \item Hat der erste Thread den Code im Mutex ausgeführt, gibt er den Mutex frei. Dadurch ist der erste Thread nicht mehr Besitzer des Mutex und ein weiterer Thread kann den Mutex für sich sperren.
 \end{itemize}
 
-Compiler wie Rubymotion \footnote{Cross Plattform Ruby Compiler für IOS und Android \url{http://www.rubymotion.com/}}, welche Ruby Code in eine andere Programmiersprache kompilieren, werden in dieser Thesis ebenfalls nicht besprochen.
+Das Sperren und Freigeben des Mutex wird direkt vom Betriebssystem verwaltet. Dabei gibt das Betriebssystem die Garantie dafür das kein anderer Thread diese Operation zur exakt selben Zeit ausführt. Durch die verwendung von Mutex in Listing \ref{listing:race condition mutex} wird die Operation \emph{Thread-Safe}.
 
-\subsection{CRuby}
+Auf Linux kann ein Lock durch die C Funktion \emph{pthread_mutex_init(3)} \footnote{http://linux.die.net/man/3/pthread_mutex_init} erstellt werden. Diese Funktion wird auch in MRI verwendet um einen Mutex zu erstellen \cite[p. 83-84]{Sto2013}. \footnote{Die Zeile in der ein Mutex in MRI erstellt wird: \url{https://github.com/ruby/ruby/blob/40564c1e3b187fc593001ae80522e577dbb8eb50/thread_pthread.c#L242}}.
 
+Mutex kann zur synchronisierung von Daten verwendet werden. Jedoch können Teile einer Applikation welche durch einen Mutex gekapselt worden sind nicht parallel laufen. Ist ein Abschnitt in einer Applikation durch einen Mutex gekapselt, so kann dieser Teil nie parallel ausgeführt werden. Aus diesem Grund verwendet Ruby MRI auch einen Mutex für den GIL. Dadurch kann verhindert werden das Code parallel ausgeführt wird \cite[p. 91]{Sto2013}.
 
-\subsection{JRuby}
+\subsection{Conditional Variables in Ruby}
 
-(TODO: write about jruby does not support c extensions)
+\emph{Conditional Variables} bieten die Möglichkeit der Kommunikation zwischen einzelnen Threads. Dabei bieten sie einen Kontroll Mechanismus zwischen einzelnen Threads. Zum Beispiel kann ein Thread in einen schlafenden Zustand versetzt werden bis ein anderer Thread diesen Aufweckt. Die Nachrichten einer \emph{Conditional Variable} werden nicht zwischengespeichert, was bedeutet, dass eine Nachricht verloren geht, wenn diese nicht empfangen wurde \cite[p. 748]{tan09}.
 
+Durch \emph{Conditional Variables} kann ein Thread in einen schlafenden Zustand versetzt werden, wenn dieser auf Daten eines anderen Threads wartet. Sind die Daten des anderen Threads bereit, kann dieser ein Signal an den schlafenden Thread versenden der diesen aufweckt. Dadurch muss der Thread nicht ständig den Status des anderen Threads pollen \cite[p. 100]{Sto2013}
 
-\subsection{Rubinius}
-Rubinius ist eine Implementierung von Ruby welche sich auf Concurrency spezialisiert hat. Dabei verwendet es native Threads um Ruby Code auf allen CPUs laufen zu lassen. Rubinius wird nicht interpretiert sondern besitzt einen JIT (Just In Time) Compiler. Dabei wird der Ruby Code in Bytecode transformiert, welcher von der Ribinius Virtual Maschine ausgeführt wird. Die virtuelle Maschine ist in C und C++ geschrieben und verwendet Teile wie den Ruby Parser von MRI. Die Sprache Ruby ist selbst in Ruby implementiert und kann auf der Virtuellen Maschine ausgeführt werden. Dadurch ist Rubinius eine Implementierung die zu einem großen Teil in Ruby implementiert ist. 
+\subsection{Thread-Safe Datenstrukturen in Ruby}
+In Ruby gibt es nur eine Datenstruktur welche Thread Safe ist. Die Klasse \emph{Queue} bietet eine Möglichkeit zur synchronisierung von Threads. Die Klasse Queue besitzt einen blockierenden Charakter, was bedeutet, dass bei die Funktionen Push und Pop von einem Mutex umschlossen ist. Dadurch können keine \emph{Race Conditions} entstehen, welche zu korrupten Daten führen \cite[p. 110]{Sto2013}. 
+
+Array und Hash sind weder in MRI noch in Rubinius und JRuby Thread Safe. Der Grund dafür liegt daran, dass Mutex in einem Single Threaded Kontext einen Overhead mit sich bringen, welcher sich signifikant auf die Performance der beiden Klassen niederschlagen würde \cite[p. 110]{Sto2013}.
+
+Immutable Objekte sind Objekte welche nicht verändert werden kann, nachdem es erstellt wurde. Daraus Resultiert, dass diese Objekte Thread Safe sind. Ein Array, kann mit der Methode \emph{freeze} zu einem immutable Objekt konvertiert werden. Dadurch kann dem Array jedoch kein Element angefügt, entfernt oder modifiziert werden. Listing \ref{listing:immutable} zeigt ein immutable Array welches nicht modifiziert werden kann. 
+
+\begin{lstlisting}[language=Ruby,label={listing:immutable}]
+	array = [1,2,3].freeze
+	array.push 4 # can't modify frozen Array (RuntimeError)
+\end{lstlisting}
+
+Eine Möglichkeit mit Immutable Datenstrukturen zu arbeiten bietet das gem \emph{hamster} \footnote{Dokumentation unter: \url{https://github.com/hamstergem/hamster}}. Dieses kopiert bei jeder Veränderung die originale Datenstruktur und verändert diese und gibt die veränderte Datenstruktur zurück. Dadurch bleibt die originale Struktur Datenstruktur immer gleich. 
+
+\begin{lstlisting}[language=Ruby,label={listing:immuteable hamster}]
+	require "hamster/vector"
+
+	vector_original     = Hamster.vector 1, 2, 3
+	vector_transformed  = vector_original.push 4
+
+	puts vector_original.length # 3
+	puts vector_transformed.length # 4
+	puts vector_transformed.object_id == vector_original.object_id # false
+\end{lstlisting}
+
+In Listing \ref{listing:immuteable hamster} wird ein Hamster Vector Objekt erstellt, welches mit einem Array vergleichbar ist. In Zeile 3 wird ein neues \emph{Hamster.vector} Objekt erzeugt und mit den Werten \emph{1 ,2 ,3} initialisiert. Wird auf das neu initialisierte Objekt die Methode \emph{push} aufgerufen, so kopiert die Methode das alte Objekt fügt das neue Element \emph{4} an die Kopie an und friert die kopie ein. Nachdem aus dem Objekt ein Immutable Objekt geworden ist wird dieses Objekt zurückgegeben.
+
 
