@@ -226,7 +226,7 @@ In Listing \ref{listing:race condition mri} konnte eine Race Kondition in MRI, R
 
 Das Sperren und Freigeben des Mutex wird direkt vom Betriebssystem verwaltet. Dabei gibt das Betriebssystem die Garantie dafür das kein anderer Thread diese Operation zur exakt selben Zeit ausführt. Durch die verwendung von Mutex in Listing \ref{listing:race condition mutex} wird die Operation \emph{Thread-Safe}.
 
-Auf Linux kann ein Lock durch die C Funktion \emph{pthread_mutex_init(3)} \footnote{http://linux.die.net/man/3/pthread_mutex_init} erstellt werden. Diese Funktion wird auch in MRI verwendet um einen Mutex zu erstellen \cite[p. 83-84]{Sto2013}. \footnote{Die Zeile in der ein Mutex in MRI erstellt wird: \url{https://github.com/ruby/ruby/blob/40564c1e3b187fc593001ae80522e577dbb8eb50/thread_pthread.c#L242}}.
+Auf Linux kann ein Lock durch die C Funktion \emph{pthread_mutex_init} \footnote{http://linux.die.net/man/3/pthread_mutex_init} erstellt werden. Diese Funktion wird auch in MRI verwendet um einen Mutex zu erstellen \cite[p. 83-84]{Sto2013}. \footnote{Die Zeile in der ein Mutex in MRI erstellt wird: \url{https://github.com/ruby/ruby/blob/40564c1e3b187fc593001ae80522e577dbb8eb50/thread_pthread.c#L242}}.
 
 Mutex kann zur synchronisierung von Daten verwendet werden. Jedoch können Teile einer Applikation welche durch einen Mutex gekapselt worden sind nicht parallel laufen. Ist ein Abschnitt in einer Applikation durch einen Mutex gekapselt, so kann dieser Teil nie parallel ausgeführt werden. Aus diesem Grund verwendet Ruby MRI auch einen Mutex für den GIL. Dadurch kann verhindert werden das Code parallel ausgeführt wird \cite[p. 91]{Sto2013}.
 
