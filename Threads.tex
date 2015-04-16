@@ -10,6 +10,19 @@ In einem Betriebssystem werden eine Menge von sequentiellen Prozessen ausgeführ
 \label{section: Threads}
 Ein Prozess besitzt immer nur einen Ausführungsfaden. Mehrere Prozesse können parallel oder quasi-parallel abgearbeitet werden jedoch können einzelne Prozesse nicht den gemeinsamen Adressraum teilen. Es gibt Situationen in denen eine Applikation mehrere Ausführungsfäden parallel bearbeiten möchte. Threads bieten die Möglichkeit einzelne Ausführungsfäden in einem Prozess auszuführen. Dabei besitzt ein Thread einen Befehlszeiger, ein Register und einen eigenen Stack. Der Befehlszeiger gibt an welcher Befehl als nächstes ausgeführt werden soll. Das Register beinhaltet alle lokalen Variablen. Im Stack werden aufgerufene Funktionen gestapelt welche noch nicht verlassen wurden. Durch den geteilten Adressraum zwischen den einzelnen Threads besitzen alle die selben globalen Variablen und diese lese, modifizieren oder löschen \cite[p. 97]{tan09}. 
 
+Bei der Realisierung von Threads kann man prinzipiell zwischen drei Arten unterscheiden\footnote{Auf Threads in Kernel und Hybride Realisierungen wird in dieser Arbeit nicht eingegangen. Eine Einführung in Kernel Threads und Hybride Threads findet sich in \cite[p. 109-110]{tan09}}:
+
+\begin{itemize}
+  \item Threads im Benutzeradressraum
+  \item Threads im Kernel 
+  \item Hybride Realisierung von Threads
+\end{itemize}
+
+Bei einer Implementierung von Threads im Benutzerraum weiß das Betriebssystem von der Implementierung von Threads nichts. Wenn die Threads im Benutzerraum implementiert werden, benötigt jeder Thread seine eigene Thread Tabelle in der alle Threads des Prozesses verwaltet werden. Die Threads werden dabei von der Laufzeit verwaltet. Die implementierung von Threads im Benutzeradressraum wird auch als Green-Threads bezeichnet \cite[p. 106]{tan09}}.
+
+Blockierende Operationen wie das lesen eine I/O Operation kann von Threads im Adressraum realisiert werden, jedoch würde das alle weiteren Threads stoppen. Auf vielen UNIX Systemen gibt es die Funktion \emph{select}, welche überprüft ob eine Operation blockiert oder nicht. Wird die Operation blockiert, so wird ein anderer Thread ausgeführt. Wenn der blockierte Thread beim nächsten mal die Kontrolle bekommt, kann er ein weiteres mal überprüfen ob die operation blockiert. Dieser Vorgang wiederholt sich so lange, bis der Thread die Daten lesen kann \cite[p. 108]{tan09}}. 
+
+
 \section{Prozesse vs. Threads}
 
 Prozesse und Threads teilen sich einige Eigenschaften. Beide Konzepte bieten die Möglichkeit Aufgaben parallel oder pseudo parallel zu bearbeiten. Prozesse teilen sich physische Ressourcen eines Computers wie Speicher, Festplatten, I/O Geräte, etc. Threads teilen sich den Adressraum und geöffnete Dateien eines Prozesses. Prozesse gehören immer zu genau einem Benutzer eines Betriebssystems. Threads hingegen gehören zu einem Prozess und besitzen dadurch nur indirekt einen Benutzer \cite[p. 89]{tan09}. 

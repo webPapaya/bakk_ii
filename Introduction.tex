@@ -28,10 +28,6 @@ Eine Applikation ist performant wenn diese einem EndbenutzerIn ein Aufgabe ausf�
   \item \emph{Ressourcenverbauch:} Wie viel Prozent der Verfügbaren Ressourcen eine Applikation verwendet.
 \end{itemize}
 
-(TODO: Threads add Time Slicing)
-Durch Time-Slicing kann eine pseudo Parallelität auf einem einzelnen Prozessor erreicht werden. Durch diese Definition schließt sich, dass eine richtige Parallelität nur dann existiert wenn mehrere Aufgaben auf der selben Anzahl an Prozessorkernen ausgeführt werden.
-
-
 
 \subsection{Concurrency}
 \label{section:concurrency}
@@ -139,18 +135,13 @@ In Listing \ref{listing:closures} wird eine Datei vom lokalem Filesystem geöffn
 Beim Lesen einer Datei werden der erste Charackter der Datei überprüft ob dieser bereit ist zum lesen. Dadurch kann bestimmt werden ob die Datei eingelesen werden kann, ohne dass die I/O Operation blockiert.
 
 
-
-
-
-\cite[]{select2}
-
 \subsection{I/O Operations}
 \label{subsection: io_operationen}
+Eine Aufgabe eines Betriebssystems ist die Verwaltung von Ein- und Ausgabe (I/O = Input/Output). Besonders in grafischen Anwendungen spielt das Reagieren auf Benutzereingaben eine wichtige Rolle. Um zum Beispiel eine Datei zu öffnen wird die Eingabe des Benutzers verwendet um die Datei zu finden. Die Datei wird anschließend gelesen um den Inhalt am Monitor auszugeben.
 
-(TODO: write about select)
-%http://man7.org/linux/man-pages/man2/select.2.html
-(TODO: how does I/O in the Kernel work)
+In Applikationen können viele I/O Operationen zwischengespeichert werden bevor sie in die Applikation eintreffen. Dabei blockiert das Betriebssystem die restlichen Operationen so lange bis die Datei fertig eingelesen wurde. Im Anschluss können die Daten der Datei weiterverareitet werden \cite[p. 307]{tan09}. 
 
+(TODO: refactor)
 
 \subsubsection{Why I/O Speed Matters}
 \label{subsection: i/o speed}
