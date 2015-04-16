@@ -10,7 +10,7 @@ In einem Betriebssystem werden eine Menge von sequentiellen Prozessen ausgeführ
 \label{section: Threads}
 Ein Prozess besitzt immer nur einen Ausführungsfaden. Mehrere Prozesse können parallel oder quasi-parallel abgearbeitet werden jedoch können einzelne Prozesse nicht den gemeinsamen Adressraum teilen. Es gibt Situationen in denen eine Applikation mehrere Ausführungsfäden parallel bearbeiten möchte. Threads bieten die Möglichkeit einzelne Ausführungsfäden in einem Prozess auszuführen. Dabei besitzt ein Thread einen Befehlszeiger, ein Register und einen eigenen Stack. Der Befehlszeiger gibt an welcher Befehl als nächstes ausgeführt werden soll. Das Register beinhaltet alle lokalen Variablen. Im Stack werden aufgerufene Funktionen gestapelt welche noch nicht verlassen wurden. Durch den geteilten Adressraum zwischen den einzelnen Threads besitzen alle die selben globalen Variablen und diese lese, modifizieren oder löschen \cite[p. 97]{tan09}. 
 
-Bei der Realisierung von Threads kann man prinzipiell zwischen drei Arten unterscheiden\footnote{Auf Threads in Kernel und Hybride Realisierungen wird in dieser Arbeit nicht eingegangen. Eine Einführung in Kernel Threads und Hybride Threads findet sich in \cite[p. 109-110]{tan09}:
+Bei der Realisierung von Threads kann man prinzipiell zwischen drei Arten unterscheiden\footnote{Auf Threads in Kernel und Hybride Realisierungen wird in dieser Arbeit nicht eingegangen. Eine Einführung in Kernel Threads und Hybride Threads findet sich in \cite[p. 109-110]{tan09}}:
 
 \begin{itemize}
   \item Threads im Benutzeradressraum
@@ -92,5 +92,3 @@ Green Threads sind User-Level Threads welche nicht vom Kernel des Betriebssystem
 
 
  \cite[p.2]{Sun01}.
-
-
