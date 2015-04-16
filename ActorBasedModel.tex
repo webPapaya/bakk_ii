@@ -65,5 +65,4 @@ Das Actor Based Model ist ein Model welches auf drei Grundlegenden Komponenten d
 
 Es gibt drei Möglichkeiten wie ein Actor eine Nachricht verarbeiten kann (Neue Actoren erstellen, Er kann eine Nachricht an andere Versenden, Er kann bestimmen wie er die nächste Nachricht verarbeiten möchte).
 
-Um Race Conditionen zu vermeiden dürfen Nachrichten nur aus unveränderbaren Daten bestehen. Das übermitteln von Referenzen oder Pointer zu anderen Actoren ist verboten. Dadurch entsteht eine innere Kapselung der Daten eines einzelnen Actors was dazu führt, dass sich das Actor Based Model für parallele Programmierung anbietet. Es können zwar Deadlocks oder Race Conditions entstehen wobei diese Hauptsächlich als Fehler in der Applikation gesehen werden können. 
-
+Um Race Conditionen zu vermeiden dürfen Nachrichten nur aus unveränderbaren Daten bestehen. Das übermitteln von Referenzen oder Pointer zu anderen Actoren ist verboten. Dadurch entsteht eine innere Kapselung der Daten eines einzelnen Actors was dazu führt, dass sich das Actor Based Model für parallele Programmierung anbietet. Es können zwar Deadlocks oder Race Conditions entstehen wobei diese Hauptsächlich als Fehler in der Applikation gesehen werden können.
