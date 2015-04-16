@@ -1,16 +1,18 @@
+\section{Prozess}
+
+Tanenbaum beschreibt einen Prozess als ein Programm in Ausführung inklusive des aktuellen Wertes des Befehlszählers, der Registerinhalte und der Belegung der Variablen. Dabei besitzt jeder Prozess seine eigene virtuelle CPU, auf welcher der Prozess arbeiten darf. Um den Anschein einer parallelität für den BenutzerIn zu gewährleisten, wechselt die CPU zwischen einzelnen Programmen. Dadurch kann ein Betriebssystem, welches auf einem Computer mit Single Core Prozessor installiert ist, trotzdem mehrere Dinge gleichzeitig erledigen. Zum Beispiel kann ein Textverarbeitungsprogramm ausgeführt werden und gleichzeitig kann dieses eine Datei von der Festplatte öffnen \cite[p. 87]{tan09}.
+
+In einem Betriebssystem werden eine Menge von sequentiellen Prozessen ausgeführt. Dabei kann man einen Prozess als ein Programm beschreiben, welches ausgeführt wird. Durch einen Scheduling Algorithmus werden die einzelnen Prozesse koordiniert und den Rechnzeiten auf der CPU zugewiesen. Die exakte Zeit wie lange ein Prozess für eine Aufgabe benötigt kann durch das Scheduling nicht genau bestimmt werden, da der Prozess nur seine Priorität beeinflussen kann. Jedoch unterliegt es dem Scheduling Algorithmus welcher Prozess wann auf der CPU ausgeführt wird \cite[p. 88]{tan09}. 
+
+(TODO: add image Tannenbaum 88 Abb 2.1)
+
 \section{Threads}
 \label{section: Threads}
+Ein Prozess besitzt immer nur einen Ausführungsfaden. Mehrere Prozesse können parallel oder quasi-parallel abgearbeitet werden jedoch können einzelne Prozesse nicht den gemeinsamen Adressraum teilen. Es gibt Situationen in denen eine Applikation mehrere Ausführungsfäden parallel bearbeiten möchte. Threads bieten die Möglichkeit einzelne Ausführungsfäden in einem Prozess auszuführen. Dabei besitzt ein Thread einen Befehlszeiger, ein Register und einen eigenen Stack. Der Befehlszeiger gibt an welcher Befehl als nächstes ausgeführt werden soll. Das Register beinhaltet alle lokalen Variablen. Im Stack werden aufgerufene Funktionen gestapelt welche noch nicht verlassen wurden. Durch den geteilten Adressraum zwischen den einzelnen Threads besitzen alle die selben globalen Variablen und diese lese, modifizieren oder löschen \cite[p. 97]{tan09}. 
 
+\section{Prozesse vs. Threads}
 
-(TODO: maybe cover those topics:)
-%https://www.wikiwand.com/en/Parallel_Virtual_Machine
-%https://www.wikiwand.com/de/Message_Passing_Interface
-%http://www.open-mpi.org/
-
-Prozess ist eine squentielle folge von Operationen welche keinen Speicher mit anderen Operationen teilen. (TODO: add to own subheading - maybe to introduction)
-
-
-Threads sind Prozesse die sequentiell abgearbeitet werden jedoch den selben Speicher verwenden. \cite[p. 2]{Lee06} Es gibt Applikationen welche Threads
+Prozesse und Threads teilen sich einige Eigenschaften. Beide Konzepte bieten die Möglichkeit Aufgaben parallel oder pseudo parallel zu bearbeiten. Prozesse teilen sich physische Ressourcen eines Computers wie Speicher, Festplatten, I/O Geräte, etc. Threads teilen sich den Adressraum und geöffnete Dateien eines Prozesses. Prozesse gehören immer zu genau einem Benutzer eines Betriebssystems. Threads hingegen gehören zu einem Prozess und besitzen dadurch nur indirekt einen Benutzer \cite[p. 89]{tan09}. 
 
 
 \subsection{Probleme bei verwendung von Multithreading}
@@ -63,17 +65,12 @@ Das Problem bei dieser Implementierung ist die Möglichkeit eines Deadlocks. Die
 
 Das \emph{Dining Philosophers Problem} kann auf die Informatik angewendet werden bei dem mehrere parallel laufende Threads auf einen geteilten Speicher warten der vom jeweilig anderen Thread blockiert wird. 
 
-\subsection{Threadsafety}
-
-
-
 \subsection{Context Switching}
 Um einen möglichst faieren Zugriff auf die CPU für einzelne Threads zu bieten kann das Betriebssystem einzelne Threads zu jeder Zeit stoppen und zu einem späteren Zeitpunkt wieder ausführen. Der Zeitpunk wann ein Thread gestoppt werden soll und wann dieser wieder weiter ausgeführt werden soll wird von dem \emph{Scheduler} des Betriebssystems bestimmt. Die übergabe von CPU Ressourcen von einem Thread an den anderen wird als Context-Switch bezeichnet \cite[p. 23]{Sto2013}. 
 
 
 
 
-\url{https://wiki.haskell.org/Parallelism_vs._Concurrency}
 
 
 
@@ -84,6 +81,3 @@ Green Threads sind User-Level Threads welche nicht vom Kernel des Betriebssystem
  \cite[p.2]{Sun01}.
 
 
-Green Threads vs System Threads
-
-Deadlocks
