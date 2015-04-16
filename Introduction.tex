@@ -127,14 +127,6 @@ Closures können auf lokale Variablen zugreifen. Das bedeutet dass eine Closure 
 
 In Listing \ref{listing:closures} wird eine Datei vom lokalem Filesystem geöffnet. Die Funktion open in der File Klasse akzeptiert einen Block als Argument. Die Funktion open öffnet die Datei, führt den angegebenen Block aus und schließt nach Ausführung des Blocks die Datei. Blöcke können unter anderem in Transaktionen verwendet werden. \cite[]{fow04}
 
-
-\subsection{select(2)}
-\emph{select(2)} ist ein Low Level System Aufruf der ein oder mehrere Dateien beobachten kann ob diese bereit für eine I/O Operation sind. Dabei wird überprüft ob eine Datei bereit zum Lesen oder Schreiben ist oder einen Fehler besitzt.
-
-
-Beim Lesen einer Datei werden der erste Charackter der Datei überprüft ob dieser bereit ist zum lesen. Dadurch kann bestimmt werden ob die Datei eingelesen werden kann, ohne dass die I/O Operation blockiert.
-
-
 \subsection{I/O Operations}
 \label{subsection: io_operationen}
 Eine Aufgabe eines Betriebssystems ist die Verwaltung von Ein- und Ausgabe (I/O = Input/Output). Besonders in grafischen Anwendungen spielt das Reagieren auf Benutzereingaben eine wichtige Rolle. Um zum Beispiel eine Datei zu öffnen wird die Eingabe des Benutzers verwendet um die Datei zu finden. Die Datei wird anschließend gelesen um den Inhalt am Monitor auszugeben.
