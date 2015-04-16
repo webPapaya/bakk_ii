@@ -1,0 +1,18 @@
+\subsection{Actor Based Model in Ruby}
+
+In Kapitel \ref{section:Actor Based Model} wurde das Actor Based Model vorgestellt. In diesem Kapitel wird eine Implementierung dieses Models in Ruby vorgestellt und genauer analysiert \footnote{Den vollständigen Code findet man auf Github unter: \url{https://github.com/webPapaya/concurrency-in-ruby/tree/master/actor_based_model}}. 
+
+
+
+\subsection{Komponenten}
+
+Unser Actor besteht aus einem Modul Namens \emph{Actor}. In diesem Modul befinden sich drei Komponenten.
+
+\emph{modul ClassMethods}
+Das Modul ClassMethods ist ein Wrapper für alle statischen Methoden welche auf den Host des Moduls übertragen werden sollten. Dabei wird die Methode \emph{new} überschrieben, welche ein neues Objekt erzeugt.  
+
+\emph{class << self}
+
+
+
+\emph{class ActorProxy}
