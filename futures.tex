@@ -1,0 +1,38 @@
+\subsection{Futures}
+
+Ein Future \footnote{Im Javascript Bereich findet man Futures unter dem Begriff defferred} ist ein Platzhalter Objekt für die Berechnung eines Werts der in Zukunft verfügbar sein kann. Der Wert eines Futures wird im asynchron im Hintergrund berechnet. Dabei darf der Wert eines Futures nur einmal gesetzt werden. Dadurch wird der Wert eines Future immutable. Wird das Resultat eines Futures benötigt so gibt es entweder den Wert direkt an den Aufrufer zurück oder blockiert so lange den Thread des Aufrufers bis der Wert des Futures vorhanden ist. Durch Futures können Werte im parallel berechnet werden, was zu einem asynchronen, nicht blockierenden Programmfluss führt \cite[]{ScalaFutures}. 
+
+\subsubsection{Funktionsweise} 
+
+Ein Future ist ein Objekt welches die Berechnung eines Wertes representiert, der in Zukunft verfügbar sein kann. Dabei kann ein Future grundsätzlich drei Status besitzten: 
+
+\begin{itemize}
+  \item working
+  \item completed
+  \item error
+\end{itemize}  
+
+Besitzt das Future den Status \emph{working} so ist die Prozedur, welche den Wert des Futures berechnet noch nicht beendet. Sobald die Berechnung beendet ist wird der Wert des Futures auf das Resultat der Berechnung gesetzt. Der Status wird in diesem Schritt auf \emph{completed} gesetzt und der Wert wird in ein immutable verwandelt. Tritt bei der Berechnung ein Fehler auf wird der Status auf error gesetzt. 
+
+Möchte eine Applikation auf den Wert eines Futures zugreifen so gibt es zwei Möglichkeiten wie sich die Applikation verhalten kann. Wenn der Status des Futures \emph{completed} ist, so wird der Wert der Variable direkt zurückgeliefert. Ist die Berechnung jedoch noch nicht beendet so wird der Thread der Applikation so lange blockiert, bis der Wert verfügbar ist \cite[]{ScalaFutures}.
+
+Es gibt Implementierungen welche eine Callback Funktion aufrufen können, sobald der Wert eines Futures verfügbar ist. 
+
+\subsubsection{Schlüsse}
+(TODO: Deadlocks?)
+(TODO: Thread Safety?)
+
+\subsubsection{Implementierungen}
+Futures können entweder als Sprachkonzept direkt in die Programmiersprache eingebettet sein oder als Bibliothek zu einer bestehenden Programmiersprache hinzugefügt werden. Die folgende Liste gibt einen Aufschluss über Programmiersprachen welche Futures direkt in die Programmiersprache integriert haben und erhebt keinen anspruch auf Vollständigkeit \footnote{Eine erweiterte Liste findet sich auf \url{http://en.wikipedia.org/wiki/Futures_and_promises#List_of_implementation}}:
+
+\begin{itemize}
+  \item Javascript
+  \item Java
+  \item Scala
+  \item Dart
+  \item Swift
+\end{itemize}  
+
+\subsubsection{Zusammenfassung}
+Futures bieten die Möglichkeit Prozeduren wie I/O Operationen oder Berechnungen unabhängig vom Main Thread auszuführen. Dabei ist ein Future ein Platzhalter Objekt welches einen noch nicht brechneten Wert representiert. Futures besitzen eine weite Verbreitung und können durch Bibliotheken einem Projekt hinzugefügt werden.
+
