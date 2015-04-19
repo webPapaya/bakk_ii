@@ -4,13 +4,15 @@ In der Literatur wird zwischen den Begriffen Blocking und Synchrone Programmieru
 
 Drei voneinander unabhängige Aufgaben sollen von einem Computer ausgeführt werden. Alle drei Aufgaben müssen abgeschlossen sein, damit das Program abgeschlossen ist \cite[]{Pet2015}. 
 
-\subsection{I/O Bound vs CPU Bound Operations}
-(TODO: write section)
-
-
 \subsection{Blocking vs Non-Blocking}
 
 Beim behandeln von I/O Operationen kann eine Applikation dem Betriebssystem mitteilen wie die I/O Operation ausgeführt werden soll. Wird der Blocking Modus verwendet, so wartet das Program so lange bis alle Daten eingelesen wurden und bereit für die Weiterverarbeitung sind. Im Unterschied zum Blocking Mode wartet die Applikation nicht bis alle Daten eingelesen wurden. Die Funktion welche die I/O Operation ausführt leitet die Aufgabe (z.B. das einlesen einer Datei) an das Betriebssystem weiter und kehrt sofort zur aufrufenden Funktion zurück \cite[p. 47]{Erb2012}. Im Fall von NodeJS wird eine Callback Funktion hinterlegt, welche aufgerufen wird, wenn die I/O Operation abgeschlossen ist. Dadurch kann NodeJS in der Zwischenzeit andere Operationen ausführen. 
+
+\subsection{I/O Bound vs CPU Bound Operations}
+
+\emph{CPU Bound Operations}: Sind Prozeduren die primär CPU Ressourcen benötigen. In vielen Fällen sind das Algorithmen welche mit Daten aus dem Arbeitsspeicher arbeiten. Zum Beispiel ist die Berechnung der Fibonacci Zahl oder das Rendern eines HTML Templates eine CPU intensive Aufgabe und fällt dadurch in diese Kategorie \cite[p. 70]{Erb2012}. 
+
+\emph{I/O Bound Operations}: Sind Prozeduren welche grundsätzlich von I/O Operationen abhängig sind. Beim lesen solcher Dateien wird der Prozess in einen schlafenden Zustand versetzt bis die Datei fertig in den Arbeitsspeicher gelesen wurde. Das lesen einer Datei aus dem Dateisystem oder eine Datenbankabfrage fällt in die Kategorie der I/O Bound Operations \cite[p. 70]{Erb2012}. 
 
 \subsection{Das synchrone Model}
 
@@ -50,10 +52,9 @@ In diesem Kapitel wurde das Prinzip der asynchronen Programmierung besprochen. I
 \end{itemize}    
 
 Viele Anwendungen welche nur wenige I/O Operationen besitzen verwenden das blockierende und synchrone Model da es einen sequentiellen Programmierfluss erlaubt. Das nicht blockierende und synchrone Model verlagert das Warten auf die I/O Operation vom Betriebssystem in die Applikation, was zu einem unnötigen Ressourcenverbauch führen kann. 
-
-(TODO: write about blockierend und asynchron)
-
 Das asynchrone und nicht blockierende Model bietet die Möglichkeit die CPU bestmöglich auszunutzen da die Applikation während der I/O Operation eine andere Aufgabe ausführen kann.
+
+
 
 \subsection{Event getriebene Programmierung}
 (TODO: write Section)

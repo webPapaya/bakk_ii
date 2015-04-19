@@ -5,6 +5,7 @@ Das Reactor Pattern ist ein Design Pattern bei dem asynchrone auftretende Events
 
 
 \subsubsection{Motivation}
+\label{section:reactor_motivation}
 
 Douglas C. Schmidt beschreibt einen Anwendungsfall für das Reactor Pattern, bei dem Logging Informationen in einem Verteilten System an einen zentralen Server gesendet und gespeichert werden. Der Server soll in der Lage sein Logging informationen zu jederzeit speichern zu können und Logging Informationen können auch von mehreren Clients gleichzeitig an den Server gesendet werden. Möchte ein Client eine Verbindung zum Webserver aufbauen, wird der Thread des Webservers so lange blockiert, bis die Verbindung aufgebaut wurde und alle Daten übertragen wurden \cite[p. 1]{Sch95}. Sektion \ref{subsection: i/o speed} vergleicht wie lange I/O Operationen benötigen.
 
