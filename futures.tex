@@ -1,4 +1,5 @@
 \subsection{Futures}
+\label{section:futures}
 
 Ein Future \footnote{Im Javascript Bereich findet man Futures unter dem Begriff defferred} ist ein Platzhalter Objekt für die Berechnung eines Werts der in Zukunft verfügbar sein kann. Der Wert eines Futures wird im asynchron im Hintergrund berechnet. Dabei darf der Wert eines Futures nur einmal gesetzt werden. Dadurch wird der Wert eines Future immutable. Wird das Resultat eines Futures benötigt so gibt es entweder den Wert direkt an den Aufrufer zurück oder blockiert so lange den Thread des Aufrufers bis der Wert des Futures vorhanden ist. Durch Futures können Werte im parallel berechnet werden, was zu einem asynchronen, nicht blockierenden Programmfluss führt \cite[]{ScalaFutures}. 
 
@@ -35,4 +36,3 @@ Futures können entweder als Sprachkonzept direkt in die Programmiersprache eing
 
 \subsubsection{Zusammenfassung}
 Futures bieten die Möglichkeit Prozeduren wie I/O Operationen oder Berechnungen unabhängig vom Main Thread auszuführen. Dabei ist ein Future ein Platzhalter Objekt welches einen noch nicht brechneten Wert representiert. Futures besitzen eine weite Verbreitung und können durch Bibliotheken einem Projekt hinzugefügt werden.
-
