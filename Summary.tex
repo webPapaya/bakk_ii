@@ -1,7 +1,16 @@
 \section*{Kurzfassung}
 \vspace{0.5cm}
 
-TODO: Write Kurzfassung
+Die vorliegende Arbeit beschäftigt sich mit dem Thema \emph{Concurrency in Ruby}. Dabei werden Grundlegende Konzepte für gleichzeitige und parallele Programmierung behandelt. In weiterer Folge werden diese Konzepte in der Programmiersprache Ruby umgesetzt. 
 
-\paragraph{Schlagwörter:}
-\textit{TODO: Keywords}
+Die Programmiersprache Ruby ist nicht für ihre Concurrency Features bekannt. 
+Ruby besitzt mehrere Implementierungen welche sich insbesondere beim Thema Concurrency unterscheiden. CRuby (oder MRI) besitzt einen GIL (Global Interpreter Lock) besitzen, welcher das parallele ausführen von Code verhindert. Das bedeutet jedoch nicht dass keine Operationen gleichzeitig behandelt werden können. Rubinius und JRuby besitzen aufgrund deren Architektur keinen GIL und können daher Code parallel ausführen. Die Probleme welche im Zusammenhang mit Concurrency entstehen können sind Teil dieser Arbeit. 
+
+Zu Beginn dieser Arbeit wird ein genereller Überblick über das Thema Concurrency gegeben. Im zweiten Teil werden Design Pattern vorgestellt welche im Zusammenhang mit Concurrency stehen. Dabei wird besonders auf das Reactor Pattern, Actor Based Model und Futures eingegangen.
+
+Im zweiten Teil dieser Arbeit wird speziell auf die Programmiersprache Ruby und dem Concurrency Model eingegangen. Im letzten Teil werden Implementierungen der Designpatterns aus Kapitel 5 und 6 in Ruby vorgestellt.
+
+Zum Abschluss wird ein persönliches Fazit gezogen und ein Ausblick auf mögliche Applikationen gegeben, welche concurrency verwenden. 
+
+
+\paragraph{Schlagwörter: Ruby, Concurrency, Reactor Pattern, Futures, Actor Based Model, Rubinius, Ruby, MRI}

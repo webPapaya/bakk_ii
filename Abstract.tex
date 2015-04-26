@@ -1,9 +1,24 @@
 \selectlanguage{english}
 \subsection*{Abstract}
 
-Abstract English
+This theses is dedicated to the topic concurrency in Ruby. Therefor some basic concepts about concurency and parallel programming will be explaind. Deadlocks and Race Conditions are only a few problems which can occure when running code concurrently. In this thesis those problems will be explained and solutions to these problems will be presented. 
 
-\paragraph{Keywords:}
-\textit{TODO: Write Keywords}
+The programing language Ruby is not widly know for its concurrent features. The GIL (Global Interpreter Lock) from CRuby is widely misunderstood. It's true that GIL prevents code from executing parallely but it doesn't mean that code can't be executed concurrencly. Other Implementations of Ruby like JRuby or Rubinius handle concurrency differently. Those two implementations don't have a GIL and can run code truly parallel.
+
+At the beginning of this thesis basic concepts of concurrency and parallel programming will be explaind. Those concepts will be used to describe common design patterns which are related to concurrency. (Reactor Pattern, Actor Based Model, Futures)
+
+
+
+
+To show how concurrency can be handled in Ruby several Design Patterns will be explained including Reactor Patter, Futures and Actor Based Model. 
+
+In the later part of this thesis the basic concurrency concepts of Ruby will be explained. There will be reference implementations of the Design Patterns form chapter 5 and 6. At the end of this thesis there will be my personal resume about concurrency in Ruby.
+
+
+
+
+
+
+\paragraph{Keywords:  Ruby, Concurrency, Reactor Pattern, Futures, Actor Based Model, Rubinius, Ruby, MRI}
 
 \selectlanguage{ngerman}
