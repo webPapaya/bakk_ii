@@ -2,16 +2,49 @@
 \label{section:Einleitung}
 
 
-(TODO: write about callbacks)
-(TODO: write about callstack)
+\subsection{Concurrency}
+\label{section:concurrency}
+
+Concurrency laut Robert Pike ist das behandeln von mehreren Operationen zur selben Zeit. Wenn zwei oder mehrere Prozeduren gleichzeitig behandelt werden, beduetet das nicht zwangsweise dass diese parallel ausgeführt werden. Durch die Verwendung von Concurrency kann aus einem linearen Programmierfluss ein nicht-linearer Programmierfluss entstehen. Concurrency ist die Art und Weise wie ein Programm strukturiert ist \cite[]{Pik2013}.
+
+Werden zwei Prozeduren gleichzeitig behandelt so gibt es mehrere möglichkeiten wie diese auf der CPU ausgeführt werden \cite[p. 14]{Erb2012}:
+
+\begin{itemize}
+  \item Sie werden sequenziell abgearbeitet (die Reihenfolge spielt dabei keine Rolle)
+  \item Sie werden abwechseln abgearbeitet
+  \item Sie werden parallel abgearbeitet
+\end{itemize}
+
+\subsection{Parallelismus}
+
+Parallelismus ist eine eine spezielle Form von Concurrency bei der zwei oder mehrere Prozeduren parallel und  zur exakt selben Zeit auf mehreren Prozessorkernen ausgeführt werden. Im Allgemeinen handelt es sich bei Parallelismus um die Art und Weise wie ein Program ausgeführt wird. In anderen Worten besitzt eine Applikation eine parallele Komponente, wenn zwei Threads dieser Applikation zur exakt selben Zeit einen fortschritt machen \cite[]{oracle:multithreading}.
+
+\subsection{Concurrency vs. Parallelismus}
+
+In der Literatur finden sich unterschiedliche Definitionen über Parallelismus und Concurrency. Oft wird zwischen diesen beiden Definitionen jedoch nicht unterschieden. 
+
+Rob Pike ein Software Entwickler von GoLang \footnote{Konferenz Talk von Rob Pike: \url{https://vimeo.com/49718712}} versteht unter dem Begriff Concurrency das behandeln von vielen Dingen zu einem Zeitpunkt. Unter dem Begriff Parallelismus versteht er wenn zwei Prozeduren zur exakt selben Zeit auf der CPU ausgeführt werden \cite[]{Pik2013}.
+
+Prozeduren können in folgenden Umgebungen ausgeführt werden \cite[p. 14]{Erb2012}:
+
+\begin{itemize}
+  \item Single Core Prozessoren
+  \item Multi Core Prozessoren
+  \item Multi Prozessoren
+  \item Unterschiedliche Maschinen in einem Distributed System
+\end{itemize} 
+
+Da ein Single Core Prozessor nur eine Operation zu einem Zeitpunkt ausführen kann, ist es nicht möglich parallelität darauf zu erreichen. Auf den anderen Systemen ist echte parallelität möglich.  
+
+In dieser Thesis wird von Concurrency gesprochen, wenn mehrere Operationen zur selben Zeit behandelt werden.  Von Parallelität wird gesprochen, wenn zwei Prozeduren zum exact selben Zeitpunkt einen Fortschritt machen. Virtueller Parallelismus bei dem Threads durch Time-Slicing abwechselnd ausgeführt werden, wird in dieser Thesis nicht als Parallelismus bezeichnet.
 
 \subsection{Performance}
 
-Eine Applikation ist performant wenn diese einem EndbenutzerIn ein Aufgabe ausführen lässt ohne ein unangemessene Wartezeit für diesen hervorruft. Aus dieser Definition schließt sich dass die Performance im Auge des Betrachters liegt und es somit keine klar definierten Regeln für die Performance einer Applikation gibt. Es gibt jedoch einzelne Indikatoren an denen man die Performance von Applikationen vergleichen kann. Dabei kann man in \emph{Service orientierter Performance} und \emph{Effektiv orientierter Performance} unterteilen \cite[p. 2]{Mol2009}.
+In der Literatur findet sich keine klare Definition von Performance. Generell kann man sagen dass eine Applikation performant ist, wenn diese eine Aufgabe für einen EndbenutzerIn ausführt, ohne dass die Applikation eine unangemessene Wartezeit hervorruft. Daraus kann man schließen, dass Performance im Auge des Betrachters liegt. Neben dieser Wagen definition von Performance gibt es einzelne Indikatoren um die Performance zwischen zwei Applikationen zu vergleichen \cite[p. 2]{Mol2009}. 
 
 \subsubsection{Service orientierte Performance}
 
-\emph{Service orientierte Performance} beschreibt wie gut eine Applikation einen Service für den EndbenutzerIn zur verfügung stellt \cite[p. 2]{Mol2009}:
+\emph{Service orientierte Performance} beschreibt wie gut eine Applikation einen Service für den EndbenutzerIn zur Verfügung stellt \cite[p. 2]{Mol2009}:
 
 \begin{itemize}
   \item {Verfügbarkeit:} beschreibt die Menge an Zeit in welcher eine Applikation für den EndbenutzerIn verfügbar ist.
@@ -28,104 +61,19 @@ Eine Applikation ist performant wenn diese einem EndbenutzerIn ein Aufgabe ausf�
   \item \emph{Ressourcenverbauch:} Wie viel Prozent der Verfügbaren Ressourcen eine Applikation verwendet.
 \end{itemize}
 
-
-\subsection{Concurrency}
-\label{section:concurrency}
-
-Concurrency laut Robert Pike ist das behandeln von mehreren Operationen zur selben Zeit. Dabei geht es um die Art und Weise wie mehrere Operationen in einem nicht linearen Programmierfluss behandelt werden. Eine Applikation welche concurrent ist demnach muss nicht zwangsweise zur gleichen Zeit ausgeführt werden. Bei einer Applikation welche concurrent Aufgebaut ist, ist das Ziel ein gutes Design der Applikation zu erreichen. \cite[]{Pik2013}
-
-Dabei können Concurrent Applikationen in folgenden Reihenfolgen abgearbeitet werden \cite[p. 14]{Erb2012}:
-
-\begin{itemize}
-  \item Sie werden sequenziell abgearbeitet (die Reihenfolge spielt dabei keine Rolle)
-  \item Sie werden abwechseln abgearbeitet
-  \item Sie werden parallel abgearbeitet
-\end{itemize}
-
-\subsection{Parallelismus}
-Parallelismus beschreibt das gleichzeitige Ausführen von Operationen. Genauer handelt es sich bei Parallelismus um die Art und Weise wie ein Progam ausgeführt wird. Parallelismus ist auch eine Kondition die auftritt wenn mindestens zwei Threads gleichzeitig ausgeführt werden \cite[]{oracle:multithreading}.
-
-Im allgemeinen können Operationen auf einem Computer in folgenden Umgebungen ausgeführt werden \cite[p. 14]{Erb2012}:
-
-\begin{itemize}
-  \item Single Core Prozessoren
-  \item Multi Core Prozessoren
-  \item Multi Prozessoren
-  \item Unterschiedliche Maschinen in einem Distributed System
-\end{itemize}
-
-Das Hauptziel von paralleler Programierung ist nach Robert Pike das gleichzeitige oder simultane ausführen von Operationen auf zwei oder mehreren CPUs.\cite[]{Pik2013} Parallelität kann demnach nur auf den Umgebungen 2-4 auftreten.
-
-Das gleichzeitige Ausführen von Operationen kann zu einer Steigerung der Performance einer Applikation führen \cite[p. 18]{Can08}.
-
-\subsection{Concurrency vs. Parallelismus}
-
-Ein Betriebssystem besitzt unterschiedliche I/O Devices (z.B. Maus, Keyboard, Touchpad, etc.). Dabei können Eingaben zu jeder Zeit von einem Benutzer durchgeführt werden. Atomare Eingaben wie das Tippen eines Buchstabens sind ebenso Möglich wie das parallele Eingaben drücken von mehreren Tasten (z.B. STRG+S zum speichern eines Dokuments). Um diese Informationen zu verarbeiten benötigt das Betriebssystem ein Concurrency Model. Dieses Concurrency Model kann entweder Linear oder Parallel ausgeführt werden. \cite[]{Pik2013}
-
-In der Literatur finden sich unterschiedliche Definitionen über Parallelismus und Concurrency. Oft wird zwischen diesen beiden Definitionen jedoch nicht unterschieden.
-
-In dieser Thesis wird von Parallelität gesprochen wenn zwei Aufgaben auf zwei CPU parallel abgearbeitet werden. Virtueller Parallelismus bei dem Threads durch Time-Slicing abwechselnd ausgeführt werden, wird in dieser Thesis nicht als Parallelismus bezeichnet. Von Concurrency wird in dieser Thesis gesprochen wenn mindestens zwei Operationen auf der CPU sequenziell oder abwechselnd abgearbeitet werden.
-
-
-\subsection{Performance}
-(TODO: write/refactor)
-
-Teile einer Applikation welche keinen gemeinsamen Status besitzen und sequentiell abgearbeitet werden können mit wenig Aufwand parallel ausgeführt werden. \cite[p. 18]{Can08}
-
-Ein konkretes Beispiel dazu bietet ein Webserver. Mehrere Anfragen werden von unterschiedlichen Clients an einen HTTP-Webserver gesendet, welcher die Anfragen gleichzeitig verarbeitet. Der Webserver leitet die Anfragen an ein das zugehörige Program weiter welches den jeweiligem HTTP-Response sequentiell generiert. \cite[p. 18]{Can08}
-
-Für einen modernen Webserver müssen folgende Bedingungen erfüllt sein \cite[p. 2]{Sch97}:
-\label{Webserver_Requirements}
-\emph{Concurrency}
-	Ein Server muss mehrere Anfragen von Clients gleichzeitig verarbeiten können.
-
-\emph{Efficiency}
-	Der Server muss Latenzen gering halten und die CPU nicht unnötig belasten.
-
-\emph{Programming simplicity}
-	Der Server muss einfache Schnittstellen für Concurrent Programming bieten (TODO: concurrent programming?)
-
-\emph{Adaptability}
-	Neue Protokolle wie HTTP 2.0 sollten mit minimalen Implementierungsaufwand realisierbar sein.
-
-
-\subsection{Lambdas}
-Lambdas werden auch als Closures, anonyme Functions oder Blocks genannt. Lambdas sind Blöcke aus Quellcode welcher als Argument an eine Funktion übergeben werden kann. Unter anderem werden Lambdas in den folgenden Programmiersprachen unterstützt:
-
-\begin{itemize}
-  \item Lisp
-  \item Ruby
-  \item Javascript
-  \item Java
-  \item Smalltalk
-\end{itemize}
-
-Closures können auf lokale Variablen zugreifen. Das bedeutet dass eine Closure auf alle Variablen im aktuellen Kontext zugriff haben. In der Sprache Ruby werden Closures unter anderem mit geschwungenen Klammeren erstellt. \cite[]{fow04}
-
-\begin{lstlisting}[
-	caption={},
-	label=listing:closures
-]
-	File.open(filename) {|f| doSomethingWithFile(f)}
-\end{lstlisting}
-\cite[]{fow04}
-
-In Listing \ref{listing:closures} wird eine Datei vom lokalem Filesystem geöffnet. Die Funktion open in der File Klasse akzeptiert einen Block als Argument. Die Funktion open öffnet die Datei, führt den angegebenen Block aus und schließt nach Ausführung des Blocks die Datei. Blöcke können unter anderem in Transaktionen verwendet werden. \cite[]{fow04}
+Das gleichzeitige Behandeln von mehreren Operationen kann zu einer gesteigerten Performance führen. Dabei können mehrere Prozeduren zur selben Zeit behandelt werden was zu einer besseren Verteilung des Ressourcenverbrauchs führen kann. Durch die Verbesserung der Effekt orientierten Performance kann die Antwortzeit für den EndbenuterIn verringert werden.
 
 \subsection{I/O Operations}
 \label{subsection: io_operationen}
-Eine Aufgabe eines Betriebssystems ist die Verwaltung von Ein- und Ausgabe (I/O = Input/Output). Besonders in grafischen Anwendungen spielt das Reagieren auf Benutzereingaben eine wichtige Rolle. Um zum Beispiel eine Datei zu öffnen wird die Eingabe des Benutzers verwendet um die Datei zu finden. Die Datei wird anschließend gelesen um den Inhalt am Monitor auszugeben.
 
-In Applikationen können viele I/O Operationen zwischengespeichert werden bevor sie in die Applikation eintreffen. Dabei blockiert das Betriebssystem die restlichen Operationen so lange bis die Datei fertig eingelesen wurde. Im Anschluss können die Daten der Datei weiterverareitet werden \cite[p. 307]{tan09}. 
+Eine Aufgabe eines Betriebssystems ist die Verwaltung von Ein- und Ausgabe (I/O = Input/Output). I/O Operationen bezeichnet die Kommunikation zwischen der Hardware und dem Betriebssystem. Das Lesen einer Datei von einer Festplatte ist eine typische I/O Operation. Eine Applikation welche eine Datei von der Festplatte lesen möchte kann einen \emph{read} Aufruf tätigen, welcher dem Betriebssystem mitteilt, dass es eine Datei lesen möchte. Dadurch blockiert das Betriebssystem die Applikation so lange bis die Datei vollständig von der Festplatte gelesen wurde und der Inhalt zurück in die Applikation geliefert wurde \cite[p. 292]{tan09}.
 
-(TODO: refactor)
+In grafischen Applikationen können diese I/O Operationen zu einer erheblich längeren Antwortzeit einer Applikation beitragen. In der Zeit in der die Datei eingelesen wird  steht die gesamte Applikation still und kann keine weiteren Aufgaben ausführen. Müssen für eine Applikation viele Dateien von einer Festplatte oder über das Netzwerk eingelesen werden, kann dies zu einer erheblichen Verzögerung der Antwortzeit einer Applikation führen \cite[p. 307]{tan09}. 
 
-\subsubsection{Why I/O Speed Matters}
-\label{subsection: i/o speed}
-Die Nachfolgende Tabelle gibt einen groben Überblick wie lange einzelne I/O Operationen benötigen. Diese Tabelle beruht auf keinen wissenschaftlichen Quellen und sollte lediglich als grobe Referenz für die Dauer von I/O Operationen dienen. Diese Tabelle beruht auf den Zahlen von Peter Norvig \cite[]{Nor98} einem Director of Research bei Google und den Vergleichen des Github Benutzers hellerbarde \cite[]{Gis15}:
+Um dies zu verdeutdlichen gibt die nachfolgende Tabelle eine Übersicht über die benötigte Zeit einzelner I/O Operationen. In Spalte 3 wird die Zeit einer I/O Operation mit 1 Mrd. multipliziert um einen Vergleich mit alltäglichen Dingen zu geben. Diese Tabelle beruht auf keinen wissenschaftlichen Quellen und sollte lediglich als grobe Referenz für die Dauer von I/O Operationen dienen. Die Tabelle beruht auf den Zahlen von Peter Norvig \cite[]{Nor98} einem Director of Research bei Google und den Vergleichen des Github Benutzers hellerbarde \cite[]{Gis15}:
 
 (TODO: check table if it fits on the page)
-
+\label{subsection: i/o speed}
 \begin{table}[h]
 \begin{tabular}{@{}lllll@{}}
 \toprule

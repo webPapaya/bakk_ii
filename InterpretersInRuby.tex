@@ -260,3 +260,33 @@ Eine Möglichkeit mit Immutable Datenstrukturen zu arbeiten bietet das gem \emph
 \end{lstlisting}
 
 In Listing \ref{listing:immuteable hamster} wird ein Hamster Vector Objekt erstellt, welches mit einem Array vergleichbar ist. In Zeile 3 wird ein neues \emph{Hamster.vector} Objekt erzeugt und mit den Werten \emph{1 ,2 ,3} initialisiert. Wird auf das neu initialisierte Objekt die Methode \emph{push} aufgerufen, so kopiert die Methode das alte Objekt fügt das neue Element \emph{4} an die Kopie an und friert die kopie ein. Nachdem aus dem Objekt ein Immutable Objekt geworden ist wird dieses Objekt zurückgegeben.
+
+
+
+\subsection{Lambdas}
+(TODO: check if we need this)
+Lambdas werden auch als Closures, anonyme Functions oder Blocks genannt. Lambdas sind Blöcke aus Quellcode welcher als Argument an eine Funktion übergeben werden kann. Unter anderem werden Lambdas in den folgenden Programmiersprachen unterstützt:
+
+\begin{itemize}
+  \item Lisp
+  \item Ruby
+  \item Javascript
+  \item Java
+  \item Smalltalk
+\end{itemize}
+
+Closures können auf lokale Variablen zugreifen. Das bedeutet dass eine Closure auf alle Variablen im aktuellen Kontext zugriff haben. In der Sprache Ruby werden Closures unter anderem mit geschwungenen Klammeren erstellt. \cite[]{fow04}
+
+\begin{lstlisting}[
+  caption={},
+  label=listing:closures
+]
+  File.open(filename) {|f| doSomethingWithFile(f)}
+\end{lstlisting}
+\cite[]{fow04}
+
+In Listing \ref{listing:closures} wird eine Datei vom lokalem Filesystem geöffnet. Die Funktion open in der File Klasse akzeptiert einen Block als Argument. Die Funktion open öffnet die Datei, führt den angegebenen Block aus und schließt nach Ausführung des Blocks die Datei. Blöcke können unter anderem in Transaktionen verwendet werden. \cite[]{fow04}
+
+
+(TODO: write about callbacks)
+(TODO: write about callstack)
