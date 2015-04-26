@@ -1,0 +1,99 @@
+\section{Implementierungen in Ruby}
+
+In diesem Kapitel werden drei unterschiedliche Implementierungen vorgestellt, welche 10 Fotos über das Netzwerk von einer externen Ressource downloaden. Dabei wird der online dummy Bilder Service placehold.it verwendet. Um die Bilder in Ruby herunterladen zu können wird die Bibliothek \emph{HTTP} aus dem Modul \emph{Net} verwendet \footnote{Die Dokumentation findet man unter: \url{http://ruby-doc.org/stdlib-2.2.2/libdoc/net/http/rdoc/Net/HTTP.html}}.
+
+Der gesamte Source Code zu den Beispielen findet sich auf Github: \url{https://github.com/webPapaya/concurrency-in-ruby}.
+
+
+\subsection{Iterative Implementierung}
+
+In der folgenden Implementierung werden 10 Bilder von placehold.it heruntergeladen.
+
+\begin{lstlisting}[
+	caption={Download der Bilder},
+	label=listing:image_algorithm
+]
+	require 'benchmark'
+	require 'net/http'
+
+	def download_images
+	  images = Array.new(10) { |idx| "http://placehold.it/350x1#{idx*100}" }
+	  images.each do |image_url|
+	    uri = URI(image_url)
+	    Net::HTTP.get(uri)
+	  end
+	end
+
+	Benchmark.bm do |x|
+	  10.times do |iteration|
+	    x.report("futures: #{iteration}") { download_images }
+	  end
+	end
+\end{lstlisting}
+
+In Listing \ref{listing:image_algorithm} werden die Bibliotheken Benchmark und Net/HTTP inkludiert. Die wichtigste Zeile in diesem Beispiel ist die Zeile 8. Darin wird ein HTTP Get Request an die Domain placehold.it mit dem Pfad zum Bild gesendet. In diesem Beispiel blockiert dieser Aufruf den Hauptthread bis das Bild heruntergeladen wurde. Ist der HTTP Request beendet so wiederholt sich der vorgang bis alle 10 Bilder heruntergeladen wurden. 
+
+Diese Implementierung ist nicht optimal da durch den blockierenden der I/O Operation in Zeile 8 der Main Thread zum stillstand kommt. 
+
+
+\subsection{Futures Implementierung}
+
+Die folgende Implementierung verwendet Futures um die Bilder über das Netzwerk herunterzuladen.
+
+\begin{lstlisting}[
+	caption={Download der Bilder},
+	label=listing:futures_implementierung
+]
+	require 'benchmark'
+	require 'net/http'
+
+	class Future
+	  def self.call(&block)
+	    Future.new block
+	  end
+
+	  def initialize(block)
+	    @thread = Thread.new { block.call }
+	  end
+
+	  def value
+	    @thread.value
+	  end
+
+	  def status
+	    @thread.status
+	  end
+	end
+
+	def download_images
+	  images = Array.new(10) { |idx| "http://placehold.it/350x1#{idx*100}" }
+	  downloads = images.map do |image_url|
+	    Future.call do
+	      uri = URI(image_url)
+	      Net::HTTP.get(uri)
+	    end
+	  end
+	  downloads.each(&:value)
+	end
+
+	Benchmark.bm do |x|
+	  10.times do |iteration|
+	    x.report("futures: #{iteration}") { download_images }
+	  end
+	end
+\end{lstlisting}
+
+Listing \ref{listing:futures_implementierung} zeigt die Implementierung einer Futures Klasse wie sie in Kapitel \ref{section:futures} behandelt wurde. Die Klasse besitzt eine statische Funktion \emph{call} welcher man einen Block übergeben kann, der die Berechnung des Wertes beinhaltet. Diese erstellt ein neues Futures Objekt und übergibt dem Konstruktor einen Block. In der Konstruktorfunktion der Features Klasse wird ein neuer Thread erzeugt in dem der übergebene Block ausgeführt wird. Des weiteren gibt es in der Futures Klasse zwei weitere Methoden \emph{value} und \emph{status}. Die Methode \emph{value} gibt den Rückgabewert des Blocks an den Aufrufer zurück. Dabei wird der Thread des Aufrufers so lange blockiert bis der Rückgabewert des Blocks verfügbar ist. Die Methode \emph{status} gibt den aktuellen Status des Futures zurück.
+
+Die Funktion \emph{download_images} erstellt ein Array von Bildern welche von placehold.it heruntergeladen werden sollten. Bei der Iteration über die Bilder wird die statische Methode Future.call aufgerufen, welcher ein Block übergeben wird. Dieser Block kümmert sich um das Herunterladen der Bilder. Durch die Verwendung des Futures werden alle Bilder asynchron heruntergeladen. In Zeile 30 wird über alle Futures iteriert und die Methode \emph{value} aufgerufen. Dadurch wird der Hauptthread mit den Futures synchronisiert und blockiert so lange bis alle Bilder heruntergeladen wurden. 
+
+Durch die Verwendung von Futures können Berechnungen oder I/O concurrent oder auch parallel ausgeführt werden. Die Implementierung der Futures Klasse besitzt dabei weniger als 20 Zeilen an Code. Durch die Verwendung von Futures kann die Applikation mehrere HTTP Get Requests gleichzeitig an \emph{placehold.it} versenden ohne dass der Main Thread auf jeden einzelnen HTTP Get Response warten muss bevor er das nächste Bild anfragt. 
+
+\subsection{Actor Based Model}
+
+
+
+
+
+
+
