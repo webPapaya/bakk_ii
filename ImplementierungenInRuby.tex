@@ -85,15 +85,8 @@ Die folgende Implementierung verwendet Futures um die Bilder über das Netzwerk 
 
 Listing \ref{listing:futures_implementierung} zeigt die Implementierung einer Futures Klasse wie sie in Kapitel \ref{section:futures} behandelt wurde. Die Klasse besitzt eine statische Funktion \emph{call} welcher man einen Block übergeben kann, der die Berechnung des Wertes beinhaltet. Diese erstellt ein neues Futures Objekt und übergibt dem Konstruktor einen Block. In der Konstruktorfunktion der Features Klasse wird ein neuer Thread erzeugt in dem der übergebene Block ausgeführt wird. Des weiteren gibt es in der Futures Klasse zwei weitere Methoden \emph{value} und \emph{status}. Die Methode \emph{value} gibt den Rückgabewert des Blocks an den Aufrufer zurück. Dabei wird der Thread des Aufrufers so lange blockiert bis der Rückgabewert des Blocks verfügbar ist. Die Methode \emph{status} gibt den aktuellen Status des Futures zurück.
 
-Die Funktion \emph{download_images} erstellt ein Array von Bildern welche von placehold.it heruntergeladen werden sollten. Bei der Iteration über die Bilder wird die statische Methode Future.call aufgerufen, welcher ein Block übergeben wird. Dieser Block kümmert sich um das Herunterladen der Bilder. Durch die Verwendung des Futures werden alle Bilder asynchron heruntergeladen. In Zeile 30 wird über alle Futures iteriert und die Methode \emph{value} aufgerufen. Dadurch wird der Hauptthread mit den Futures synchronisiert und blockiert so lange bis alle Bilder heruntergeladen wurden. 
+Die Funktion \emph{download\_images} erstellt ein Array von Bildern welche von placehold.it heruntergeladen werden sollten. Bei der Iteration über die Bilder wird die statische Methode Future.call aufgerufen, welcher ein Block übergeben wird. Dieser Block kümmert sich um das Herunterladen der Bilder. Durch die Verwendung des Futures werden alle Bilder asynchron heruntergeladen. In Zeile 30 wird über alle Futures iteriert und die Methode \emph{value} aufgerufen. Dadurch wird der Hauptthread mit den Futures synchronisiert und blockiert so lange bis alle Bilder heruntergeladen wurden. 
 
 Durch die Verwendung von Futures können Berechnungen oder I/O concurrent oder auch parallel ausgeführt werden. Die Implementierung der Futures Klasse besitzt dabei weniger als 20 Zeilen an Code. Durch die Verwendung von Futures kann die Applikation mehrere HTTP Get Requests gleichzeitig an \emph{placehold.it} versenden ohne dass der Main Thread auf jeden einzelnen HTTP Get Response warten muss bevor er das nächste Bild anfragt. 
 
 \subsection{Actor Based Model}
-
-
-
-
-
-
-
