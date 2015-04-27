@@ -29,13 +29,13 @@ Blockierende Operationen wie das lesen eine I/O Operation kann von Threads im Ad
 Prozesse und Threads teilen sich einige Eigenschaften. Beide Konzepte bieten die Möglichkeit Aufgaben parallel oder pseudo parallel zu bearbeiten. Prozesse teilen sich physische Ressourcen eines Computers wie Speicher, Festplatten, I/O Geräte, etc. Threads teilen sich den Adressraum und geöffnete Dateien eines Prozesses. Prozesse gehören immer zu genau einem Benutzer eines Betriebssystems. Threads hingegen gehören zu einem Prozess und besitzen dadurch nur indirekt einen Benutzer \cite[p. 89]{tan09}. 
 
 
-\section{Probleme bei verwendung von Threads}
+\subsection{Probleme bei verwendung von Threads}
 Bei der Verwendung von mehreren Threads in einer Applikation können durch den geteilten Adressraum auch einige Probleme auftreten. In vielen Fällen enstehen Probleme bei der synchronisation der Daten im Adressraum. Race Conditions und Deadlocks sind zwei häufig auftretende Probleme bei der Verwendung von mehreren Threads. 
 
-\subsection{Context Switching}
+\subsubsection{Context Switching}
 Um einen möglichst faieren Zugriff auf die CPU für einzelne Threads zu bieten kann das Betriebssystem einzelne Prozesse zu jeder Zeit stoppen und zu einem späteren Zeitpunkt wieder ausführen. Der Zeitpunk wann ein Thread gestoppt werden soll und wann dieser wieder weiter ausgeführt werden soll wird von dem \emph{Scheduling Algorithmus} des Betriebssystems bestimmt. Die übergabe von CPU Ressourcen von einem Thread an den anderen wird als Context-Switch bezeichnet \cite[p. 23]{Sto2013}.
 
-\subsection{Race Conditions}
+\subsubsection{Race Conditions}
 
 Eine Race Condition tritt auf wenn mindestens zwei Threads (Thread A und B) auf die selbe Speicheradresse zugreifen und diese unerwartet verändern wird. Eine unerwartete Veränderung kann auftreten kann durch einen Context Switch entstehen. Entscheidet der Scheduling Algorithmus in einer kritischen Phase von Thread A, dass Thread B arbeiten darf kann Thread B auf die selben Werte von Thread A zugreifen. Thread B verändert einen Wert welcher von Thread A aktiv genutzt wird und nachdem Thread A seine arbeit wieder aufgenommen hat arbeitet dieser mit einem falschen Wert weiter \cite[p. 89]{tan09}. 
 
@@ -53,11 +53,11 @@ end
 
 In Listing \ref{listing:race_conditions} ist zu sehen, dass durch einen anderen Thread die Variable x auf einen anderen Wert gesetzt wird. Dadurch entsteht wird ein falscher Wert auf der Konsole ausgegeben. Dieses Verhalten ist in vielen Fällen nur schwer reproduzierbar, da der Scheduling Algorithmus schwer vorhersehbar ist \ref[]{Net92}.
 
-\subsection{Deadlocks}
+\subsubsection{Deadlocks}
 
 In einem Deadlock befinden sich mehrere Threads die jeweils auf eine Ressource warten, welche vom jeweilig anderen Prozess gesperrt ist \cite[p. 1]{Jah04}. Dadurch kann keiner der Threads einen fortschritt machen und bleiben in dem Zustand bis das Program terminiert. Deadlocks sind nicht nur auf Threads beschränkt sondern können auch vorkommen wenn mehrere Prozesse auf die Freigabe von Geräten, Datein oder Speicherstellen warten. Ein Deadlock kann auch PC übergreifend über ein Netzwerk entstehen \cite[p. 177]{tan09}. 
 
-\subsubsection{The Dining Philosophers Problem}
+\emph{The Dining Philosophers Problem:}
 
 Edsger Dijkstra beschreibt in seiner Thesis \emph{Hierarchical ordering of sequential processes} das Problem des Deadlocks anhand 5 Philosophen die gemeinsam an einem Tisch sitzen. Dabei beschreibt er folgendes Problem:
 
