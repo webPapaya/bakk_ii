@@ -35,10 +35,10 @@ Ein Beispiel für einen nicht deterministischen Algorithmus in einem Actor Based
 
 Zu Begin bekommt er von einem entfernten Actor B die Nachricht `Start Inkrement'. Daraufhin schickt er sich selbst die Nachricht `Inkrement 1'. Beim erhalten der Nachricht wir diese in die Mailbox gepackt und abgearbeitet. Beim abarbeiten der Mailbox wird die lokale Variable x um 1 erhöht und besitzt somit den Wert 1. Nachdem der Wert erhöht wurde versendet der Actor A eine weitere Nachricht mit dem Inhalt `Inkrement 1' an sich selbst. Zum exact selben Zeitpunkt versendet der Actor B die Nachricht `Show Value'. Nachdem das Actor basierte Model die Reihenfolge der Nachrichten nicht behandelt kann die Nachricht `Show Value' entweder vor oder nach der Nachricht `Inkrement 1' ankommen. Kommt die Nachricht `Show Value' vor der Nachricht `Inkrement 1' an so wird der Wert 1 in der Konsole ausgegeben. Anderenfalls wird der Wert 2 ausgegeben.
 
-\subsection{Probleme}
+\subsubsection{Probleme}
 Auch wenn das Actor Based Model Probleme von paralleler Programmierung verhindern kann, können dennoch Deadlocks auftreten. So kann eine zyklische Abhängigkeit entstehen, wenn zwei Actoren jeweils auf eine Nachricht des anderen warten. In der Praxis kann jedoch ein Deadlock in einem Actor Based Model durch ein Timeout behoben werden. Durch die asynchrone Funktionsweise können nicht deterministische Algorithmen entstehen, welche bei falsche implementierung als eine Race Condition angesehen werden können \cite[]{Erb2012}. 
 
-\subsection{Implementierungen}
+\subsubsection{Implementierungen}
 Das Actor Based Model kann entweder Sprachkonzept direkt in eine Programmiersprache eingebaut werden oder als Bibliothek zu einer bestehenden Programmiersprache hinzugefügt werden. Die folgende Liste gibt einen Aufschluss über Programmiersprachen welche das Actor Based Model direkt in die Programmiersprache integriert haben \footnote{Eine erweiterte Liste findet sich auf  \cite[]{Erb2012}: \url{http://en.wikipedia.org/wiki/Actor_model?oldformat=true#Programming_with_Actors}}:
 
 \begin{itemize}
