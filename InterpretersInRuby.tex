@@ -29,16 +29,14 @@ Für die Programmiersprache Ruby gibt es unterschiedliche Implementierungen auf 
 Compiler wie Rubymotion \footnote{Cross Plattform Ruby Compiler für IOS und Android \url{http://www.rubymotion.com/}}, welche Ruby Code in eine andere Programmiersprache kompilieren, werden in dieser Thesis ebenfalls nicht besprochen.
 
 \subsubsection{CRuby}
-
+CRuby oder MRI (Matz's Ruby Interpreter) ist die Referenzimplementierung des Standards ISO/IEC 30170. CRuby wurde 1995 veröffentlicht und wird aktuell auf Github als OpenSource Projekt entwickelt. CRuby ist zu einem in C geschrieben und besitzt eine API mit der Extensions in C geschrieben werden können. Viele Gems wie Nokogiri (XML Parser) oder Psych (YAML Parser) verwenden in C geschriebene Bibliotheken. Nachdem viele dieser Bibliotheken nicht Thread-Safe sind besitzt CRuby einen GIL (Global Interpreter Lock), welcher das parallele Ausführen von Ruby Code verhindert. I/O Operationen können jedoch gleichzeitig behandelt werden. Seit Version 1.9 verwendet Ruby Native Threads des Betriebssystems. CRuby ist die am meisten verwendete Ruby Implementierung und ist für mehrere Plattformen verfügbar \footnote{Eine List an unterstützten Plattformen findet sich unter: \url{http://en.wikipedia.org/wiki/Ruby_MRI#Operating_systems}}.
 
 \subsubsection{JRuby}
 
-(TODO: write about jruby does not support c extensions)
-
+JRuby ist eine Implementierung von Ruby welche auf der JVM (Java Virtual Maschine) läuft. JRuby besitzt keine Möglichkeit auf C Extensions zurückzugreifen. JRuby besitzt jedoch eine API für Java Bibliotheken. JRuby probiert so gut wie möglich die Kompatibelität mit CRuby zu behalten jedoch gibt es einige Punkte bei denen beide Implementierungen voneinander abweichen \footnote{Eine Liste von Unterschieden findet sich auf: \url{https://github.com/jruby/jruby/wiki/DifferencesBetweenMriAndJruby}}. 
 
 \subsubsection{Rubinius}
 Rubinius ist eine Implementierung von Ruby welche sich auf Concurrency spezialisiert hat. Dabei verwendet es native Threads um Ruby Code auf allen CPUs laufen zu lassen. Rubinius wird nicht interpretiert sondern besitzt einen JIT (Just In Time) Compiler. Dabei wird der Ruby Code in Bytecode transformiert, welcher von der Ribinius Virtual Maschine ausgeführt wird. Die virtuelle Maschine ist in C und C++ geschrieben und verwendet Teile wie den Ruby Parser von MRI. Die Sprache Ruby ist selbst in Ruby implementiert und kann auf der Virtuellen Maschine ausgeführt werden. Dadurch ist Rubinius eine Implementierung die zu einem großen Teil in Ruby implementiert ist. 
-
 
 
 \subsection{Concurrency in Ruby}

@@ -3,8 +3,7 @@
 
 Die vorliegende Arbeit beschäftigt sich mit dem Thema \emph{Concurrency in Ruby}. Dabei werden Grundlegende Konzepte für gleichzeitige und parallele Programmierung behandelt. In weiterer Folge werden diese Konzepte in der Programmiersprache Ruby umgesetzt. 
 
-Die Programmiersprache Ruby ist nicht für ihre Concurrency Features bekannt. 
-Ruby besitzt mehrere Implementierungen welche sich insbesondere beim Thema Concurrency unterscheiden. CRuby (oder MRI) besitzt einen GIL (Global Interpreter Lock) besitzen, welcher das parallele ausführen von Code verhindert. Das bedeutet jedoch nicht dass keine Operationen gleichzeitig behandelt werden können. Rubinius und JRuby besitzen aufgrund deren Architektur keinen GIL und können daher Code parallel ausführen. Die Probleme welche im Zusammenhang mit Concurrency entstehen können sind Teil dieser Arbeit. 
+Die Programmiersprache Ruby ist nicht für ihre Concurrency Features bekannt. Der Mythos dass der GIL (Global Interpreter Lock) concurrency in Ruby unmöglich macht hält sich bis heute. Dabei besitzt lediglich eine Implementierung von Ruby (CRuby) einen GIL. Diese unterbindet tatsächlich das parallele ausführen von Ruby. Das bedeutet jedoch nicht dass keine Operationen gleichzeitig behandelt werden können. Rubinius und JRuby besitzen aufgrund deren Architektur keinen GIL und können daher Code parallel ausführen. Die Probleme welche im Zusammenhang mit Concurrency entstehen können sind Teil dieser Arbeit. 
 
 Zu Beginn dieser Arbeit wird ein genereller Überblick über das Thema Concurrency gegeben. Im zweiten Teil werden Design Pattern vorgestellt welche im Zusammenhang mit Concurrency stehen. Dabei wird besonders auf das Reactor Pattern, Actor Based Model und Futures eingegangen.
 
