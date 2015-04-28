@@ -1,21 +1,19 @@
 \section{Ruby}
 \label{section: Ruby}
 
-In diesem Kapitel wird die Programmiersprache Ruby kurz vorgestellt. Dieses Kapitel ist nicht mit einer Einführung in Ruby vergleichbar, da eine solche über den Rahmen dieser Arbeit hinausgehen würde. Das Buch Programming Ruby \cite[]{Dav05} bietet eine Einführung in die Sprache kann als Referenz dienen. 
+Die Programmiersprache Ruby ist nicht für ihre Concurrency Features bekannt. Der Mythos dass der GIL (Global Interpreter Lock) concurrency in Ruby unmöglich macht hält sich bis heute. Dabei besitzt lediglich eine Implementierung von Ruby (CRuby) einen GIL. Diese unterbindet tatsächlich das parallele ausführen von Ruby. Das bedeutet jedoch nicht dass keine Operationen gleichzeitig behandelt werden können. Beim Thema Concurrency herscht aktuell der größte Unterschied zwischen den einzelnen Implementierungen von Ruby.
+
+Ruby wurde im Jahr 2012 von der ISO (International Organization for Standardization) mit dem Standard ISO/IEC 30170 \footnote{Den Standard kann man der Website \url{http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=59579} erwerben} standardisiert. Die Referenzimplementierung von Ruby ist CRuby oder MRI (Matz's Ruby Interpreter) \footnote{Der Quellcode ist auf Github verfügbar: \url{https://github.com/ruby/ruby}}.
 
 Auf der Website \footnote{\url{http://www.ruby-lang.org}} definiert sich Ruby wie folgt:
 
 \begin{quote}
-	Ruby ist eine dynamische, freie Programmiersprache, die sich einfach anwenden und produktiv einsetzen lässt. Sie hat eine elegante Syntax, die man leicht lesen und schreiben kann. \cite[]{Rub92}
+  Ruby ist eine dynamische, freie Programmiersprache, die sich einfach anwenden und produktiv einsetzen lässt. Sie hat eine elegante Syntax, die man leicht lesen und schreiben kann. \cite[]{Rub92}
 \end{quote}
-
-Im Kern ist Ruby eine rein Objekt Orientierte Programmiersprache. Dabei besteht ein Objekt aus einer Kombination von Status und Methoden welche diesen Status verändern. \cite[p. 1-2]{Dav05}
-
-Ruby wurde im Jahr 2012 von der ISO (International Organization for Standardization) mit dem Standard ISO/IEC 30170 \footnote{Den Standard kann man der Website \url{http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=59579} erwerben} standardisiert. Die Referenzimplementierung von Ruby ist CRuby oder MRI (Matz's Ruby Interpreter) \footnote{Der Quellcode ist auf Github verfügbar: \url{https://github.com/ruby/ruby}}.
 
 \subsection{Ruby Implementierungen}
 
-Für die Programmiersprache Ruby gibt es unterschiedliche Implementierungen auf welche ich in diesem Kapitel eingehen möchte. Folgende Implementierungen werden in dieser Arbeit nicht behandelt da diese entweder nicht mehr aktiv Weiterentwickelt werden oder für diese Arbeit keine Relevanz besitzten:
+Neben der Referenzimplementierung des ISO Standards gibt es noch weitere Implementierungen von Ruby. Die aktuell relevantesten Implementierungen sind CRuby (oder MRI), JRuby und Rubinius. Folgende Implementierungen werden in dieser Arbeit nicht behandelt da diese entweder nicht mehr aktiv Weiterentwickelt werden oder für diese Arbeit keine Relevanz besitzten:
 
 \begin{itemize}
   \item MacRuby
@@ -26,25 +24,25 @@ Für die Programmiersprache Ruby gibt es unterschiedliche Implementierungen auf 
   \item Ruby Enterprise Edition
 \end{itemize}
 
-Compiler wie Rubymotion \footnote{Cross Plattform Ruby Compiler für IOS und Android \url{http://www.rubymotion.com/}}, welche Ruby Code in eine andere Programmiersprache kompilieren, werden in dieser Thesis ebenfalls nicht besprochen.
+Compiler wie Rubymotion \footnote{Cross Plattform Ruby Compiler für IOS und Android \url{http://www.rubymotion.com/}}, welche Ruby Code in eine andere Programmiersprache kompilieren, werden in dieser Thesis ebenfalls nicht behandelt.
 
 \subsubsection{CRuby}
-CRuby oder MRI (Matz's Ruby Interpreter) ist die Referenzimplementierung des Standards ISO/IEC 30170. CRuby wurde 1995 veröffentlicht und wird aktuell auf Github als OpenSource Projekt entwickelt. CRuby ist zu einem in C geschrieben und besitzt eine API mit der Extensions in C geschrieben werden können. Viele Gems wie Nokogiri (XML Parser) oder Psych (YAML Parser) verwenden in C geschriebene Bibliotheken. Nachdem viele dieser Bibliotheken nicht Thread-Safe sind besitzt CRuby einen GIL (Global Interpreter Lock), welcher das parallele Ausführen von Ruby Code verhindert. I/O Operationen können jedoch gleichzeitig behandelt werden. Seit Version 1.9 verwendet Ruby Native Threads des Betriebssystems. CRuby ist die am meisten verwendete Ruby Implementierung und ist für mehrere Plattformen verfügbar \footnote{Eine List an unterstützten Plattformen findet sich unter: \url{http://en.wikipedia.org/wiki/Ruby_MRI#Operating_systems}}.
+CRuby oder MRI (Matz's Ruby Interpreter) ist die Referenzimplementierung des Standards ISO/IEC 30170. CRuby wurde 1995 veröffentlicht und wird aktuell auf Github als OpenSource Projekt entwickelt. CRuby ist in C geschrieben und besitzt eine API mit der Extensions in C geschrieben werden können. Viele Gems wie Nokogiri (XML Parser) oder Psych (YAML Parser) verwenden in C geschriebene Bibliotheken. Nachdem viele dieser Bibliotheken nicht Thread-Safe sind besitzt CRuby einen GIL (Global Interpreter Lock), welcher das parallele Ausführen von Ruby Code verhindert. I/O Operationen können jedoch gleichzeitig behandelt werden. Seit Version 1.9 verwendet Ruby Native Threads des Betriebssystems. CRuby ist die am meisten verwendete Ruby Implementierung und ist für mehrere Plattformen verfügbar \footnote{Eine List an unterstützten Plattformen findet sich unter: \url{http://en.wikipedia.org/wiki/Ruby_MRI#Operating_systems}}.
 
 \subsubsection{JRuby}
 
-JRuby ist eine Implementierung von Ruby welche auf der JVM (Java Virtual Maschine) läuft. JRuby besitzt keine Möglichkeit auf C Extensions zurückzugreifen. JRuby besitzt jedoch eine API für Java Bibliotheken. JRuby probiert so gut wie möglich die Kompatibelität mit CRuby zu behalten jedoch gibt es einige Punkte bei denen beide Implementierungen voneinander abweichen \footnote{Eine Liste von Unterschieden findet sich auf: \url{https://github.com/jruby/jruby/wiki/DifferencesBetweenMriAndJruby}}. 
+JRuby ist eine Implementierung von Ruby welche auf der JVM (Java Virtual Maschine) läuft. JRuby besitzt keine Möglichkeit auf C Extensions zurückzugreifen jedoch besitzt die Implementierung eine API für Java Bibliotheken. JRuby probiert so gut wie möglich die Kompatibelität mit CRuby zu behalten jedoch gibt es einige Punkte bei denen beide Implementierungen voneinander abweichen \footnote{Eine Liste von Unterschieden findet sich auf: \url{https://github.com/jruby/jruby/wiki/DifferencesBetweenMriAndJruby}}. 
 
 \subsubsection{Rubinius}
-Rubinius ist eine Implementierung von Ruby welche sich auf Concurrency spezialisiert hat. Dabei verwendet es native Threads um Ruby Code auf allen CPUs laufen zu lassen. Rubinius wird nicht interpretiert sondern besitzt einen JIT (Just In Time) Compiler. Dabei wird der Ruby Code in Bytecode transformiert, welcher von der Ribinius Virtual Maschine ausgeführt wird. Die virtuelle Maschine ist in C und C++ geschrieben und verwendet Teile wie den Ruby Parser von MRI. Die Sprache Ruby ist selbst in Ruby implementiert und kann auf der Virtuellen Maschine ausgeführt werden. Dadurch ist Rubinius eine Implementierung die zu einem großen Teil in Ruby implementiert ist. 
-
+Rubinius ist eine Implementierung von Ruby welche sich auf Concurrency spezialisiert hat. Dabei verwendet es native Threads um Ruby Code auf allen CPUs laufen zu lassen. Rubinius wird nicht interpretiert sondern besitzt einen JIT (Just In Time) Compiler. Dabei wird der Ruby Code in Bytecode transformiert, welcher von der Ribinius Virtual Maschine ausgeführt wird. Die virtuelle Maschine ist in C und C++ geschrieben und verwendet Teile wie den Ruby Parser von MRI. Viele der Sprachfeatures sind selbst in Ruby implementiert und kann auf der Virtuellen Maschine ausgeführt werden. Dadurch ist Rubinius eine Implementierung die zu einem großen Teil in Ruby implementiert ist. 
 
 \subsection{Concurrency in Ruby}
+Der Standard von Ruby beinhaltet einige Features um concurrency und paralleles Programmieren zu ermöglichen.
 
 \subsubsection{Threads in Ruby}
-In Ruby wird jedes Program in einem Thread ausgeführt. Dieser Main Thread wird beim ausführen eines Ruby Programms automatisch erstellt und ausgeführt. Wird der Main Thread beendet, so werden gleichzeitig alle anderen Threads der Applikation beendet und der Ruby Prozess wird beendet \cite[p. 15]{Sto2013}.
+In Ruby wird jedes Program in einem Thread ausgeführt. Dieser Main Thread wird beim Ausführen eines Ruby Programms automatisch erstellt und ausgeführt. Wird der Main Thread beendet, so werden gleichzeitig alle anderen Threads der Applikation beendet und der Ruby Prozess wird beendet \cite[p. 15]{Sto2013}.
 
-Um einen Thread in Ruby zu erzeugen erstellt man ein neues Thread Objekt und übergibt diesen einen Block. 
+Um einen neuen Thread in Ruby zu erzeugen erstellt man ein neues Thread Objekt und übergibt diesen einen Block. 
 
 \begin{lstlisting}[language=Ruby,label=lst:thread_example]
 def long_running
@@ -61,8 +59,7 @@ puts "first"
 
 \end{lstlisting}
 
-In Listing \ref{lst:thread_example} sieht man ein Ruby Script welches einen Thread verwendet. Durch die Methode \emph{sleep} wird die Methode \textit{long\_run\_running} zwei Sekunden gestoppt. Im Beispiel sieht man dass die Zeile 6 als erstes auf dem Monitor ausgegeben wird als die Zeile 3. 
-
+In Listing \ref{lst:thread_example} sieht man ein Ruby Script welches einen Thread verwendet. Durch die Methode \emph{sleep} wird die Ausführung der Funktion \textit{long\_run\_running} zwei Sekunden gestoppt. Im Beispiel sieht man dass die Zeile 6 als erstes auf dem Monitor ausgegeben wird als die Zeile 3. 
 
 \begin{lstlisting}[language=Ruby,caption=Adaptiert von \cite{Sto2013}]
   100.times do
