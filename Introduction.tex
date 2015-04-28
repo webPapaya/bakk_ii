@@ -1,6 +1,13 @@
 \section{Einleitung}
 \label{section:Einleitung}
 
+Die Programmiersprache Ruby ist nicht für ihre Concurrency Features bekannt. In Web basierten Applikationen ist dieses Thema wichtiger den je. Die Themen Event Loop, Asynchronous vs. Synchronous und Blocking vs. Non-Blocking sind Stichwörter welche sich in vielen Web-Relevanten Artikeln und Blog Posts finden. Es finden sich jedoch nur wenige Artikel welche sich mit den Grundlegenden und Hintergründen dieser Begriffe beschäftigen. 
+
+Mit der Bewegung Applikationen vom Desktop in die Cloud zu bringen müssen sich immer mehr Entwickler von Backend Applikatione über Performance und Skallierbarkeit ihrer Applikation gedanken machen. BenutzerInnen von Web-Applikationen erwarten sich geringste Latenzen selbst bei der Ausführung von komplexen Berechnungen auf dem Server. I/O lastige Operationen welche viele Dateien lesen und schreiben müssen verschwenden wertvolle Server Ressourcen auf Kosten der Performance für den/die AnwenderIn.
+
+In dieser Arbeit werden die Grundlagen von Concurrency und paralleler Programmierung behandelt. Dabei werden Probleme wie Deadlocks und Race Conditions besprochen welche bei paraller Programmierung auftreten können. Durch diese Probleme haben sich einige Design Patterns entwicklet welche die Arbeit mit gleichzeitigen Aufgaben vereinfacht. Wie diese Design Patterns in Ruby umgesetzt werden können ist Teil dieser Arbeit. Um die Möglichkeiten dieser Patterns zu demonstrieren wird es Referenzimplementierungen dafür geben. 
+
+In dieser Bachelorarbeit möchte ich der Frage nachgehen: Wie kann Concurrency in Ruby umgesetzt werden?
 
 \subsection{Concurrency}
 \label{section:concurrency}
