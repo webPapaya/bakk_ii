@@ -39,7 +39,7 @@ Diese Implementierung ist nicht optimal da durch den blockierenden der I/O Opera
 
 \subsection{Futures Implementierung}
 
-Die folgende Implementierung verwendet Futures um die Bilder über das Netzwerk herunterzuladen.
+Die folgende Implementierung verwendet Futures um die 10 Bilder von \emph{placehold.it} über das Netzwerk herunterzuladen.
 
 \begin{lstlisting}[
 	caption={Download der Bilder},
@@ -91,3 +91,167 @@ Die Funktion \emph{download\_images} erstellt ein Array von Bildern welche von p
 Durch die Verwendung von Futures können Berechnungen oder I/O concurrent oder auch parallel ausgeführt werden. Die Implementierung der Futures Klasse besitzt dabei weniger als 20 Zeilen an Code. Durch die Verwendung von Futures kann die Applikation mehrere HTTP Get Requests gleichzeitig an \emph{placehold.it} versenden ohne dass der Main Thread auf jeden einzelnen HTTP Get Response warten muss bevor er das nächste Bild anfragt. 
 
 \subsection{Actor Based Model}
+
+Die folgende Implementierung verwendet das Actor Based Model um die 10 Bilder von placehold.it herunterzuladen. Dafür müssen wir uns zuerst die Implementierung des Actor Based Models genauer ansehen \footnote{Datei: \url{https://github.com/webPapaya/concurrency-in-ruby/blob/master/actor_based_model/actor.rb}}.
+
+In der Datei \emph{actor.rb} werden drei unterschiedliche Klassen erstellt.
+
+\begin{itemize}
+  \item ActorPool
+  \item Actor
+  \item ActorProxy
+\end{itemize}
+
+Der \emph{ActorPool} ist ein Singelton Objekt welches für die Verwaltung aller Aktoren verantwortlich ist. 
+
+\begin{lstlisting}[
+	caption={Die Singelton Klasse ActorPool},
+	label=listing:actor_pool
+]
+class ActorPool
+  include Singleton
+
+  def initialize
+    @queue = Queue.new
+  end
+
+  def add(actor)
+    @queue.push actor
+  end
+
+  def shutdown
+    until @queue.length == 0 do
+      actor = @queue.pop
+      actor.shutdown
+    end
+  end
+end
+\end{lstlisting}
+
+Da die Aktoren mit Threads arbeiten würden diese entfernt werden sobald der Main Thread das Ende der Applikation erreicht. Um das zu verhindern bietet der Actor Pool mit der Methode \emph{shutdown} die Möglichkeit alle Aktoren herunterzufahren. Das Herunterfahren eines Aktors bedeutet, dass keine weiteren Nachrichten mehr hinzugefügt werden können und die Nachrichten welche sich aktuell in der Mailbox befinden noch abgearbeitet werden. Um die einzelnen Aktoren zu verwalten verwendet die Klasse die Datenstruktur Queue aus dem Modul Thread. In der Methode \emph{add} werden einzelne Aktoren der Queue hinzugefügt. 
+
+Nachdem die Aktor Implementierung die Möglichkeit bieten soll aus jeder Ruby Klasse einen Aktor zu machen benötigt diese Implementierung einige Meta Programming Features von Ruby. 
+
+\begin{lstlisting}[
+	caption={Die Singelton Klasse ActorPool},
+	label=listing:actor_meta
+]
+module Actor
+  module ClassMethods
+    def new(*)
+      ActorProxy.new(super)
+    end
+  end
+
+  class << self
+    def included(klass)
+      klass.extend(ClassMethods)
+    end
+  end
+  ...
+\end{lstlisting}
+
+
+Listing \ref{listing:actor_meta} zeigt einen Auszug aus dem Modul Actor. In diesem Modul \emph{Actor} wird ein weiteres Modul ClassMethods erstellt. Dieses Modul besitzt die Methode new. Diese erstellt ein neues ActorProxy Objekt und ruft mit dem Keyword \emph{super} die Methode \emph{new} der eigentlichen Klasse auf. Um die Methode \emph{new} in der eigentlichen Klasse zu überladen werden in Zeile 10 alle Methoden des Moduls ClassMethods dem eigentlichen Objekt hinzugefügt. 
+
+\begin{lstlisting}[
+	caption={Die Singelton Klasse ActorPool},
+	label=listing:actor_in_use
+]
+class Test
+  include Actor
+end
+
+puts Test.new.class # Actor::ActorProxy
+\end{lstlisting}
+
+Listing \ref{listing:actor_in_use} zeigt eine einfache Klasse welches das Modul Actor inkludiert.  Wird aus der Klasse ein neues Objekt mit dem Stichwort \emph{new} erstellt wird nicht der Standard Konstruktor aufgerufen, sondern der überladene Konstruktor des Moduls Actor. Dieser erstellt ein neues ActorProxy Objekt und ruft mit dem Stichwort \emph{super} den Konstruktor der Klasse Test auf. Das neu erstellte Objekt vom Typ \emph{Test} wird dem Konstruktor von ActorProxy übergeben. Durch das Überladen der Methode \emph{new} wird kein Objekt vom Typ Test zurückgeliefert, sondern ein Objekt vom Typ Actor::ActorProxy. Durch dieses Konstrukt 
+werden alle Methoden über das ActorProxy Objekt abgewickelt.
+
+Die ActorProxy Klasse besitzt folgende Methoden:
+
+\begin{itemize}
+  \item method_missing
+  \item shutdown
+  \item process_inbox
+  \item process_message
+  \item deliver
+\end{itemize}
+
+Die Methode \emph{method_missing} ist eine Ruby interne Methode welche es erlaubt nicht definierte Methoden eines Objekts abzufangen und zu behandeln. Dieses Konzept wird genutzt um den Namen einer Methode des Basisobjekts in eine Nachricht zu verwandeln, und anschließend der Mailbox hinzuzufügen. Listing \ref{listing:actor_method_missing} zeigt die Methode \emph{method_missing} in der \emph{ActorProxy} Klasse. 
+
+\begin{lstlisting}[
+	caption={Aktor method_missing},
+	label=listing:actor_method_missing
+]
+
+def method_missing(method, *args)
+  @mailbox.push [method, args]
+  process_inbox
+end
+\end{lstlisting}
+
+
+Wurde einem Aktor eine neue Nachricht hinzugefügt wird diese in der Methode \emph{process_inbox} abgearbeitet. 
+
+\begin{lstlisting}[
+	caption={Aktor process_inbox},
+	label=listing:actor_method_missing
+]
+
+def process_inbox
+  @threads << Thread.new do
+    method, args = @mailbox.pop
+    process_message method, args
+  end
+end
+\end{lstlisting}	
+
+Dabei wird ein neuer Thread erstellt welcher die einzelnen Nachrichten abarbeitet. Die einzelnen Nachrichten werden in der Methode \emph{process_message} abgearbeitet. Um Race Conditions zu vermeiden wird beim Aufruf der eigentlichen Methode mutex.synchronize aufgerufen. 
+
+
+\begin{lstlisting}[
+	caption={Aktor process_message},
+	label=listing:actor_method_missing
+]
+
+def process_message(method, args)
+  @mutex.synchronize do
+    @target.public_send method, *args
+  end
+end
+\end{lstlisting}	
+
+Durch die Verwendung des vorher beschriebenen Actor Based Models werden alle Methodenaufrufe eines Objekts welche das Modul \emph{Actor} inkludiert haben asynchron abgearbeitet. Eine Klasse welche diese Implementierung des Actor Based Models verwendet ist die Klasse \emph{ImageDownload}:
+
+\begin{lstlisting}[
+	caption={Aktor process_message},
+	label=listing:actor_image_download
+]
+
+require_relative 'actor'
+require 'net/http'
+
+class ImageDownload
+  include Actor
+
+  def initialize(image_url)
+    @image_url = URI(image_url)
+  end
+
+  def download
+    Net::HTTP.get @image_url
+  end
+end
+\end{lstlisting}
+
+In Listing \ref{listing:actor_image_download} wird eine Klasse erstellt welche das Modul Actor inkludiert. Dem Konstruktor muss ein Bild URL übergeben werden und wird die Methode download aufgerufen, so wird das Bild automatisch asynchron und nicht blockierend heruntergeladen. Durch die Verwendung dieser Implementierung können nicht blockierende Programme geschrieben werden. 
+
+\subsection{Reactor Pattern}
+Für die Implementierung des Reactor Patterns wird die Bibliothek Eventmachine\footnote{EM auf Github: \url{https://github.com/eventmachine/eventmachine}} verwendet. 
+
+Auf der Github Seite beschreibt sich Eventmachine wie folgt: 
+
+	``EventMachine is an event-driven I/O and lightweight concurrency library for Ruby. It provides event-driven I/O using the Reactor pattern, much like JBoss Netty, Apache MINA, Python's Twisted, Node.js, libevent and libev.'' (\url{https://github.com/eventmachine/eventmachine})
+
+Eventmashine verwendet eine nicht blockierende EventLoop bei I/O Operationen. 
