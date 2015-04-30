@@ -177,7 +177,7 @@ Die ActorProxy Klasse besitzt folgende Methoden:
   \item process\_message
 \end{itemize}
 
-Die Methode \emph{method_missing} ist eine Ruby interne Methode welche es erlaubt nicht definierte Methoden eines Objekts abzufangen und zu behandeln. Dieses Konzept wird genutzt um den Namen einer Methode des Basisobjekts in eine Nachricht zu verwandeln, und anschließend der Mailbox hinzuzufügen. Listing \ref{listing:actor_method_missing} zeigt die Methode \emph{method_missing} in der \emph{ActorProxy} Klasse. 
+Die Methode \emph{method_missing} ist eine Ruby interne Methode welche es erlaubt nicht definierte Methoden eines Objekts abzufangen und zu behandeln. Dieses Konzept wird genutzt um den Namen einer Methode des Basisobjekts in eine Nachricht zu verwandeln, und anschließend der Mailbox hinzuzufügen. Listing \ref{listing:actor_method_missing} zeigt die Methode \emph{method\_missing} in der \emph{ActorProxy} Klasse. 
 
 \begin{lstlisting}[
 	caption={Aktor method_missing},
@@ -191,7 +191,7 @@ end
 \end{lstlisting}
 
 
-Wurde einem Aktor eine neue Nachricht hinzugefügt wird diese in der Methode \emph{process_inbox} abgearbeitet. 
+Wurde einem Aktor eine neue Nachricht hinzugefügt wird diese in der Methode \emph{process\_inbox} abgearbeitet. 
 
 \begin{lstlisting}[
 	caption={Aktor process_inbox},
@@ -206,7 +206,7 @@ def process_inbox
 end
 \end{lstlisting}	
 
-Dabei wird ein neuer Thread erstellt welcher die einzelnen Nachrichten abarbeitet. Die einzelnen Nachrichten werden in der Methode \emph{process_message} abgearbeitet. Um Race Conditions zu vermeiden wird beim Aufruf der eigentlichen Methode mutex.synchronize aufgerufen. 
+Dabei wird ein neuer Thread erstellt welcher die einzelnen Nachrichten abarbeitet. Die einzelnen Nachrichten werden in der Methode \emph{process\_message} abgearbeitet. Um Race Conditions zu vermeiden wird beim Aufruf der eigentlichen Methode mutex.synchronize aufgerufen. 
 
 
 \begin{lstlisting}[
