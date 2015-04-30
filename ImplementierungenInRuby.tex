@@ -171,11 +171,10 @@ werden alle Methoden über das ActorProxy Objekt abgewickelt.
 Die ActorProxy Klasse besitzt folgende Methoden:
 
 \begin{itemize}
-  \item method_missing
+  \item method\_missing
   \item shutdown
-  \item process_inbox
-  \item process_message
-  \item deliver
+  \item process\_inbox
+  \item process\_message
 \end{itemize}
 
 Die Methode \emph{method_missing} ist eine Ruby interne Methode welche es erlaubt nicht definierte Methoden eines Objekts abzufangen und zu behandeln. Dieses Konzept wird genutzt um den Namen einer Methode des Basisobjekts in eine Nachricht zu verwandeln, und anschließend der Mailbox hinzuzufügen. Listing \ref{listing:actor_method_missing} zeigt die Methode \emph{method_missing} in der \emph{ActorProxy} Klasse. 
