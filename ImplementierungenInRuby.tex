@@ -251,6 +251,57 @@ Für die Implementierung des Reactor Patterns wird die Bibliothek Eventmachine\f
 
 Auf der Github Seite beschreibt sich Eventmachine wie folgt: 
 
-	``EventMachine is an event-driven I/O and lightweight concurrency library for Ruby. It provides event-driven I/O using the Reactor pattern, much like JBoss Netty, Apache MINA, Python's Twisted, Node.js, libevent and libev.'' (\url{https://github.com/eventmachine/eventmachine})
+	``EventMachine is an event-driven I/O and lightweight concurrency library for Ruby. It provides event-driven I/O using the Reactor pattern, much like JBoss Netty, Apache MINA, Python's Twisted, Node.js, libevent and libev.'' (\url{https://github.com/eventmachine/eventmachine}, Zugriff: 30.04.2015)
 
-Eventmashine verwendet eine nicht blockierende EventLoop bei I/O Operationen. 
+Eventmashine verwendet eine nicht blockierende EventLoop bei I/O Operationen. Intern verwendet Eventmachine einen Thread Pool um blockierende I/O Operationen zu behandeln. In der Praxis muss man sich jedoch mit diesem Thread Pool nicht befassen und der Code der eigenen Applikation bleibt Single-Threaded. Eventmachine verwendet Callback Methoden um auf Ereignisse zu reagieren. 
+
+\begin{lstlisting}[
+	caption={Aktor process\_message},
+	label=listing:em_download
+]
+
+require 'eventmachine'
+require 'em-http'
+require 'thread'
+
+class ImageDownloader
+  def initialize(caller, image_url)
+    request = EM::HttpRequest.new(image_url).get
+    request.callback do
+      caller.image_downloaded
+    end
+  end
+end
+
+class ImageManager
+  def initialize(images)
+    @images = images
+    @missing_images = Queue.new
+    @images.each do |image_url|
+      ImageDownloader.new self, image_url
+    end
+  end
+
+  def image_downloaded
+    @missing_images.push ''
+    EM.stop if @missing_images.length == @images.length
+  end
+end
+
+EM.run do
+  images = Array.new(20) { |idx| "http://placehold.it/350x1#{idx*100}" }
+  ImageManager.new images
+end
+\end{lstlisting}
+
+In Listing \ref{listing:em_download} wird die Klasse \emph{ImageDownloader} deklariert. \emph{EM:HttpRequest} ist eine Erweiterung von EventMachine welche es ermöglicht nicht blockierende HTTP Requests mit EventMachine zu erstellen. Ein EM::HttpRequest Objekt besitzt mehrere Callback Funktionen:
+
+\begin{itemize}
+  \item errback
+  \item callback
+\end{itemize}
+
+Die Methode \emph{callback} wird aufgerufen sobald der HTTP Request erfolgreich abgeschlossen ist. Die \emph{errback} wird aufgerufen sobald ein Fehler aufgetreten ist.
+
+EventMachine besitzt eine Eventloop welche nur stoppt, wenn sie durch einem äußeren Einfluss gestoppt wird. Ein solcher Einfluss kann Entstehen wenn der Ruby Prozesses beendet wird oder wenn die Methode \emph{stop} auf das globale \emph{EM} Objekt aufgerufen wird. Für das Herunterladen mehrerer Bilder ist dieses Verhalten jedoch nicht gewünscht. Aus diesem Grund gibt es die \emph{ImageManager} Klasse, welche die einzelnen ImageDownloader Objekte erstellt und die EventLoop stoppt sobald alle Bilder heruntergeladen wurden. 
+
