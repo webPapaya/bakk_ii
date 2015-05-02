@@ -1,9 +1,10 @@
 \section{Zusammenfassung}
 Ruby ist eine ausdrucksvolle Programmiersprache, welche grundsetzlich parallele Programmierung erlaubt. Die Referenzimplementierung CRuby kann durch GIL keine Operationen parallel ausführen. Dadurch werden zum einen häufig auftretende Probleme wie Race Conditions und Deadlocks verhindert, jedoch können diese dennoch auftreten. Yukihiro Matsumoto der Erfinder von Ruby hat bei der Rubycon 2012 in Denver auf die Frage nach der Zukunft von Concurrency in Ruby folgende Antwort gegeben:
 
-	``
-	I don't consider myself as the threading guy, so I don't think I can make the right decision about the Actor library or the threading library.
-	'' (Yukihiro Matsumoto, Rubyconf 2012)
+\begin{quote}
+I don't consider myself as the threading guy, so I don't think I can make the right decision about the Actor library or the threading library.
+ (Yukihiro Matsumoto, Rubyconf 2012)
+\end{quote}
 
 Daraus könnte man schließen dass in Zukunft die Bibliothek Celluloid oder eine andere Bibliothek in die Ruby Standard Library hineinfliesen könnte. Dieses Zitat ist jedoch aus dem Jahr 2012 und bis heute gibt es nur vereinzelt Verbesserungen im Bereich von Concurrency. Es gab bereits Bestrebungen den GIL aus Ruby MRI zu entfernen und ihn mit einzelnen fein dosierten Locks zu ersetzen. Dieser Versuch schlug jedoch fehl da einzelne Locks zu einem Performance verlust bei Applikationen führte, welche nur einen Thread verwenden. 
 
