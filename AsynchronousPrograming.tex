@@ -10,9 +10,9 @@ In der Literatur wird zwischen den Begriffen Blocking und Synchrone Programmieru
 
 \subsection{Synchron vs. Asynchron}
 
-Im synchronen Model werden Aufgaben sequentiell abgearbeitet. Dabei wird eine Initialaufgabe aufgerufen und von dieser ausgehend alle anderen Aufgaben sequentiell abgearbeitet. Ist eine Aufgabe fertig wird die nächste Aufgabe ausgeführt. Sind alle Aufgaben abgeschlossen so terminiert das Program. Der Programverlauf ist im synchronen Model Linear und kann in einer Zeitachse wie in Abbildung dargestellt werden \cite[]{Pet2015}.
+Im synchronen Model werden Aufgaben sequentiell abgearbeitet. Dabei wird eine Initialaufgabe aufgerufen und von dieser ausgehend alle anderen Aufgaben sequentiell abgearbeitet. Ist eine Aufgabe fertig wird die nächste Aufgabe ausgeführt. Sind alle Aufgaben abgeschlossen so terminiert das Program. Der Programverlauf ist im synchronen Model linear und kann in einer Zeitachse wie in Abbildung dargestellt werden \cite[]{Pet2015}.
 
-Im asynchronen Model wird der lineare Programmfluss um einen zweiten Fluss erweitert. Eine asynchrone Funktion erstellt einen neuen Programmierfluss der nach einer gewissen Zeit mit dem Hauptfluss wieder synchronisiert wird. 
+Im asynchronen Model wird der lineare Programmfluss um einen zweiten Fluss erweitert. Eine asynchrone Funktion erstellt einen neuen Programmierfluss der nach einer gewissen Zeit mit dem Hauptfluss wieder synchronisiert wird. Dabei ist der genaue Zeitpunkt der Synchronisation nicht definiert. 
 
 \begin{figure}[!htb]
   \centering
@@ -23,7 +23,7 @@ Im asynchronen Model wird der lineare Programmfluss um einen zweiten Fluss erwei
   \label{figure:syncron_vs_async}
 \end{figure}
 
-Abbildung \ref{figure:syncron_vs_async} zeigt den unterschied zwischen synchron und asynchron. 
+Abbildung \ref{figure:syncron_vs_async} zeigt den Unterschied zwischen synchron und asynchron. 
 
 \subsection{Blocking vs Non-Blocking}
 
@@ -47,41 +47,44 @@ Abbildung \ref{figure:blocking_vs_non_blocking} zeigt die unterschiede zwischen 
 \subsection{Kombinationen}
 Beim blockierenden oder nicht blockierenden Prozeduren geht es grundsätzlich um die Art und Weise wie eine Prozedur auf dem Rechner ausgeführt wird. Bei synchronen oder asynchronen Prozeduren geht es um den Programmierfluss. Kombiniert man die vorher genannten Konzepte so ergeben sich daraus vier unterschiedliche Kombinationen \cite[p. 48]{Erb2012}. 
 
-\subsubsection{Das blockierenden und synchrone Model}
-Im blockierenden und synchronen Model werden einzelne Operationen sequentiell abgearbeitet. Wird in diesem Model eine blockierende Operation ausgeführt, wird die Prozedur so lange pausiert bis die blockierende Prozedur abgeschlossen ist. Dannach wird der Programfluss weiter ausgeführt bis die nächste blockierende Operation auftritt oder das Programm terminiert.
-
-Ruft ein Prozess eine blockierende I/O Operation auf so wird der Prozess so lange pausiert, bis das Betriebssystem die Daten vollständig gelesen hat. Durch das blockierende und synchrone Model wird die CPU nicht optimal ausgelastet. In vielen Applikationen spielen I/O Operationen nur eine nebensächliche Rolle. Im Bereich der Webserver sind I/O Operationen jedoch ein wichtiger Bestandteil wodurch dieses Model für den Einsatz bei Webserver nur bedingt geeignet ist \cite[p. 48]{Erb2012}.
-
-
-\subsubsection{Das nicht blockierende synchrone Model}
-
-Bei diesem Model kehrt eine Prozedur sofort nach dem Aufruf zum AufruferIn zurück. Das Resultat der aufgerufenen Prozedur könnte in diesem Fall noch nicht verfügbar sein. Der Aufrufer selbst muss sich um die synchronisierung der Daten zwischen den beiden Prozeduren kümmern. Dabei muss der Aufrufer selbst den Programmierfluss unterbrechen bis die Prozedur abgeschlossen ist. 
-
-Das nicht blockierende synchrone Model führt zu unnötigen Ressourcenverbauch da die Applikation zwar prinzipiell nicht blockiert, jedoch trotzdem wartet bis eine Operation zu ende ist. Eine Mögliche Implementierung wäre eine Schleife zu verwenden welche abbricht, wenn die Operation abgeschlossen ist.\cite[p. 48]{Erb2012}
-
-\subsubsection{Das blockierende asynchrone Model}
-
-Das blockierende asynchrone Model verwendet einen zweiten Programmierfluss für die Applikation. Durch den blockierenden Charakter verhält sich das blockierende asynchrone Model ähnlich dem blockierenden synchronen Model. 
-
-\subsubsection{Das nicht blockierende asynchrone Model}
-Beim nicht blockierenden asynchronen Model kehrt eine blockierende Operation sofort an die aufrufende Funktion zurück. Ist die Operation abgeschlossen wird entweder ein Ereignis getriggert oder eine Callback Funktion ausgeführt. Durch das nicht blockierende asynchrone Model wird die I/O Operation direkt im Kernel des Betriebssystems abgearbeitet. Dadurch kann die Applikation die Zeit in der die I/O Operation ausgeführt wird für andere Aufgaben nutzen \cite[p. 48]{Erb2012}.
-
-Ein Grund warum das asynchrone nicht blockierende Model schneller sein kann als die beiden synchronen Modelle sind I/O Operationen die den Prozess blockieren\ref{subsection: io_operationen}. Angenommen eine Applikation möchte 2 Aufgaben erledigen bei der die erste Aufgabe eine Datei vom Dateisystem einliest. Im Falle der beiden synchronen Modelle müssten die Aufgabe 1 auf das fertige Einlesen der Datei warten. Dies kann entweder auf Kernelebene Funktionieren (= synchrones blockierendes Model) oder auf Applikationsebene (= synchrones nicht blockierendes Model) passieren \cite[]{Pet2015}. 
-
-Im asynchronen nicht blockierenden Model kann die Applikation die Aufgabe 1 ausführen bis die Operation blockiert. Während der Kernel die Datei einliest kann die Applikation die Aufgabe 2 ausführen und nach dem terminieren der Aufgabe 2 wird die Aufgabe 1 abgeschlossen. Dadurch macht das Program immer eine fortschritt ohne dass es auf auf Daten vom Kernel warten muss \cite[]{Pet2015}.
-
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=17cm]{images/synchron_blocking.jpg}
+  \includegraphics[width=16cm]{images/synchron_blocking.jpg}
   \caption{
     Unterschiedliche Kombinationen im Überblick
   }
   \label{figure:synchron_blocking}
 \end{figure}
 
+Abbildung \ref{figure:synchron_blocking} zeigt alle 4 Kombinationen auf einer Zeitachse welche im folgenden genauer betrachtet werden.
+
+\subsubsection{Das blockierenden und synchrone Model}
+Im blockierenden und synchronen Model werden einzelne Operationen sequentiell abgearbeitet. Wird in diesem Model eine blockierende Operation ausgeführt, wird die Prozedur so lange pausiert bis die blockierende Prozedur abgeschlossen ist. Dannach wird der Programfluss weiter ausgeführt bis die nächste blockierende Operation auftritt oder das Programm terminiert.
+
+Ruft ein Prozess eine blockierende I/O Operation auf so wird der Prozess so lange pausiert, bis das Betriebssystem die Daten vollständig gelesen hat. Durch das blockierende und synchrone Model wird die CPU nicht optimal ausgelastet. Da blockierende I/O Operationen den Prozess pausieren. In vielen Applikationen spielen I/O Operationen nur eine nebensächliche Rolle. Für Applikationen welche viele I/O Operationen benötigen ist dieses Model nur bedingt geeignet \cite[p. 48]{Erb2012}.
+
+
+\subsubsection{Das nicht blockierende synchrone Model}
+
+Bei diesem Model kehrt eine Prozedur sofort nach dem Aufruf zum Aufrufer zurück. Das Resultat der aufgerufenen Prozedur könnte in diesem Fall noch nicht verfügbar sein. Der Aufrufer selbst muss sich um die synchronisierung der Daten zwischen den beiden Prozeduren kümmern. Dabei muss der Aufrufer selbst den Programmierfluss unterbrechen bis die Prozedur abgeschlossen ist. 
+
+Das nicht blockierende synchrone Model führt zu unnötigen Ressourcenverbauch da die Applikation zwar prinzipiell nicht blockiert, jedoch trotzdem wartet bis eine Operation zu ende ist. Eine möglicher Ablauf einer Implementierung ist in Abbildung \ref{figure:synchron_blocking} (zweite Abbildung) zu sehen. Es wird eine Schleife verwendet welche bei jedem durchgang fragt ob die I/O Operation bereits abgeschlossen ist \cite[p. 48]{Erb2012}.
+
+\subsubsection{Das blockierende asynchrone Model}
+
+Das blockierende asynchrone Model verwendet einen zweiten Programmierfluss für die Applikation. Durch den blockierenden Charakter verhält sich das blockierende asynchrone Model ähnlich dem blockierenden synchronen Model. 
+
+\subsubsection{Das nicht blockierende asynchrone Model}
+Beim nicht blockierenden asynchronen Model kehrt eine blockierende Operation sofort an die aufrufende Funktion zurück. Die aufrufende Funktion kann in der Zeit des blockierenden Aufrufes andere Aufgaben erledigen. Durch das nicht blockierende asynchrone Model wird die I/O Operation direkt im Kernel des Betriebssystems abgearbeitet. Ist die Operation abgeschlossen wird entweder ein Ereignis getriggert oder eine Callback Funktion ausgeführt \cite[p. 48]{Erb2012}.
+
+Ein Grund warum das asynchrone nicht blockierende Model schneller sein kann als die beiden synchronen Modelle sind I/O Operationen die den Prozess blockieren\ref{subsection: io_operationen}. Angenommen eine Applikation möchte 2 Aufgaben erledigen bei der die erste Aufgabe eine Datei vom Dateisystem einliest. Im Falle der beiden synchronen Modelle müssten die Aufgabe 1 auf das fertige Einlesen der Datei warten. Dies kann entweder auf Kernelebene Funktionieren (= synchrones blockierendes Model) oder auf Applikationsebene (= synchrones nicht blockierendes Model) passieren \cite[]{Pet2015}. 
+
+Im asynchronen nicht blockierenden Model kann die Applikation die Aufgabe 1 ausführen bis die Operation blockiert. Während der Kernel die Datei einliest kann die Applikation die Aufgabe 2 ausführen und nach dem terminieren der Aufgabe 2 wird die Aufgabe 1 abgeschlossen. Dadurch macht das Program immer eine fortschritt ohne dass es auf auf Daten vom Kernel warten muss \cite[]{Pet2015}.
+
+
 \subsection{Zusammenfassung}
 
-In diesem Kapitel wurde das Prinzip der asynchronen Programmierung besprochen. Im Bezug auf asynchrone Programmierung kann man Programme in vier unterschiedliche Kategorien einteilen: 
+In diesem Kapitel wurden die Grundlagen für asynchrone Programmierung besprochen. Dabei kann man asynchrone Programme in vier unterschiedliche Kategorien einteilen:
 
 \begin{itemize}
   \item blockierend und synchron
@@ -89,5 +92,4 @@ In diesem Kapitel wurde das Prinzip der asynchronen Programmierung besprochen. I
   \item blockierend und asynchron
   \item nicht blockierend und asynchron
 \end{itemize}    
-
 Viele Anwendungen welche nur wenige I/O Operationen besitzen verwenden das blockierende und synchrone Model da es einen sequentiellen Programmierfluss erlaubt. Das nicht blockierende und synchrone Model verlagert das Warten auf I/O Operationen vom Betriebssystem in die Applikation, was zu einem unnötigen Ressourcenverbauch führen kann. Das asynchrone und nicht blockierende Model bietet die Möglichkeit die CPU bestmöglich auszunutzen da die Applikation während der I/O Operation eine andere Aufgabe ausführen kann.

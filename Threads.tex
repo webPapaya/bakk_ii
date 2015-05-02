@@ -1,14 +1,14 @@
 \section{Prozesse und Threads}
 
-Viele modernen Betriebssysteme können mehrere Operationen gleichzeitig ausführen. Das Ausführen eines Browsers und eines Textverarbeitungsprogramm stellt für moderne Betriebssysteme keine Schwierigkeit dar. Dieses Kapitel gibt einen Überblick über Prozesse und Threads. Um einen tiefen Einblick in dieses Kapitel zu erlangen bietet sich das Kapitel 2 aus dem Buch Moderne Betriebssysteme von Andrew S. Tanenbaum an. 
+Viele modernen Betriebssysteme können mehrere Operationen gleichzeitig ausführen. Das Ausführen eines Browsers und eines Textverarbeitungsprogramm stellt für moderne Betriebssysteme keine Schwierigkeit mehr dar. Dieses Kapitel gibt einen Überblick über Grundlegende Konzepte von concurrency und paralleler Programmierung. Um einen tieferen Einblick in dieses Thema zu erlangen bietet sich das Kapitel 2 aus dem Buch Moderne Betriebssysteme von Andrew S. Tanenbaum an. 
 
 \subsection{Prozess}
 \label{section: Prozess}
-Tanenbaum beschreibt einen Prozess als ein Programm welches gerade ausgeführt wird. Ein Prozess beinhaltet den aktuellen Wertes des Befehlszählers, die Registerinhalte und die Belegung der Variablen. Um den Anschein einer parallelität für den BenutzerIn zu gewährleisten, wechselt die CPU zwischen einzelnen Prozessen.  Welches Programm wann ausgeführt werden darf entscheidet ein Scheduling Algorithmus. Dieser koordiniert die einzelnen Prozesse und gibt Rechenzeit auf der CPU für einen Prozess frei. Dadurch kann ein Betriebssystem, welches auf einem Computer mit Single Core Prozessor installiert ist, mehrere Dinge gleichzeitig erledigen. Zum Beispiel kann ein Textverarbeitungsprogramm ausgeführt werden und gleichzeitig ein Browser geöffnet sein \cite[p. 87]{tan09}.
+Tanenbaum beschreibt einen Prozess als ein Programm welches sich in Ausführung befindet. Ein Prozess beinhaltet den aktuellen Wertes des Befehlszählers, die Registerinhalte und die Belegung der Variablen. Um den Anschein von parallelität zu erwecken wechselt das Betriebssystem zwischen einzelnen Prozessen und kann so mehr Prozesse verarbeiten als auf die CPU Kerne besitzt. Welcher Prozess wann ausgeführt wird entscheidet ein Scheduling Algorithmus. Dieser koordiniert die einzelnen Prozesse und vergibt Rechenzeit auf der CPU. Dadurch kann ein Betriebssystem, welches auf einem Computer mit Single Core Prozessor arbeitet, den anschein erwecken als ob mehrere Applikationen parallel laufen würden. Zum Beispiel kann ein Textverarbeitungsprogramm ausgeführt werden und gleichzeitig ein Browser geöffnet sein \cite[p. 87]{tan09}.
 
 \subsection{Threads}
 \label{section: Threads}
-Ein Prozess besitzt immer nur einen Ausführungsfaden. Mehrere Prozesse können parallel oder quasi-parallel abgearbeitet werden. Inter-Prozess Kommunikation erweist sich als problematisch da ein Prozess einen abgekapselten Adressraum besitzt. Es gibt Situationen in denen eine Applikation mehrere Ausführungsfäden parallel bearbeiten möchte. Threads bieten die Möglichkeit mehrere Ausführungsfäden in einem Prozess auszuführen. Das Ausführen von mehreren Threads in einem Prozess wird als Multithreading bezeichnet. Dabei besitzt ein Thread einen Befehlszeiger, ein Register und einen eigenen Stack. Der Befehlszeiger gibt an welcher Befehl als nächstes ausgeführt werden soll. Das Register beinhaltet alle lokalen Variablen. Im Stack werden aufgerufene Funktionen gestapelt welche noch nicht verlassen wurden. Durch den geteilten Adressraum zwischen den einzelnen Threads besitzen alle die selben globalen Variablen. Einzelne Threads können diese globalen Variablen lese, modifizieren und löschen \cite[p. 97]{tan09}. 
+Ein Prozess besitzt immer nur einen Ausführungsfaden. Mehrere Prozesse können parallel oder quasi-parallel abgearbeitet werden. Inter-Prozess Kommunikation erweist sich als problematisch da ein Prozess einen abgekapselten Adressraum besitzt. Es gibt Situationen in denen eine Applikation mehrere Ausführungsfäden parallel bearbeiten möchte und gleichzeitig auf die selben Variablen zugreifen möchte. Threads bieten die Möglichkeit mehrere Ausführungsfäden in einem Prozess zu behandeln. Das Ausführen von mehreren Threads in einem Prozess wird als Multithreading bezeichnet. Dabei besitzt ein Thread einen Befehlszeiger, ein Register und einen eigenen Stack. Der Befehlszeiger gibt an welcher Befehl als nächstes ausgeführt werden soll. Das Register beinhaltet alle lokalen Variablen. Im Stack werden aufgerufene Funktionen gestapelt welche noch nicht verlassen wurden. Durch den geteilten Adressraum besitzen alle Threads des Prozesses die selben globalen Variablen. Einzelne Threads können diese globalen Variablen lesen, modifizieren und löschen \cite[p. 97]{tan09}. 
 
 Bei der Realisierung von Threads kann man prinzipiell zwischen drei Arten unterscheiden\footnote{Auf Threads in Kernel und Hybride Realisierungen wird in dieser Arbeit nicht eingegangen. Eine Einführung in Kernel Threads und Hybride Threads findet sich in \cite[p. 109-110]{tan09}}:
 
@@ -18,10 +18,9 @@ Bei der Realisierung von Threads kann man prinzipiell zwischen drei Arten unters
   \item Hybride Realisierung von Threads
 \end{itemize}
 
-Bei einer Implementierung von Threads im Benutzerraum weiß das Betriebssystem von den Threads nichts. Werden die Threads im Benutzerraum implementiert muss sich die Laufzeitumgebung um das Erstellen und Verwalten der Threads kümmern. Die Laufzeitumgebeung muss dafür eine eigene thread Tabelle verwalten in der alle Threads des Prozesses verwaltet werden. Die implementierung von Threads im Benutzeradressraum wird auch als Green-Threads bezeichnet \cite[p. 106]{tan09}.
+Werden Threads im Benutzerraum implementiert so weiß das Betriebssystem nichts von den einzelnen Threads. Das Erstellen, Löschen und Scheduling dieser Threads muss von der Laufzeitumgebung  behandelt werden. Die Laufzeitumgebeung muss dafür eine eigene Thread Tabelle verwalten. Die Implementierung von Threads im Benutzeradressraum wird auch als Green-Threads bezeichnet. Green Threads können schneller sein als Betriebssystem Threads, da sie einen für den Anwendungsfall angepassten Scheduling Algorithmus besitzen können \cite[p. 106-108]{tan09}.
 
-(TODO: Refactor)
-Blockierende Operationen wie das lesen eine I/O Operation kann von Threads im Adressraum realisiert werden, jedoch würde das alle weiteren Threads stoppen. Auf vielen UNIX Systemen gibt es die Funktion \emph{select}, welche überprüft ob eine Operation blockiert oder nicht. Wird die Operation blockiert, so wird ein anderer Thread ausgeführt. Wenn der blockierte Thread beim nächsten mal die Kontrolle bekommt, kann er ein weiteres mal überprüfen ob die operation blockiert. Dieser Vorgang wiederholt sich so lange, bis der Thread die Daten lesen kann \cite[p. 108]{tan09}. 
+Bei Kernel-Threads werden die Threads direkt vom Kernel des Betriebssystems verwaltet. Soll ein neuer Thread erstellt oder zerstört werden, muss ein Systemaufruf abgesetzt werden, was eine verhältnismäßig langsame Operation ist. Aus diesem Grund zerstörten manche Betriebssysteme Threads nicht wirklich sondern reactivieren diese sobald ein neuer Thread erstellt werden soll \cite[p. 106-108]{tan09}.
 
 
 \subsection{Prozesse vs. Threads}
@@ -30,19 +29,19 @@ Prozesse und Threads teilen sich einige Eigenschaften. Beide Konzepte bieten die
 
 
 \subsection{Probleme bei verwendung von Threads}
-Bei der Verwendung von mehreren Threads in einer Applikation können durch den geteilten Adressraum auch einige Probleme auftreten. In vielen Fällen enstehen Probleme bei der synchronisation der Daten im Adressraum. Race Conditions und Deadlocks sind zwei häufig auftretende Probleme bei der Verwendung von mehreren Threads. 
+Bei der Verwendung von mehreren Threads in einer Applikation können durch den geteilten Adressraum einige Probleme auftreten. In vielen Fällen enstehen Probleme bei der synchronisation der Daten. Race Conditions und Deadlocks sind zwei häufig auftretende Probleme bei der Verwendung  Multithreading. 
 
 \subsubsection{Context Switching}
-Um einen möglichst faieren Zugriff auf die CPU für einzelne Threads zu bieten kann das Betriebssystem einzelne Prozesse zu jeder Zeit stoppen und zu einem späteren Zeitpunkt wieder ausführen. Der Zeitpunk wann ein Thread gestoppt werden soll und wann dieser wieder weiter ausgeführt werden soll wird von dem \emph{Scheduling Algorithmus} des Betriebssystems bestimmt. Die übergabe von CPU Ressourcen von einem Thread an den anderen wird als Context-Switch bezeichnet \cite[p. 23]{Sto2013}.
+Um einen möglichst faieren Zugriff auf die CPU für einzelne Threads zu bieten kann das Betriebssystem einzelne Prozesse zu jeder Zeit stoppen und zu einem späteren Zeitpunkt wieder ausführen. Der Zeitpunk wann ein Thread gestoppt und wieder ausgeführt werden soll, wird von dem \emph{Scheduling Algorithmus} bestimmt. Die übergabe von CPU Ressourcen von einem Thread an den anderen wird als Context-Switch bezeichnet. Dabei spielt es keine Rolle ob die Threads im Benutzeradressraum oder im Kernel des Betriebssystems implementiert sind \cite[p. 23]{Sto2013}.
 
 \subsubsection{Race Conditions}
 
-Eine Race Condition tritt auf wenn mindestens zwei Threads (Thread A und B) auf die selbe Speicheradresse zugreifen und diese unerwartet verändern wird. Eine unerwartete Veränderung kann auftreten kann durch einen Context Switch entstehen. Entscheidet der Scheduling Algorithmus in einer kritischen Phase von Thread A, dass Thread B arbeiten darf kann Thread B auf die selben Werte von Thread A zugreifen. Thread B verändert einen Wert welcher von Thread A aktiv genutzt wird und nachdem Thread A seine arbeit wieder aufgenommen hat arbeitet dieser mit einem falschen Wert weiter \cite[p. 89]{tan09}. 
+Eine Race Condition tritt auf wenn mindestens zwei Threads (Thread A und B) auf die selbe Speicheradresse zugreifen und diese vom jeweils anderen Thread unerwarteterweise verändert wird. Eine unerwartete Veränderung kann durch paralleles Ausführen zweier Threads oder durch einen Context-Switch entstehen. Bei einem Context-Switch kann eine Race-Condition auftreten, wenn der Scheduling Algorithmus in einer kritischen Phase von Thread A entscheidet, dass Thread B die CPU Ressourcen zur Verfügung gestellt bekommt. Da beide Threads den gleichen Adressraum besitzen darf Thread B auf die selben Werte wie Thread A zugreifen und diese auch verändern.  Thread B verändert einen Wert welcher von Thread A aktiv genutzt wird und nachdem Thread A seine arbeit wieder aufgenommen hat arbeitet dieser mit einem falschen Wert weiter \cite[p. 89]{tan09}. 
 
 Ein Beispiel einer Race Condition zeigt Listing \ref{listing:race_conditions}. Dabei soll der Wert einer Variable ausgegeben werden, wenn dieser 10 ist.
 
 \begin{lstlisting}[
-	caption={},
+	caption={Race Condition},
 	label=listing:race_conditions
 ]
 if x == 10
@@ -51,11 +50,11 @@ if x == 10
 end
 \end{lstlisting}
 
-In Listing \ref{listing:race_conditions} ist zu sehen, dass durch einen anderen Thread die Variable x auf einen anderen Wert gesetzt wird. Dadurch entsteht wird ein falscher Wert auf der Konsole ausgegeben. Dieses Verhalten ist in vielen Fällen nur schwer reproduzierbar, da der Scheduling Algorithmus schwer vorhersehbar ist \ref[]{Net92}.
+In Listing \ref{listing:race_conditions} ist zu sehen, dass durch einen anderen Thread die Variable x auf einen anderen Wert gesetzt wird. Dadurch wird ein falscher Wert auf der Konsole ausgegeben. Dieses Verhalten ist in vielen Fällen nur schwer reproduzierbar, da der Scheduling Algorithmus schwer vorhersehbar ist \cite[]{Net92}.
 
 \subsubsection{Deadlocks}
 
-In einem Deadlock befinden sich mehrere Threads die jeweils auf eine Ressource warten, welche vom jeweilig anderen Prozess gesperrt ist \cite[p. 1]{Jah04}. Dadurch kann keiner der Threads einen fortschritt machen und bleiben in dem Zustand bis das Program terminiert. Deadlocks sind nicht nur auf Threads beschränkt sondern können auch vorkommen wenn mehrere Prozesse auf die Freigabe von Geräten, Datein oder Speicherstellen warten. Ein Deadlock kann auch PC übergreifend über ein Netzwerk entstehen \cite[p. 177]{tan09}. 
+In einem Deadlock befinden sich mehrere Threads die jeweils auf eine Ressource warten, welche vom jeweilig anderen Thread gesperrt ist \cite[p. 1]{Jah04}. Dadurch kann keiner der Threads einen fortschritt machen und bleiben in diesem Zustand bis das Program von einem außenstehenden Prozess terminiert. Deadlocks sind nicht nur auf Threads beschränkt sondern können auch vorkommen wenn mehrere Prozesse auf die Freigabe von Geräten, Datein oder Speicherstellen warten. Ein Deadlock kann auch PC übergreifend über ein Netzwerk entstehen \cite[p. 177]{tan09}. 
 
 \emph{The Dining Philosophers Problem:}
 
@@ -80,11 +79,13 @@ Alle Philosophen sind mit ihren Gedanken so beschäftigt, dass sie nicht miteina
   \item Gehe zu Schritt 1
 \end{itemize}
 
-Das Problem bei dieser Implementierung ist die Möglichkeit eines Deadlocks. Dieses kann entstehen wenn alle Philosophen zur gleichen Zeit hungrig werden und die jeweils rechte Gabel in die Hand nehmen. Nachdem die jeweils linke Gabel vom rechten Philosophen bereits besetzt ist, denken alle Philosophen so lange nach bis die jeweilige linke Gabel frei wird. Nachdem alle Philosophen die rechte Gabel so lange für sich Beanspruchen bis sie nicht mehr hungrig sind. In diesem Zustand wird keiner der Philosophen jemals satt werden \cite[p. 21]{dij71}. 
+Das Problem bei dieser Implementierung ist die Möglichkeit eines Deadlocks. Dieses kann entstehen wenn alle Philosophen zur exact gleichen Zeit hungrig werden und die jeweils rechte Gabel in die Hand nehmen. Nachdem die jeweils linke Gabel vom rechten Philosophen bereits besetzt ist, denken alle Philosophen so lange nach bis die jeweilige linke Gabel frei wird. Nachdem alle Philosophen die rechte Gabel so lange für sich beanspruchen bis sie nicht mehr hungrig sind wird keiner der Philosophen jemals satt werden \cite[p. 21]{dij71}. 
 
-Das \emph{Dining Philosophers Problem} kann auf die Informatik angewendet werden bei dem mehrere parallel laufende Prozesse auf geteilte Ressourcen warten welche vom jeweilig anderen Prozess blockiert wird.
+(TODO: add dining philosophers image)
+
+Das \emph{Dining Philosophers Problem} kann auf die Informatik angewendet werden bei dem mehrere parallel laufende Threads auf geteilte Ressourcen warten welche vom jeweilig anderen Thread blockiert wird.
 
 \subsection{Zusammenfassung}
 In diesem Kapitel wurden die Grundlagen von Prozesse und Threads näher erläutert. Prozesse können als Programme bezeichnet werden welche sich in Ausführung befinden. Dabei kann ein Betriebssystem mehrere Programme gleichzeitig ausführen. Dabei besitzen Prozesse einen linearen Programmfluss. Threads bieten die Möglichkeit diesen linearen Programmierfluss aufzubrechen und in einem gemeinsamen Adressraum parallele Prozeduren auszuführen. 
 
-Durch den nichtlinearen Programmierfluss und das gleichzeitige behandeln mehrere Prozeduren im selben Adressraum können Race Conditions auftreten. Dabei werden Speicherstellen unerwartet verändert und führen zu korrupten Daten. Deadlocks sind ein weitere Probleme welche im Zusammenhang von paralleler Programmierung aufterten können. Diese treten auf, wenn mehrere Prozeduren auf eine Ressource warten, welche vom jeweilig anderen für sich alleine beansprucht wird. 
+Durch den nichtlinearen Programmierfluss und das gleichzeitige behandeln mehrere Prozeduren im selben Adressraum können Race Conditions auftreten. Dabei werden Speicherstellen unerwartet verändert und führen zu korrupten Daten. Deadlocks sind ein weitere Probleme welche im Zusammenhang von paralleler Programmierung aufterten können. Diese treten auf, wenn mehrere Prozeduren auf eine Ressource warten, welche vom jeweilig anderen für sich alleine beansprucht wird. Dadurch macht keiner der Prozeduren einen fortschritt. 
