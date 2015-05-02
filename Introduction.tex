@@ -75,8 +75,7 @@ Eine Aufgabe eines Betriebssystems ist die Verwaltung von Ein- und Ausgabe (I/O 
 
 Da I/O Operationen im Vergleich zur CPU relativ langsam sind führen diese zu längeren Antwortzeiten bei Berechnungen.  In der Zeit in der die Datei eingelesen wird  steht die gesamte Applikation still und kann keine weiteren Aufgaben ausführen. Müssen für eine Applikation viele Dateien von einer Festplatte oder über das Netzwerk eingelesen werden, kann dies zu einer erheblichen Verzögerung der Antwortzeit einer Applikation führen \cite[p. 307]{tan09}. 
 
-Um dies zu verdeutdlichen gibt die nachfolgende Tabelle eine Übersicht über die benötigte Zeit einzelner I/O Operationen. In Spalte 3 wird die Zeit einer I/O Operation mit 1 Milliarde multipliziert um einen Vergleich mit alltäglichen Dingen des Lebens zu geben. Diese Tabelle beruht auf keinen wissenschaftlichen Quellen und sollte lediglich als grobe Referenz für die Dauer von I/O Operationen dienen. Die Tabelle beruht auf den Zahlen von Peter Norvig \cite[]{Nor98} einem Director of Research bei Google und den Vergleichen des Github Benutzers hellerbarde \cite[]{Gis15}:
-
+Um dies zu verdeutdlichen gibt die nachfolgende Tabelle eine Übersicht über die benötigte Zeit einzelner I/O Operationen. In Spalte 3 wird die Zeit einer I/O Operation mit 1 Milliarde multipliziert um einen Vergleich mit alltäglichen Dingen des Lebens zu geben. Diese Tabelle beruht auf keinen wissenschaftlichen Quellen und sollte lediglich als grobe Referenz für die Dauer von I/O Operationen dienen. Die Tabelle beruht auf den Zahlen von Peter Norvig \cite[]{Nor98} einem Director of Research bei Google und den Vergleichen des Github Benutzers hellerbarde \footnote{Latency numbers every programmer should know: \url{https://gist.github.com/hellerbarde/2843375}}:
 
 \begin{figure}[!htb]
   \centering
