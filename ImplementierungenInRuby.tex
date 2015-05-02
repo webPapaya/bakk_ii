@@ -18,7 +18,7 @@ In der folgenden Implementierung werden 10 Bilder von placehold.it heruntergelad
 	require 'net/http'
 
 	def download_images
-	  images = Array.new(10) { |idx| "http://placehold.it/350x1#{idx*100}" }
+	  images = 10.times.map { |idx| "http://placehold.it/350x1#{idx*100}" }
 	  images.each do |image_url|
 	    uri = URI(image_url)
 	    Net::HTTP.get(uri)
@@ -32,21 +32,19 @@ In der folgenden Implementierung werden 10 Bilder von placehold.it heruntergelad
 	end
 \end{lstlisting}
 
-In Listing \ref{listing:image_algorithm} werden die Bibliotheken Benchmark und Net/HTTP inkludiert. Die wichtigste Zeile in diesem Beispiel ist die Zeile 8. Darin wird ein HTTP Get Request an die Domain placehold.it mit dem Pfad zum Bild gesendet. In diesem Beispiel blockiert dieser Aufruf den Hauptthread bis das Bild heruntergeladen wurde. Ist der HTTP Request beendet so wiederholt sich der vorgang bis alle 10 Bilder heruntergeladen wurden. 
+In Listing \ref{listing:image_algorithm} werden die Bibliotheken Benchmark und Net/HTTP inkludiert. In Zeile 4 wird ein Array mit 10 unterschiedlichen Bildern erstellt. Über diese Bilder wird in der folgenden Zeile Iteriert und in dem übergebenen Block wird ein HTTP get Request and die URL gestellt. Bei der iterativen Implementierung wird bei jeder HTTP Get Anfrage der aktuelle Thread so lange blockiert bis diese Anfrage abgeschlossen ist. Ist der erste HTTP Get Request beendet so wiederholt sich der vorgang bis alle 10 Bilder heruntergeladen wurden. 
 
-Diese Implementierung ist nicht optimal da durch den blockierenden der I/O Operation in Zeile 8 der Main Thread zum stillstand kommt. 
-
+Diese Implementierung ist nicht Optimal, da Netzwerk I/O Zugriffe relativ langsam sind und der Thread bei jeder Anfrage zum stillstand kommt.
 
 \subsection{Futures Implementierung}
 
 Die folgende Implementierung verwendet Futures um die 10 Bilder von \emph{placehold.it} über das Netzwerk herunterzuladen.
 
 \begin{lstlisting}[
-	caption={Download der Bilder},
+	caption={Futures Implementierung},
 	label=listing:futures_implementierung
 ]
-	require 'benchmark'
-	require 'net/http'
+	require  'thread'
 
 	class Future
 	  def self.call(&block)
@@ -65,30 +63,38 @@ Die folgende Implementierung verwendet Futures um die 10 Bilder von \emph{placeh
 	    @thread.status
 	  end
 	end
-
-	def download_images
-	  images = Array.new(10) { |idx| "http://placehold.it/350x1#{idx*100}" }
-	  downloads = images.map do |image_url|
-	    Future.call do
-	      uri = URI(image_url)
-	      Net::HTTP.get(uri)
-	    end
-	  end
-	  downloads.each(&:value)
-	end
-
-	Benchmark.bm do |x|
-	  10.times do |iteration|
-	    x.report("futures: #{iteration}") { download_images }
-	  end
-	end
 \end{lstlisting}
 
-Listing \ref{listing:futures_implementierung} zeigt die Implementierung einer Futures Klasse wie sie in Kapitel \ref{section:futures} behandelt wurde. Die Klasse besitzt eine statische Funktion \emph{call} welcher man einen Block übergeben kann, der die Berechnung des Wertes beinhaltet. Diese erstellt ein neues Futures Objekt und übergibt dem Konstruktor einen Block. In der Konstruktorfunktion der Features Klasse wird ein neuer Thread erzeugt in dem der übergebene Block ausgeführt wird. Des weiteren gibt es in der Futures Klasse zwei weitere Methoden \emph{value} und \emph{status}. Die Methode \emph{value} gibt den Rückgabewert des Blocks an den Aufrufer zurück. Dabei wird der Thread des Aufrufers so lange blockiert bis der Rückgabewert des Blocks verfügbar ist. Die Methode \emph{status} gibt den aktuellen Status des Futures zurück.
+Listing \ref{listing:futures_implementierung} zeigt die Implementierung einer Futures Klasse wie sie in Kapitel \ref{section:futures} behandelt wurde. Die Klasse besitzt eine statische Funktion \emph{call} welcher man einen Block übergeben kann, die die Berechnung des Wertes beinhaltet. Diese erstellt ein neues Futures Objekt und übergibt dem Konstruktor den Block. In der Konstruktorfunktion der Features Klasse wird ein neuer Thread erzeugt in dem der übergebene Block ausgeführt wird. Weiters gibt es in der Futures Klasse zwei weitere Methoden \emph{value} und \emph{status}. Die Methode \emph{value} gibt den Rückgabewert des Blocks an den Aufrufer der Methode \emph{value} zurück. Dabei wird der Thread des Aufrufers so lange blockiert bis der Rückgabewert des Blocks verfügbar ist. Die Methode \emph{status} gibt den aktuellen Status des Futures zurück.
 
-Die Funktion \emph{download\_images} erstellt ein Array von Bildern welche von placehold.it heruntergeladen werden sollten. Bei der Iteration über die Bilder wird die statische Methode Future.call aufgerufen, welcher ein Block übergeben wird. Dieser Block kümmert sich um das Herunterladen der Bilder. Durch die Verwendung des Futures werden alle Bilder asynchron heruntergeladen. In Zeile 30 wird über alle Futures iteriert und die Methode \emph{value} aufgerufen. Dadurch wird der Hauptthread mit den Futures synchronisiert und blockiert so lange bis alle Bilder heruntergeladen wurden. 
+\begin{lstlisting}[
+	caption={Download der Bilder},
+	label=listing:futures_download
+]
+require 'benchmark'
+require 'net/http'
 
-Durch die Verwendung von Futures können Berechnungen oder I/O concurrent oder auch parallel ausgeführt werden. Die Implementierung der Futures Klasse besitzt dabei weniger als 20 Zeilen an Code. Durch die Verwendung von Futures kann die Applikation mehrere HTTP Get Requests gleichzeitig an \emph{placehold.it} versenden ohne dass der Main Thread auf jeden einzelnen HTTP Get Response warten muss bevor er das nächste Bild anfragt. 
+def download_images
+  images = 10.times.map { |idx| "http://placehold.it/350x1#{idx*100}" }
+  downloads = images.map do |image_url|
+    Future.call do
+      uri = URI(image_url)
+      Net::HTTP.get(uri)
+    end
+  end
+  downloads.each(&:value)
+end
+
+Benchmark.bm do |x|
+  10.times do |iteration|
+    x.report("futures: #{iteration}") { download_images }
+  end
+end
+\end{lstlisting}
+
+Listing \ref{listing:futures_download} zeigt die Verwendung der Klasse \emph{Future} aus Listing \ref{listing:futures_implementierung}. Die Funktion \emph{download\_images} erstellt ein Array von Bildern welche von placehold.it heruntergeladen werden sollten. Bei der Iteration über die Bilder wird die statische Methode Future.call aufgerufen, welcher ein Block übergeben wird. In diesem Block befinden sich die Operationen welche nötig sind um ein Bild über HTTP herunterzuladen. Durch die Verwendung des Futures werden alle Bilder asynchron heruntergeladen. In Zeile 12 wird über alle Futures iteriert und die Methode \emph{value} aufgerufen. Dadurch wird der Hauptthread mit den Futures synchronisiert und blockiert so lange bis alle Bilder über das Netzwerk heruntergeladen wurden. 
+
+Durch die Verwendung von Futures können Berechnungen oder I/O concurrent oder auch parallel ausgeführt werden. Die Implementierung der Futures Klasse besitzt dabei weniger als 20 Zeilen an Code. Durch die Verwendung von Futures kann die Applikation mehrere HTTP Get Requests gleichzeitig an \emph{placehold.it} versenden ohne dass der Main Thread auf jeden einzelnen HTTP Get Response warten muss bevor er die Anfrage für das nächste Bild versendet. 
 
 \subsection{Actor Based Model}
 
@@ -128,9 +134,9 @@ class ActorPool
 end
 \end{lstlisting}
 
-Da die Aktoren mit Threads arbeiten würden diese entfernt werden sobald der Main Thread das Ende der Applikation erreicht. Um das zu verhindern bietet der Actor Pool mit der Methode \emph{shutdown} die Möglichkeit alle Aktoren herunterzufahren. Das Herunterfahren eines Aktors bedeutet, dass keine weiteren Nachrichten mehr hinzugefügt werden können und die Nachrichten welche sich aktuell in der Mailbox befinden noch abgearbeitet werden. Um die einzelnen Aktoren zu verwalten verwendet die Klasse die Datenstruktur Queue aus dem Modul Thread. In der Methode \emph{add} werden einzelne Aktoren der Queue hinzugefügt. 
+Da diese Implementierung des Aktorenmodels mit Threads arbeitet, würden diese entfernt werden sobald der Main Thread das Ende der Applikation erreicht. Um das zu verhindern bietet der Actor Pool mit der Methode \emph{shutdown} an, welche die aktuelle Mailbox des Aktors abarbeitet und dabei den Main Thread blockiert. Das Herunterfahren eines Aktors bedeutet, dass keine weiteren Nachrichten mehr hinzugefügt werden können. Um die einzelnen Aktoren zu verwalten verwendet die Klasse die Datenstruktur Queue aus dem Modul Thread. In der Methode \emph{add} wird ein einzelner Aktoren der Queue hinzugefügt. 
 
-Nachdem die Aktor Implementierung die Möglichkeit bieten soll aus jeder Ruby Klasse einen Aktor zu machen benötigt diese Implementierung einige Meta Programming Features von Ruby. 
+Die Implementierung des Aktorenmodels soll es ermöglichen aus jeder Ruby Klasse einen Aktor zu machen. Dafür benötigt die Implementierung einige Meta Programming Features von Ruby. 
 
 \begin{lstlisting}[
 	caption={Die Singelton Klasse ActorPool},
@@ -166,7 +172,7 @@ puts Test.new.class # Actor::ActorProxy
 \end{lstlisting}
 
 Listing \ref{listing:actor_in_use} zeigt eine einfache Klasse welches das Modul Actor inkludiert.  Wird aus der Klasse ein neues Objekt mit dem Stichwort \emph{new} erstellt wird nicht der Standard Konstruktor aufgerufen, sondern der überladene Konstruktor des Moduls Actor. Dieser erstellt ein neues ActorProxy Objekt und ruft mit dem Stichwort \emph{super} den Konstruktor der Klasse Test auf. Das neu erstellte Objekt vom Typ \emph{Test} wird dem Konstruktor von ActorProxy übergeben. Durch das Überladen der Methode \emph{new} wird kein Objekt vom Typ Test zurückgeliefert, sondern ein Objekt vom Typ Actor::ActorProxy. Durch dieses Konstrukt 
-werden alle Methoden über das ActorProxy Objekt abgewickelt.
+werden alle Methoden über das ActorProxy Objekt abgewickelt und können dadurch asynchron abgearbeitet werden.
 
 Die ActorProxy Klasse besitzt folgende Methoden:
 
@@ -189,7 +195,6 @@ def method_missing(method, *args)
   process_inbox
 end
 \end{lstlisting}
-
 
 Wurde einem Aktor eine neue Nachricht hinzugefügt wird diese in der Methode \emph{process\_inbox} abgearbeitet. 
 
@@ -221,7 +226,7 @@ def process_message(method, args)
 end
 \end{lstlisting}	
 
-Durch die Verwendung des vorher beschriebenen Actor Based Models werden alle Methodenaufrufe eines Objekts welche das Modul \emph{Actor} inkludiert haben asynchron abgearbeitet. Eine Klasse welche diese Implementierung des Actor Based Models verwendet ist die Klasse \emph{ImageDownload}:
+Durch diese Implementierung des Aktorenmodels werden alle Methodenaufrufe eines Objekts welche das Modul \emph{Actor} inkludiert haben asynchron abgearbeitet. Eine Klasse welche diese Implementierung des Actor Based Models verwendet ist die Klasse \emph{ImageDownload}:
 
 \begin{lstlisting}[
 	caption={Aktor process\_message},
@@ -244,7 +249,7 @@ class ImageDownload
 end
 \end{lstlisting}
 
-In Listing \ref{listing:actor_image_download} wird eine Klasse erstellt welche das Modul Actor inkludiert. Dem Konstruktor muss ein Bild URL übergeben werden und wird die Methode download aufgerufen, so wird das Bild automatisch asynchron und nicht blockierend heruntergeladen. Durch die Verwendung dieser Implementierung können nicht blockierende Programme geschrieben werden. 
+In Listing \ref{listing:actor_image_download} wird eine Klasse erstellt welche das Modul Actor inkludiert. Dem Konstruktor muss ein Bild URL übergeben werden. Beim Aufruf der Methode download wird das Bild automatisch asynchron und nicht blockierend heruntergeladen. Durch die Verwendung dieser Implementierung können nicht blockierende Programme geschrieben werden. 
 
 \subsection{Reactor Pattern}
 Für die Implementierung des Reactor Patterns wird die Bibliothek Eventmachine\footnote{EM auf Github: \url{https://github.com/eventmachine/eventmachine}} verwendet. 
@@ -303,4 +308,19 @@ In Listing \ref{listing:em_download} wird die Klasse \emph{ImageDownloader} dekl
 
 Die Methode \emph{callback} wird aufgerufen sobald der HTTP Request erfolgreich abgeschlossen ist. Die \emph{errback} wird aufgerufen sobald ein Fehler aufgetreten ist.
 
-EventMachine besitzt eine Eventloop welche nur stoppt, wenn sie durch einem äußeren Einfluss gestoppt wird. Ein solcher Einfluss kann Entstehen wenn der Ruby Prozesses beendet wird oder wenn die Methode \emph{stop} auf das globale \emph{EM} Objekt aufgerufen wird. Für das Herunterladen mehrerer Bilder ist dieses Verhalten jedoch nicht gewünscht. Aus diesem Grund gibt es die \emph{ImageManager} Klasse, welche die einzelnen ImageDownloader Objekte erstellt und die EventLoop stoppt sobald alle Bilder heruntergeladen wurden. 
+EventMachine besitzt eine Eventloop welche nur angehalten wird, wenn sie durch einem äußeren Einfluss gestoppt wird. Ein solcher Einfluss kann Entstehen wenn der Ruby Prozesses beendet wird oder wenn die Methode \emph{stop} auf das globale \emph{EM} Objekt aufgerufen wird. Für das Herunterladen mehrerer Bilder ist dieses Verhalten jedoch nicht gewünscht. Aus diesem Grund gibt es die \emph{ImageManager} Klasse, welche die einzelnen ImageDownloader Objekte erstellt und die EventLoop stoppt sobald alle Bilder heruntergeladen wurden. 
+
+\subsection{Zusammenfassung}
+
+Dieses Kapitel zeigt unterschiedliche Möglichkeiten wie der Download von mehreren Bildern über HTTP realisiert werden kann. Dabei wurden folgende 4 Möglichkeiten vorgestellt: 
+
+\begin{itemize}
+  \item iterative Implementierung
+  \item Futures
+  \item Reactor Pattern
+  \item Actor Based Model
+\end{itemize}
+
+Bis auf die \emph{iterative Implementierung} können alle anderen Implementierungen Bilder gleichzeitig herunterladen. Aus diesem Grund wird bei gleichbleibender Netzwerkgeschwindigkeit die \emph{iterative Implementierung} immer langsamer sein als die anderen drei Implementierungen. In dieser Arbeit wurden keine genauen Tests durchgeführt um die Perfomance der einzelnen Implementierungen zu vergleichen.
+
+
