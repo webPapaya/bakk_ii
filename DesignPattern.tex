@@ -33,7 +33,7 @@ Bei komplexen Berechnungen könnte ein Aktor mehrere neue Aktoren erstellen, die
 
 Um Nachrichten an andere Aktoren versenden zu können werden Adressen benötigt. Eine Adresse ist keine klare Identifizierung eines Aktors da dieser keine, eine oder mehrere Adressen besitzen kann. Möchte ein Aktor einem anderen Aktor eine Nachricht senden muss die Adresse des Empfängers bekannt sein. Einem Aktor ist es nicht verboten sich selbst eine Nachricht zu senden wodurch rekursive Algorithmen möglich werden. Das Nachrichtensystem im Aktorenmodell kann mit einem Mail-Client verglichen werden. Dieser besitzt eine Mailbox und kann keine, eine oder mehrere Mail-Adressen besitzen. Ohne die Mailadresse des Empfängers ist es einem Mail Client nicht möglich Nachrichten zu versenden \cite[p. 85]{Erb2012}. 
 
-Aktoren dürfen keinen gemeinsamen Status besitzen wodruch auch versendete Nachrichten keinen Status beinhalten dürfen. Dadurch dürfen nur unveränderbare Daten (immutable Data) von einem Aktor zum anderen versendet werden. Aus diesem Grund dürfen Pointer und Referenzen kein Teil einer Nachricht sein. Locks um den Zugriff auf einzenlne Speicherstellen im Arbeitsspeicher zu schützen werden aufgrund der Architektur im Aktorenmodell  nicht benötigt \cite[p. 85]{Erb2012}.
+Aktoren dürfen keinen gemeinsamen Status besitzen wodurch auch versendete Nachrichten keinen Status beinhalten dürfen. Dadurch dürfen nur unveränderbare Daten (immutable Data) von einem Aktor zum anderen versendet werden. Aus diesem Grund dürfen Pointer und Referenzen kein Teil einer Nachricht sein. Locks um den Zugriff auf einzelne Speicherstellen im Arbeitsspeicher zu schützen werden aufgrund der Architektur im Aktorenmodell  nicht benötigt \cite[p. 85]{Erb2012}.
 
 Das Aktorenmodell spezifiziert den Versand von Nachrichten nicht genauer. Dadurch kann das Aktorenmodell in verteilten Systemen ebenfalls zum Einsatz kommen. Nachrichten werden asynchron versendet und können beliebig lange für die Zustellung benötigen. Es wird keine Garantie über die Reihenfolge gegeben in der Nachrichten beim Empfänger ankommen. Es gibt jedoch Implementierungen des Aktorenmodells, welche die Reihenfolge der versandten Nachrichten garantiert \cite[p. 85]{Erb2012}.
 
@@ -66,11 +66,9 @@ Die folgende Liste gibt einen Überblick über einzelne Bibliotheken welche das 
   \item Pykka (Python \url{https://www.pykka.org})
 \end{itemize}
 
-
-
 \subsubsection{Zusammenfassung}
-Das Aktorenmodell ist ein Design Pattern, das auf drei grundlegenden Aufgaben der Informatik basiert (Datenverarbeitung, Datenspeicherung, Kommunikation). Ein einzelner Aktor ist eine isolierte Einheit, welche keinerlei Status mit anderen Aktoren teilt. Zur Kommunikation verwenden Aktoren Nachrichten, die in der Mailbox des Empfängers landen und von dort sequentiell abgearbeitet werden. Es gibt drei Möglichkeiten wie ein Aktor eine Nachricht verarbeiten kann (neue Actoren erstellen, kann eine Nachricht an andere versenden, kann bestimmen, wie er die nächste Nachricht verarbeiten möchte).
+Das Aktorenmodell ist ein Design Pattern, das auf drei grundlegenden Aufgaben der Informatik basiert (Datenverarbeitung, Datenspeicherung, Kommunikation). Ein einzelner Aktor ist eine isolierte Einheit, welche keinerlei Status mit anderen Aktoren teilt. Zur Kommunikation verwenden Aktoren Nachrichten, die in der Mailbox des Empfängers landen und von dort sequentiell abgearbeitet werden. Es gibt drei Möglichkeiten wie ein Aktor eine Nachricht verarbeiten kann (neue Aktoren erstellen, kann eine Nachricht an andere versenden, kann bestimmen, wie er die nächste Nachricht verarbeiten möchte).
 
 Da das Aktorenmodell Nachrichten asynchron versendet, gibt es keine Garantie für eine richtige Reihenfolge beim Eintreffen einer Nachricht. Dadurch entstehen nicht deterministische Algorithmen, die bei gleichen Eingabewerten andere Ergebnisse liefern können.
 
-Um keinen geteilten Status zu besitzen dürfen Nachrichten nur aus unveränderbaren Daten bestehen. Das Übermitteln von veränderbaren Daten sowie Referenzen oder Pointern ist verboden. Dadurch entsteht eine innere Kapselung der Daten, die Probleme der parallelen Programmierung behebt.
+Um keinen geteilten Status zu besitzen dürfen Nachrichten nur aus unveränderbaren Daten bestehen. Das Übermitteln von veränderbaren Daten sowie Referenzen oder Pointern ist verboten. Dadurch entsteht eine innere Kapselung der Daten, die Probleme der parallelen Programmierung behebt.
