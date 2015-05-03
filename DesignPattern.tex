@@ -1,53 +1,53 @@
 \section{Design Pattern}
 
-Durch die Probleme von Deadlocks und Race Conditions welche bei Multithreading Anwendungen auftreten haben sich einige Design Pattern entwickelt welche die Arbeit mit gleichzeitigen Prozeduren vereinfacht. In diesem Kapitel wird eine Auswahl von drei Design Pattern vorgestellt, welche für verschiedene Concurrency Anwendungszwecke eingesetzt werden können.
+Durch die Probleme von Deadlocks und Race Conditions, welche bei Multithreading Anwendungen auftreten haben sich einige Design Pattern entwickelt, die die Arbeit mit gleichzeitigen Prozeduren vereinfacht. In diesem Kapitel wird eine Auswahl von drei Design Patterns vorgestellt, welche für verschiedene Concurrency Anwendungszwecke eingesetzt werden können.
 
-\subsection{Actor Based Model}
-\label{section:Actor Based Model}
+\subsection{Aktorenmodell}
+\label{section:Aktorenmodell}
 
-Das Actor Based Model (dt. Aktorenmodel) ist ein Design Pattern um Concurrent Applikation zu entwickeln. Dabei werden einzelne Prozeduren so strukturiert dass sie in kleinen gekapselte Einheiten autonom arbeiten. Eine kleine Einheit wird dabei alt Aktor bezeichnet und besitzt keinen gemeinsamen Status mit anderen Aktoren. Jeder Aktor besitzt eine eigene Mailbox über welche er Nachrichten von anderen Aktoren erhalten kann. Durch ein sequentielles abarbeiten der Mailbox können keine Race Conditions entstehen, da ein einzelner Aktor keinen geteilten Status mit anderen besitzt. Dadurch kann es nicht vorkommen dass ein anderer Aktor Daten unerwünschterweise verändert.  \cite[p. 84]{Erb2012}. 
+Das Aktorenmodell (en. Actor Based Model) ist ein Design Pattern um Concurrency Applikation zu entwickeln. Dabei werden einzelne Prozeduren so strukturiert, dass sie in kleinen gekapselte Einheiten autonom arbeiten. Eine kleine Einheit wird dabei als Aktor bezeichnet. Ein Aktor besitzt keinen gemeinsamen Status mit anderen Aktoren. Jeder Aktor besitzt eine eigene Mailbox über welche er Nachrichten von anderen Aktoren erhalten kann. Durch ein sequentielles Abarbeiten der Mailbox können keine Race Conditions entstehen, da ein einzelner Aktor keinen geteilten Status mit anderen besitzt. Dadurch kann es nicht vorkommen, dass ein anderer Aktor Daten unerwünschterweise verändert.  \cite[p. 84]{Erb2012}. 
 
 \subsubsection{Funktionsweise}
 
-Das Actor Based Model verwendet drei der grundlegenden Aufgaben der Informatik \cite[p. 85]{Erb2012}:
+Das Aktorenmodell behandelt drei der Aufgaben der Informatik \cite[p. 85]{Erb2012}:
 
 \begin{itemize}
-  \item Kommunikation (Daten müssen Kommuniziert werden)
+  \item Kommunikation (Daten müssen kommuniziert werden)
   \item Processing (Daten müssen verarbeitet oder geändert werden)
   \item Store (Daten müssen gespeichert werden)
 \end{itemize}
 
-Diese drei Aufgaben werden vom Aktorenmodel folgendermasen unterstützt.
+Diese drei Aufgaben werden vom Aktorenmodell folgendermaßen umgesetzt.
 
-Zwei Einheiten können über eine Schnittstelle miteinander \emph{kommunizieren}. Im Falle von Aktoren sind das Nachrichten welche von einem Aktor an einen anderen gesendet werden und dort in einer Mailbox landen. Die Mailbox ist eine Warteschlange und wird vom Aktor sequentiell abgearbeitet. 
+Zwei Einheiten können über eine Schnittstelle miteinander \emph{kommunizieren}. Im Falle von Aktoren sind das Nachrichten, welche von einem Aktor an einen anderen gesendet werden und dort in einer Mailbox landen. Die Mailbox ist eine Warteschlange und wird vom Aktor sequentiell abgearbeitet. 
 
-Wenn ein Aktor eine Nachricht erhalten hat kann er den eigenen Status verändern. Durch die Möglichkeit den eigenen Status zu verändern sind Aktoren zeitsensitiv. Wurde der Status eines Aktors verändert gibt es drei Möglichkeiten wie er die Veränderung anderen Aktoren mitteilt \cite[p. 84]{Erb2012}:
+Wenn ein Aktor eine Nachricht erhält, kann er den eigenen Status verändern. Erhält ein Aktor eine Nachricht gibt es drei Möglichkeiten wie er darauf reagiert \cite[p. 84]{Erb2012}:
 
 \begin{itemize}
-  \item Er kann neue Actoren erstellen
-  \item Er kann Nachrichten an andere Actoren senden
+  \item Er kann neue Aktoren erstellen
+  \item Er kann Nachrichten an andere Aktoren senden
   \item Er kann sein eigenes Verhalten verändern
 \end{itemize}
 
-Bei komplexen Berechnungen könnte ein Aktor mehrere neue Aktoren erstellen welche einen kleinen Teil der Berechnung durchführen. Diese Aktoren können über Nachrichten miteinander kommunizieren und nach Abschluss der Berechnung ihren Schöpfer mit dem Resultat der kleinen Berechnung kontaktieren. 
+Bei komplexen Berechnungen könnte ein Aktor mehrere neue Aktoren erstellen, die einen kleinen Teil der Berechnung durchführen. Diese Aktoren können über Nachrichten miteinander kommunizieren und nach Abschluss der Berechnung ihren Schöpfer mit dem Resultat der kleinen Berechnung kontaktieren. 
 
-Um Nachrichten an andere Aktoren versenden zu können werden Adressen benötigt. Eine Adresse ist keine klare Identifizierung eines Aktors da dieser keine, eine oder mehrere Adressen besitzen kann. Möchte ein Aktor einem anderen Aktor eine Nachricht senden muss die Adresse des Empfängers bekannt sein. Einem Aktor ist es nicht verboten sich selbst eine Nachricht zu senden wodurch rekursive Algorithmen möglich werden. Das Nachrichtensystem im Aktor Based Model kann mit einem Mail-Client verglichen werden. Dieser besitzt eine Mailbox und kann keine, eine oder mehrere Mail-Adressen besitzen. Ohne die Mailadresse des Empfängers ist es einem Mail Client nicht möglich Nachrichten zu versenden \cite[p. 85]{Erb2012}. 
+Um Nachrichten an andere Aktoren versenden zu können werden Adressen benötigt. Eine Adresse ist keine klare Identifizierung eines Aktors da dieser keine, eine oder mehrere Adressen besitzen kann. Möchte ein Aktor einem anderen Aktor eine Nachricht senden muss die Adresse des Empfängers bekannt sein. Einem Aktor ist es nicht verboten sich selbst eine Nachricht zu senden wodurch rekursive Algorithmen möglich werden. Das Nachrichtensystem im Aktorenmodell kann mit einem Mail-Client verglichen werden. Dieser besitzt eine Mailbox und kann keine, eine oder mehrere Mail-Adressen besitzen. Ohne die Mailadresse des Empfängers ist es einem Mail Client nicht möglich Nachrichten zu versenden \cite[p. 85]{Erb2012}. 
 
-Aktoren dürfen keinen gemeinsamen Status oder Speicher besitzen wodruch auch versendete Nachrichten keinen Status beinhalten darf. Dadurch dürfen nur unveränderbare Daten (immutable Data) von einem Actor zum anderen versendet werden. Aus diesem Grund dürfen Pointer und Referenzen kein Teil einer Nachricht sein. Locks um den Zugriff auf einzenlne Speicherstellen im Arbeitsspeicher zu schützen werden aufgrund der Architektur im Aktorenmodel  nicht benötigt \cite[p. 85]{Erb2012}.
+Aktoren dürfen keinen gemeinsamen Status besitzen wodruch auch versendete Nachrichten keinen Status beinhalten dürfen. Dadurch dürfen nur unveränderbare Daten (immutable Data) von einem Aktor zum anderen versendet werden. Aus diesem Grund dürfen Pointer und Referenzen kein Teil einer Nachricht sein. Locks um den Zugriff auf einzenlne Speicherstellen im Arbeitsspeicher zu schützen werden aufgrund der Architektur im Aktorenmodell  nicht benötigt \cite[p. 85]{Erb2012}.
 
-Das Aktorenmodel spezifiziert den Versand von Nachrichten nicht genauer. Dadurch kann das Aktorenmodel in verteilten Systemen ebenfalls zum einsatz kommen. Nachrichten werden asynchron versendet und können beliebig lange für die Zustellung benötigen. Es wird keine Garantie über die Reihenfolge gegeben in der Nachrichten beim Empfänger ankommen. Es gibt jedoch Implementierungen des Actor Based Models, welche die Reihenfolge der versandten Nachrichten garantiert \cite[p. 85]{Erb2012}.
+Das Aktorenmodell spezifiziert den Versand von Nachrichten nicht genauer. Dadurch kann das Aktorenmodell in verteilten Systemen ebenfalls zum Einsatz kommen. Nachrichten werden asynchron versendet und können beliebig lange für die Zustellung benötigen. Es wird keine Garantie über die Reihenfolge gegeben in der Nachrichten beim Empfänger ankommen. Es gibt jedoch Implementierungen des Aktorenmodells, welche die Reihenfolge der versandten Nachrichten garantiert \cite[p. 85]{Erb2012}.
 
-Da in manchen Implementierungen die Reihnefolge der Nachrichten nicht garantiert ist, sind Algorithmen welche mit dem Aktorenmodel implementiert sind nicht deterministisch. Ein nicht deterministischer Algorithmus ist ein Algorithmus bei dem unterschiedliche Resultate, bei gleichbleibenden Eingabewerten auftreten \cite[]{Agh85}. 
+Ist die Reihenfolge nicht garantiert, so sind Algorithmen welche im Aktorenmodell implementiert sind nicht deterministisch. Ein nicht deterministischer Algorithmus ist ein Algorithmus bei dem unterschiedliche Resultate, bei gleichbleibenden Eingabewerten auftreten \cite[]{Agh85}. 
 
-Ein Beispiel für einen nicht deterministischen Algorithmus in einem \emph{Actor Based Model} wäre das  inkrementieren einer Zahl. Dazu nehmen wir an, dass es einen Aktor A gibt der die Variable x mit dem Wert 0 besitzt. Dieser soll sich selbst so lange die Nachricht \emph{Inkrement 1} schicken bis er die Nachricht \emph{Show Value} erhält. Beim erhalten der Nachricht \emph{Show Value} soll er den aktuellen Wert in der Konsole ausgeben.
+Ein Beispiel für einen nicht deterministischen Algorithmus in einem \emph{Aktorenmodell} wäre das Inkrementieren einer Zahl. Dazu nehmen wir an, dass es einen Aktor A gibt der die Variable x mit dem Wert 0 besitzt. Dieser soll sich selbst so lange die Nachricht \emph{Inkrement 1} schicken bis er die Nachricht \emph{Show Value} erhält. Beim Erhalt der Nachricht \emph{Show Value} soll er den aktuellen Wert in der Konsole ausgeben.
 
-Zu Begin bekommt er von einem entfernten Actor B die Nachricht \emph{Start Inkrement}. Daraufhin schickt er sich selbst die Nachricht \emph{Inkrement 1}. Beim erhalten der Nachricht wir diese in die Mailbox gepackt und abgearbeitet. Beim abarbeiten der Mailbox wird die lokale Variable x um 1 erhöht und besitzt somit den Wert 1. Nachdem der Wert erhöht wurde versendet der Actor A eine weitere Nachricht mit dem Inhalt \emph{Inkrement 1} an sich selbst. Zum exakt selben Zeitpunkt versendet der Actor B die Nachricht \emph{Show Value}. Nachdem das Aktorenmodel  die Reihenfolge der Nachrichten nicht garantiert kann die Nachricht \emph{Show Value} entweder vor oder nach der Nachricht \emph{Inkrement 1} beim Aktor A ankommen. Kommt die Nachricht \emph{Show Value} vor der Nachricht \emph{Inkrement 1} an so wird der Wert 1 in der Konsole ausgegeben. Anderenfalls wird der Wert 2 ausgegeben.
+Zu Beginn bekommt er von einem entfernten Aktor B die Nachricht \emph{Start Inkrement}. Daraufhin schickt er sich selbst die Nachricht \emph{Inkrement 1}. Beim Empfang der Nachricht wird diese in die Mailbox gepackt und abgearbeitet. Beim Abarbeiten der Mailbox wird die lokale Variable x um 1 erhöht und besitzt somit den Wert 1. Nachdem der Wert erhöht wurde versendet der Aktor A eine weitere Nachricht mit dem Inhalt \emph{Inkrement 1} an sich selbst. Zum exakt selben Zeitpunkt versendet der Aktor B die Nachricht \emph{Show Value}. Nachdem das Aktorenmodell die Reihenfolge der Nachrichten nicht garantiert, kann die Nachricht \emph{Show Value} entweder vor oder nach der Nachricht \emph{Inkrement 1} beim Aktor A ankommen. Kommt die Nachricht \emph{Show Value} vor der Nachricht \emph{Inkrement 1} an, so wird der Wert 1 in der Konsole ausgegeben. Anderenfalls wird der Wert 2 ausgegeben.
 
 \subsubsection{Probleme}
-Auch wenn das Aktorenmodel Probleme von paralleler Programmierung verhindern kann, können dennoch Deadlocks auftreten. So kann eine zyklische Abhängigkeit entstehen, wenn zwei Actoren jeweils auf eine Nachricht des anderen warten. Da das Warten auf eine Nachricht nicht auf Systemebene implementiert ist sondern auf Applikationsebene kann ein Deadlock durch ein Timeout behoben werden. Durch die asynchrone Funktionsweise können nicht deterministische Algorithmen entstehen, welche als eine Art der Race Condition angesehen werden können \cite[p. 86]{Erb2012}.
+Auch wenn das Aktorenmodell Probleme von paralleler Programmierung verhindern kann, können dennoch Deadlocks auftreten. So kann eine zyklische Abhängigkeit entstehen, wenn zwei Aktoren jeweils auf eine Nachricht des anderen warten. Da das Warten auf eine Nachricht nicht auf Systemebene implementiert ist, sondern auf Applikationsebene kann ein Deadlock durch ein Timeout behoben werden. Durch die asynchrone Funktionsweise können nicht deterministische Algorithmen entstehen, welche als eine Art der Race Condition angesehen werden können \cite[p. 86]{Erb2012}.
 
 \subsubsection{Implementierungen}
-Das Aktorenmodel kann entweder als Sprachkonzept direkt in eine Programmiersprache eingebaut werden oder als Bibliothek zu einer bestehenden Programmiersprache hinzugefügt werden. Die folgende Liste gibt einen Aufschluss über Programmiersprachen welche das Aktorenmodel direkt in die Programmiersprache integriert haben \footnote{Eine erweiterte Liste findet sich auf  \cite[p. 86]{Erb2012}: \url{http://en.wikipedia.org/wiki/Actor_model?oldformat=true#Programming_with_Actors}}:
+Das Aktorenmodell kann entweder als Sprachkonzept direkt in eine Programmiersprache eingebaut werden oder als Bibliothek zu einer bestehenden Programmiersprache hinzugefügt werden  \cite[p. 86]{Erb2012}. Die folgende Liste gibt einen Aufschluss über Programmiersprachen, die das Aktorenmodell direkt in die Programmiersprache integriert haben \footnote{Eine erweiterte Liste findet sich auf: \url{http://en.wikipedia.org/wiki/actor_model?oldformat=true#Programming_with_Actors}} \footnote{Die beiden vorherigen Listen erheben keinen Anspruch auf Vollständigkeit.}:
 
 \begin{itemize}
   \item Erlang
@@ -57,7 +57,7 @@ Das Aktorenmodel kann entweder als Sprachkonzept direkt in eine Programmiersprac
   \item E
 \end{itemize}
 
-Die folgende Liste gibt einen Überblick über einzelne Bibliotheken welche das Aktorenmodel anbieten:
+Die folgende Liste gibt einen Überblick über einzelne Bibliotheken welche das Aktorenmodell anbieten:
 
 \begin{itemize}
   \item celluloid (ruby \url{https://celluloid.io/})
@@ -66,12 +66,11 @@ Die folgende Liste gibt einen Überblick über einzelne Bibliotheken welche das 
   \item Pykka (Python \url{https://www.pykka.org})
 \end{itemize}
 
-Die beiden vorherigen Listen erheben keinen Anspruch auf Vollständigkeit. 
 
 
 \subsubsection{Zusammenfassung}
-Das Aktorenmodel ist ein Model welches auf drei Grundlegenden Komponenten der Informatik basiert (Datenverarbeitung, Datenspeicherung, Kommunikation). Ein einzelner Aktor ist eine isolierte Einheit welche keinerlei Status mit anderen Aktoren teilt. Zur Kommunikation verwenden Aktoren Nachrichten welche in der Mailbox des Empfängers landen und von dort sequentiell abgearbeitet werden. Es gibt drei Möglichkeiten wie ein Aktor eine Nachricht verarbeiten kann (Neue Actoren erstellen, Er kann eine Nachricht an andere Versenden, Er kann bestimmen wie er die nächste Nachricht verarbeiten möchte).
+Das Aktorenmodell ist ein Design Pattern, das auf drei grundlegenden Aufgaben der Informatik basiert (Datenverarbeitung, Datenspeicherung, Kommunikation). Ein einzelner Aktor ist eine isolierte Einheit, welche keinerlei Status mit anderen Aktoren teilt. Zur Kommunikation verwenden Aktoren Nachrichten, die in der Mailbox des Empfängers landen und von dort sequentiell abgearbeitet werden. Es gibt drei Möglichkeiten wie ein Aktor eine Nachricht verarbeiten kann (neue Actoren erstellen, kann eine Nachricht an andere versenden, kann bestimmen, wie er die nächste Nachricht verarbeiten möchte).
 
-Da das Aktorenmodel Nachrichten asynchron versendet gibt es keine garantier für eine richtige Reihenfolge beim eintreffen einer Nachricht. Dadurch entstehen nicht deterministische Algorithmen welche bei gleichen Eingabewerten andere Ergebnisse liefern können.
+Da das Aktorenmodell Nachrichten asynchron versendet, gibt es keine Garantie für eine richtige Reihenfolge beim Eintreffen einer Nachricht. Dadurch entstehen nicht deterministische Algorithmen, die bei gleichen Eingabewerten andere Ergebnisse liefern können.
 
-Um keinen geteilten Status zu besitzen dürfen Nachrichten nur aus unveränderbaren Daten bestehen. Das übermitteln von veränderbaren Daten, Referenzen oder Pointer ist verboden. Dadurch entsteht eine innere Kapselung der Daten welche Probleme der parallelen Programmierung behebt.
+Um keinen geteilten Status zu besitzen dürfen Nachrichten nur aus unveränderbaren Daten bestehen. Das Übermitteln von veränderbaren Daten sowie Referenzen oder Pointern ist verboden. Dadurch entsteht eine innere Kapselung der Daten, die Probleme der parallelen Programmierung behebt.
