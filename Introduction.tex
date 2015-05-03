@@ -3,7 +3,7 @@
 
 Die Programmiersprache Ruby ist nicht für ihre Concurrency Features bekannt. In webbasierten Applikationen ist dieses Thema wichtiger denn je. Die Themen Event Loop, Asynchronous vs. Synchronous und Blocking vs. Non-Blocking sind Stichwörter, welche sich in vielen web-relevanten Artikeln und Blog Posts finden. Wenige dieser Artikel befassen sich jedoch mit den Grundlagen und Hintergründen dieser Begriffe. 
 
-Mit der Bewegung Applikationen vom Desktop in die Cloud zu bringen, müssen sich immer mehr EntwicklerInnen von Backend Applikationen über Performance und Skallierbarkeit ihrer Applikation Gedanken machen. BenutzerInnen von Web-Applikationen erwarten sich geringste Latenzen selbst bei der Ausführung von komplexen Berechnungen auf dem Server. I/O lastige Operationen, welche viele Dateien lesen und schreiben müssen, verschwenden wertvolle Server Ressourcen wenn das Lesen und Schreiben sequentiell vorgenommen wird. In vielen Fällen wird  die Performance für den EndbenutzerIn verringert
+Mit der Bewegung Applikationen vom Desktop in die Cloud zu bringen, müssen sich immer mehr EntwicklerInnen von Backend Applikationen über Performance und Skalierbarkeit ihrer Applikation Gedanken machen. BenutzerInnen von Web-Applikationen erwarten sich geringste Latenzen selbst bei der Ausführung von komplexen Berechnungen auf dem Server. I/O lastige Operationen, welche viele Dateien lesen und schreiben müssen, verschwenden wertvolle Server Ressourcen wenn das Lesen und Schreiben sequentiell vorgenommen wird. In vielen Fällen wird  die Performance für den EndbenutzerIn verringert
 
 \subsection{Concurrency}
 \label{section:concurrency}
@@ -59,14 +59,14 @@ In der Literatur findet sich keine klare Definition von Performance. Man kann sa
 
 \subsubsection{Effektiv orientierte Performance}
 
-\emph{Effektiv orientierte Performance} beschreibt wie gut eine Applikation die Ausführumgebung verwendet \cite[p. 2]{Mol2009}:
+\emph{Effektiv orientierte Performance} beschreibt wie gut eine Applikation die Ausführungsumgebung verwendet \cite[p. 2]{Mol2009}:
 
 \begin{itemize}
   \item \emph{Durchsatz:} Wie viele Anfragen eine Applikation in einer Zeiteinheit verarbeiten kann.
-  \item \emph{Ressourcenverbauch:} Wie viel Prozent der verfügbaren Ressourcen eine Applikation verwendet.
+  \item \emph{Ressourcenverbrauch:} Wie viel Prozent der verfügbaren Ressourcen eine Applikation verwendet.
 \end{itemize}
 
-Das gleichzeitige Behandeln von mehreren Operationen kann zu einer gesteigerten Performance führen. Dabei können mehrere Prozeduren zur selben Zeit behandelt werden, was zu einer besseren Verteilung des Ressourcenverbrauchs führen kann. Durch die Verbesserung der \emph{effekt orientierten Performance} kann die Antwortzeit für den/die EndbenutzerIn verringert werden.
+Das gleichzeitige Behandeln von mehreren Operationen kann zu einer gesteigerten Performance führen. Dabei können mehrere Prozeduren zur selben Zeit behandelt werden, was zu einer besseren Verteilung des Ressourcenverbrauch führen kann. Durch die Verbesserung der \emph{Effekt orientierten Performance} kann die Antwortzeit für den/die EndbenutzerIn verringert werden.
 
 \subsection{I/O Operations}
 \label{subsection: io_operationen}

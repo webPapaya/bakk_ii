@@ -1,10 +1,10 @@
 \section{Prozesse und Threads}
 
-Viele modernen Betriebssysteme können mehrere Operationen gleichzeitig ausführen. Das Ausführen eines Browsers und eines Textverarbeitungsprogramm stellt für moderne Betriebssysteme keine Schwierigkeit mehr dar. Dieses Kapitel gibt einen Überblick über grundlegende Konzepte von concurrency und paralleler Programmierung. Um einen tieferen Einblick in dieses Thema zu erlangen bietet sich das Kapitel 2 aus dem Buch Moderne Betriebssysteme von Andrew S. Tanenbaum an. 
+Viele modernen Betriebssysteme können mehrere Operationen gleichzeitig ausführen. Das Ausführen eines Browsers und eines Textverarbeitungsprogramm stellt für moderne Betriebssysteme keine Schwierigkeit mehr dar. Dieses Kapitel gibt einen Überblick über grundlegende Konzepte von concurrency und paralleler Programmierung. Um einen tieferen Einblick in dieses Thema zu erlangen bietet sich das Kapitel 2 aus dem Buch Moderne Betriebssysteme von Andrew S. Tannenbaum an. 
 
 \subsection{Prozess}
 \label{section: Prozess}
-Tanenbaum beschreibt einen Prozess als ein Programm welches sich in Ausführung befindet. Ein Prozess beinhaltet den aktuellen Wertes des Befehlszählers, die Registerinhalte und die Belegung der Variablen. Um den Anschein von Parallelität zu erwecken wechselt das Betriebssystem zwischen einzelnen Prozessen und kann so mehr Prozesse verarbeiten als die CPU Kerne besitzt. Welcher Prozess wann ausgeführt wird entscheidet ein Scheduling Algorithmus. Dieser koordiniert die einzelnen Prozesse und vergibt Rechenzeit auf der CPU. Dadurch kann ein Betriebssystem, welches auf einem Computer mit Single Core Prozessor arbeitet, den Anschein erwecken als ob mehrere Applikationen parallel laufen würden. Zum Beispiel kann ein Textverarbeitungsprogramm ausgeführt werden und gleichzeitig ein Browser geöffnet sein \cite[p. 87]{tan09}.
+Tannenbaum beschreibt einen Prozess als ein Programm welches sich in Ausführung befindet. Ein Prozess beinhaltet den aktuellen Wertes des Befehlszählers, die Registerinhalte und die Belegung der Variablen. Um den Anschein von Parallelität zu erwecken wechselt das Betriebssystem zwischen einzelnen Prozessen und kann so mehr Prozesse verarbeiten als die CPU Kerne besitzt. Welcher Prozess wann ausgeführt wird entscheidet ein Scheduling Algorithmus. Dieser koordiniert die einzelnen Prozesse und vergibt Rechenzeit auf der CPU. Dadurch kann ein Betriebssystem, welches auf einem Computer mit Single Core Prozessor arbeitet, den Anschein erwecken als ob mehrere Applikationen parallel laufen würden. Zum Beispiel kann ein Textverarbeitungsprogramm ausgeführt werden und gleichzeitig ein Browser geöffnet sein \cite[p. 87]{tan09}.
 
 \subsection{Threads}
 \label{section: Threads}
@@ -29,7 +29,7 @@ Prozesse und Threads teilen sich einige Eigenschaften. Beide Konzepte bieten die
 
 
 \subsection{Probleme bei Verwendung von Threads}
-Bei der Verwendung von mehreren Threads in einer Applikation können durch den geteilten Adressraum einige Probleme auftreten. In vielen Fällen enstehen Probleme bei der Synchronisation der Daten. Race Conditions und Deadlocks sind zwei häufig auftretende Probleme bei der Verwendung Multithreading. 
+Bei der Verwendung von mehreren Threads in einer Applikation können durch den geteilten Adressraum einige Probleme auftreten. In vielen Fällen entstehen Probleme bei der Synchronisation der Daten. Race Conditions und Deadlocks sind zwei häufig auftretende Probleme bei der Verwendung Multithreading. 
 
 \subsubsection{Context Switching}
 Um einen möglichst fairen Zugriff auf die CPU zu bieten kann das Betriebssystem einzelne Threads zu jeder Zeit stoppen und zu einem späteren Zeitpunkt wieder ausführen. Der Zeitpunkt wann ein Thread gestoppt und wieder ausgeführt werden soll, wird von dem \emph{Scheduling Algorithmus} bestimmt. Die Übergabe von CPU Ressourcen von einem Thread an den anderen wird als Context-Switch bezeichnet. Dabei spielt es keine Rolle ob die Threads im Benutzeradressraum oder im Kernel des Betriebssystems implementiert wurden \cite[p. 23]{Sto2013}.
@@ -41,12 +41,12 @@ Eine Race Condition tritt auf wenn mindestens zwei Threads (Thread A und B) auf 
 Ein Beispiel einer Race Condition zeigt Listing \ref{listing:race_conditions}. Dabei soll der Wert einer Variable ausgegeben werden, wenn dieser 10 ist.
 
 \begin{lstlisting}[
-	caption={Race Condition},
-	label=listing:race_conditions
+  caption={Race Condition},
+  label=listing:race_conditions
 ]
 if x == 10
   # Ein anderer Thread veraendert die Variable x auf 12
-	puts x # Output ist 12 
+  puts x # Output ist 12 
 end
 \end{lstlisting}
 
@@ -54,14 +54,14 @@ In Listing \ref{listing:race_conditions} ist zu sehen, dass durch einen anderen 
 
 \subsubsection{Deadlocks}
 
-In einem Deadlock befinden sich mehrere Threads, die jeweils auf eine Ressource warten, welche vom jeweilig anderen Thread gesperrt ist \cite[p. 1]{Jah04}. Dadurch kann keiner der Threads einen Fortschritt machen und bleiben in diesem Zustand bis der Prozess von einer außenstehenden Prozedur terminiert wird. Deadlocks sind nicht nur auf Threads beschränkt, sondern können auch vorkommen wenn mehrere Prozesse auf die Freigabe von Geräten, Datein oder Speicherstellen warten. Ein Deadlock kann auch PC übergreifend über ein Netzwerk entstehen \cite[p. 177]{tan09}. 
+In einem Deadlock befinden sich mehrere Threads, die jeweils auf eine Ressource warten, welche vom jeweilig anderen Thread gesperrt ist \cite[p. 1]{Jah04}. Dadurch kann keiner der Threads einen Fortschritt machen und bleiben in diesem Zustand bis der Prozess von einer außenstehenden Prozedur terminiert wird. Deadlocks sind nicht nur auf Threads beschränkt, sondern können auch vorkommen wenn mehrere Prozesse auf die Freigabe von Geräten, Dateien oder Speicherstellen warten. Ein Deadlock kann auch PC übergreifend über ein Netzwerk entstehen \cite[p. 177]{tan09}. 
 
 \emph{The Dining Philosophers Problem:}
 
 Edsger Dijkstra beschreibt in seiner Thesis \emph{Hierarchical ordering of sequential processes} das Problem des Deadlocks anhand von fünf Philosophen, die gemeinsam an einem Tisch sitzen. Dabei beschreibt er folgendes Problem:
 
 \begin{quote}
-	Five pholosophers numberd 0 through 4 are living in a house where the table laid for them, each philosopher has his own place at the table. Their only problem - besides those of philosophy - is that the dish served is a very difficult kind of spaghetti, that has to be eaten with two forks. There are two forks next to each plate, so that presents no difficulty: as a consequence, however, no two neighbours may be eating simultaniously. \cite[p. 21]{dij71}
+  Five philosophers numbered 0 through 4 are living in a house where the table laid for them, each philosopher has his own place at the table. Their only problem - besides those of philosophy - is that the dish served is a very difficult kind of spaghetti, that has to be eaten with two forks. There are two forks next to each plate, so that presents no difficulty: as a consequence, however, no two neighbours may be eating simultaneously. \cite[p. 21]{dij71}
 \end{quote} 
 
 \begin{figure}[!htb]
