@@ -81,11 +81,11 @@ Douglas Schmidt beschreibt in seiner Thesis folgende Anwendungsgebiete für das 
   \item Ein oder mehrere Ereignisse können gleichzeitig von unterschiedlichen Clients kommen
   \item Das Blockieren eines Clients oder das Pollen von Requests ist zu ineffizient
   \item Die gesendeten Nachrichten können in relativ kurzer Zeit verarbeitet werden
-  \item Wenn unabhängige Teile der Applikation (Event Demultiplexing/Dispatching) von den abhängigen getrennt werden sollen
+  \item Wenn unabhängige Teile der Applikation (Event Demultiplexing/Dispatching) von den abhängigen Teilen der Applikation getrennt werden sollen
 \end{itemize}
 
 \subsubsection{Zusammenfassung}
 
-Das Reactor Pattern bietet die Möglichkeit asynchron auftretende Ereignisse synchron abzuarbeiten. Durch den bewussten Verzicht auf Multithreading werden Probleme wie Deadlocks oder Race Conditions verhindert. Um dennoch mehrere Ereignisse gleichzeitig bearbeiten zu können, verwendet das Reactor Pattern eine bis zum Ende des Prozesses laufende Schleife. Diese Event Loop kümmert sich um das Empfangen und Versenden von Ereignissen. Dadurch werden asynchron auftretende Ereignisse wie sie bei einem Webserver auftreten können in einen synchronen Kontrollfluss gebracht. 
+Das Reactor Pattern bietet die Möglichkeit asynchron auftretende Ereignisse synchron zu verarbeiten. Durch den bewussten Verzicht auf Multithreading werden Probleme wie Deadlocks oder Race Conditions verhindert. Um dennoch mehrere Ereignisse gleichzeitig bearbeiten zu können, verwendet das Reactor Pattern eine bis zum Ende des Prozesses laufende Schleife. Diese Event Loop kümmert sich um das Empfangen und Versenden von Ereignissen. Dadurch werden asynchron auftretende Ereignisse wie sie bei einem Webserver auftreten können in einen synchronen Kontrollfluss gebracht. 
 
 Das Reactor Pattern findet seine Einsatz in Applikationen welche durch viele blockierende I/O Operation abhängig sind. Durch die Verwendung des Reactor Patterns wird der Prozess nicht blockiert und somit in keinen Ruhezustand versetzt.
