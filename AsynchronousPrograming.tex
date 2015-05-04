@@ -10,7 +10,7 @@ In der Literatur wird zwischen den Begriffen Blocking und synchroner Programmier
 
 \subsection{Synchron vs. Asynchron}
 
-Im \emph{synchronen} Modell werden Aufgaben sequentiell abgearbeitet. Dabei wird eine Initialaufgabe aufgerufen und von dieser ausgehend, alle anderen Aufgaben sequentiell abgearbeitet. Ist eine Aufgabe fertig wird die nächste Aufgabe ausgeführt. Sind alle Aufgaben abgeschlossen, so terminiert das Programm. Der Programmverlauf ist im synchronen Modell linear und kann in einer Zeitachse wie in Abbildung \ref{figure:syncron_vs_async} dargestellt werden \cite[]{Pet2015}.
+Im \emph{synchronen} Modell werden Aufgaben sequentiell abgearbeitet. Dabei wird eine Initialaufgabe aufgerufen und von dieser ausgehend, alle anderen Aufgaben sequentiell abgearbeitet. Ist eine Aufgabe fertig wird die nächste Aufgabe ausgeführt. Sind alle Aufgaben abgeschlossen, so terminiert das Programm. Der Programmverlauf ist im synchronen Modell linear und kann in einer Zeitachse wie in Abbildung \ref{figure:syncron_vs_async_} dargestellt werden \cite[]{Pet2015}.
 
 Im asynchronen Modell wird der lineare Programmfluss um einen zweiten Fluss erweitert. Eine asynchrone Funktion erstellt einen neuen Programmfluss, der nach einer gewissen Zeit mit dem Hauptfluss wieder synchronisiert wird. Dabei ist der genaue Zeitpunkt der Synchronisation nicht definiert. 
 
@@ -20,10 +20,10 @@ Im asynchronen Modell wird der lineare Programmfluss um einen zweiten Fluss erwe
   \caption{
     Synchron vs. Asynchron
   }
-  \label{figure:syncron_vs_async}
+  \label{figure:syncron_vs_async_}
 \end{figure}
 
-Abbildung \ref{figure:syncron_vs_async} zeigt den Unterschied zwischen synchron und asynchron. 
+Abbildung \ref{figure:syncron_vs_async_} zeigt den Unterschied zwischen synchron und asynchron. 
 
 \subsection{Blocking vs Non-Blocking}
 
