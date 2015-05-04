@@ -3,7 +3,7 @@
 
 This thesis is dedicated to the topic \emph{Concurrency in Ruby}. Therefore some basic concepts of concurrency and parallel programming will be explained. Deadlocks and Race Conditions are only a few problems which can occur when running code concurrently. In this thesis those problems will be explained and solutions to these problems will be presented. 
 
-The programming language Ruby is not widely know for its concurrent features. The GIL (Global Interpreter Lock) from CRuby is widely misunderstood. It's true that GIL prevents code from executing parallel but it doesn't mean that code can't be executed concurrently. Other Implementations of Ruby like JRuby or Rubinius use a different architecture and don't need a GIL. Because of the GIL, those implementations can run code truly parallel.
+The programming language Ruby is not widely known for its concurrent features. The GIL (Global Interpreter Lock) from CRuby is widely misunderstood. It's true that GIL prevents code from executing parallel but it doesn't mean that code can't be executed concurrently. Other Implementations of Ruby like JRuby or Rubinius use a different architecture and don't need a GIL. Because of the GIL, those implementations can run code truly parallel.
 
 At the beginning of this thesis basic concepts of concurrency and parallel programming will be explained. Those concepts will be used to describe common design patterns which are related to concurrency. (Reactor Pattern, Actor Based Model and Futures)
 

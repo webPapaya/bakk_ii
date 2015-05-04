@@ -1,7 +1,7 @@
 \section{Concurrency in Ruby}
 \label{section: Ruby}
 
-Die Programmiersprache Ruby ist nicht für ihre Concurrency Features bekannt. Der Mythos, dass der GIL (Global Interpreter Lock) Concurrency in Ruby unmöglich macht hält sich bis heute. Dabei besitzt lediglich eine Implementierung von Ruby (CRuby) einen GIL. Dieser unterbindet tatsächlich das parallele Ausführen von Ruby, jedoch können mehrere Operationen dennoch gleichzeitig behandelt werden. Beim Thema Concurrency herrscht aktuell der größte Unterschied zwischen den einzelnen Implementierungen von Ruby.
+Die Programmiersprache Ruby ist nicht für ihre Concurrency Features bekannt. Der Mythos, dass der GIL (Global Interpreter Lock) Concurrency in Ruby unmöglich macht, hält sich bis heute. Dabei besitzt lediglich eine Implementierung von Ruby (CRuby) einen GIL. Dieser unterbindet tatsächlich das parallele Ausführen von Ruby, jedoch können mehrere Operationen dennoch gleichzeitig behandelt werden. Beim Thema Concurrency herrscht aktuell der größte Unterschied zwischen den einzelnen Implementierungen von Ruby.
 
 Ruby wurde im Jahr 2012 von der ISO (International Organization for Standardization) mit dem Standard ISO/IEC 30170 \footnote{Den Standard kann man der Website \url{http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=59579} erwerben} standardisiert. Die Referenzimplementierung von Ruby ist CRuby oder MRI (Matz's Ruby Interpreter) \footnote{Der Quellcode ist auf Github verfügbar: \url{https://github.com/ruby/ruby}}.
 
@@ -13,7 +13,7 @@ Auf der Website \url{http://www.ruby-lang.org} definiert sich Ruby wie folgt:
 
 \subsection{Ruby Implementierungen}
 
-Neben der Referenzimplementierung des ISO Standards gibt es noch weitere Implementierungen von Ruby. Die aktuell relevantesten Implementierungen sind CRuby, JRuby und Rubinius. Folgende Implementierungen werden in dieser Arbeit nicht behandelt da diese entweder nicht mehr aktiv weiter entwickelt werden oder für diese Arbeit keine Relevanz besitzen 
+Neben der Referenzimplementierung des ISO Standards gibt es noch weitere Implementierungen von Ruby. Die aktuell relevantesten Implementierungen sind CRuby, JRuby und Rubinius. Folgende Implementierungen werden in dieser Arbeit nicht behandelt, da diese entweder nicht mehr aktiv weiter entwickelt werden oder für diese Arbeit keine Relevanz besitzen 
 \footnote{Compiler wie Rubymotion, welche Ruby Code in eine andere Programmiersprache kompilieren, werden in dieser Arbeit nicht behandelt.}:
 
 \begin{itemize}
@@ -30,10 +30,10 @@ CRuby oder MRI (Matz's Ruby Interpreter) ist die Referenzimplementierung des Sta
 
 \subsubsection{JRuby}
 
-JRuby ist eine Implementierung von Ruby, welche auf der JVM (Java Virtual Maschine) läuft. JRuby besitzt keine Möglichkeit auf C Extensions zurückzugreifen jedoch besitzt die Implementierung eine API für Java Bibliotheken. JRuby probiert so gut wie möglich die Kompatibilität mit CRuby zu behalten, jedoch gibt es einige Punkte bei denen beide Implementierungen voneinander abweichen \footnote{Eine Liste von Unterschieden findet sich auf: \url{https://github.com/jruby/jruby/wiki/DifferencesBetweenMriAndJruby}}. 
+JRuby ist eine Implementierung von Ruby, welche auf der JVM (Java Virtual Maschine) läuft. JRuby besitzt keine Möglichkeit auf C Extensions zurückzugreifen, jedoch besitzt die Implementierung eine API für Java Bibliotheken. JRuby probiert so gut wie möglich die Kompatibilität mit CRuby zu behalten, jedoch gibt es einige Punkte bei denen beide Implementierungen voneinander abweichen \footnote{Eine Liste von Unterschieden findet sich auf: \url{https://github.com/jruby/jruby/wiki/DifferencesBetweenMriAndJruby}}. 
 
 \subsubsection{Rubinius}
-Rubinius ist eine Implementierung von Ruby, welche sich auf Concurrency spezialisiert hat. Dabei verwendet es native Threads um Ruby Code auf allen CPUs laufen zu lassen. Rubinius wird nicht interpretiert, sondern besitzt einen JIT (Just In Time) Compiler. Dabei wird der Ruby Code in Bytecode transformiert, welcher von der Rubinius Virtual Maschine ausgeführt wird. Die virtuelle Maschine ist in C und C++ geschrieben und verwendet Teile wie den Ruby Parser von MRI. Die VM ist in C++ geschrieben und die Sprachfeatures von Ruby sind selbst in Ruby geschrieben. Dadurch ist Rubinius eine Implementierung die zu einem großen Teil in Ruby implementiert ist. 
+Rubinius ist eine Implementierung von Ruby, welche sich auf Concurrency spezialisiert hat. Dabei verwendet es native Threads, um Ruby Code auf allen CPUs laufen zu lassen. Rubinius wird nicht interpretiert, sondern besitzt einen JIT (Just In Time) Compiler. Dabei wird der Ruby Code in Bytecode transformiert, welcher von der Rubinius Virtual Maschine ausgeführt wird. Die virtuelle Maschine ist in C und C++ geschrieben und verwendet Teile wie den Ruby Parser von MRI. Die VM ist in C++ geschrieben und die Sprachfeatures von Ruby sind selbst in Ruby geschrieben. Dadurch ist Rubinius eine Implementierung die zu einem großen Teil in Ruby implementiert ist. 
 
 \subsection{Concurrency in Ruby}
 Der Standard von Ruby beinhaltet einige Features um concurrency und paralleles Programmieren zu ermöglichen.
@@ -43,7 +43,7 @@ In MRI (seit Version 1.9), Rubinius und JRuby werden native Threads des Betriebs
 
 In Ruby wird jedes Programm in einem Thread ausgeführt. Dieser Main Thread wird beim Ausführen eines Ruby Programms automatisch erstellt und ausgeführt. Wird dieser beendet, werden gleichzeitig alle anderen Threads der Applikation beendet und der Ruby Prozess terminiert \cite[p. 15]{Sto2013}.
 
-Um einen neuen Thread in Ruby zu erzeugen erstellt man ein neues Thread Objekt und übergibt diesem einen Block. 
+Um einen neuen Thread in Ruby zu erzeugen, erstellt man ein neues Thread Objekt und übergibt diesem einen Block. 
 
 \begin{lstlisting}[
   caption={Thread in Ruby}, 
@@ -79,9 +79,9 @@ In Listing \ref{lst:thread_example} sieht man ein Ruby Script, welches einen Thr
   sleep
 \end{lstlisting} 
 
-In Listing \ref{listing:ruby_threads_amount} werden 100 Threads erstellt und in einen schlafenden Zustand versetzt. Nachdem alle Threads erstellt wurden, wird der Main Thread in einen schlafenden Zustand versetzt. Führt man die Ausgabe auf der Konsole in einem weiteren Terminal Fenster aus erkennt man dass CRuby 101 Threads verwendet. CRuby besitzt in diesem Fall einen Main Thread und 100 weitere Threads.
+In Listing \ref{listing:ruby_threads_amount} werden 100 Threads erstellt und in einen schlafenden Zustand versetzt. Nachdem alle Threads erstellt wurden, wird der Main Thread in einen schlafenden Zustand versetzt. Führt man die Ausgabe auf der Konsole in einem weiteren Terminal Fenster aus, erkennt man dass CRuby 101 Threads verwendet. CRuby besitzt in diesem Fall einen Main Thread und 100 weitere Threads.
 
-Vergleicht man die unterschiedlichen Implementierungen von Ruby so kann man erkennen dass Rubinius, und JRuby weitere Threads zum Verwalten von Ruby verwendet. Dabei richtet sich die Anzahl an Threads zum verwalten von Ruby an die Anzahl der Kerne in der CPU.
+Vergleicht man die unterschiedlichen Implementierungen von Ruby, so kann man erkennen, dass Rubinius, und JRuby weitere Threads zum Verwalten von Ruby verwendet. Dabei richtet sich die Anzahl an Threads zum Verwalten von Ruby an die Anzahl der Kerne in der CPU.
 
 \subsubsection{Race Condition in Ruby}
 
@@ -112,11 +112,11 @@ puts calculator.counter
 
 \end{lstlisting}
 
-In Listing \ref{listing:race_condition} werden zwei Threads verwendet um eine Zahl \emph{200 000} mal zu erhöhen. Das Resultat der Berechnung sollte \emph{200 000} sein. Wird die Funktion mit MRI ausgeführt erhält man den Wert \emph{200 000}. Wird das Programm mit Rubinius oder JRuby ausgeführt erhält man den Wert \emph{200 000} nicht. Führt man das Programm mit Ruby MRI aus entsteht durch den GIL keine Race Condition, da jeweils nur ein Thread einen fortschritt machen darf.
+In Listing \ref{listing:race_condition} werden zwei Threads verwendet, um eine Zahl \emph{200 000} mal zu erhöhen. Das Resultat der Berechnung sollte \emph{200 000} sein. Wird das Programm mit Rubinius oder JRuby ausgeführt, erhält man durch die Race Condition den Wert \emph{200 000} nicht. Führt man das Programm mit Ruby MRI aus, entsteht durch den GIL keine Race Condition, da jeweils nur ein Thread einen Fortschritt machen darf. Dadurch erhält man den richtigen Wert \emph{200 000}.
 
 \subsubsection{Der GIL in MRI}
 
-Der GIL (Global Interpreter Lock) ist ein globaler Lock um das parallele Ausführen von Ruby Code in einem Ruby Prozess zu verhindern. Das bedeutet, dass immer nur ein Ruby Thread pro Prozess einen Fortschritt machen kann. Wenn ein Thread einen Fortschritt machen möchte, muss er den GIL erhalten. Intern ist der GIL mit einem Mutex implementiert, welcher den gesamten Ruby Codes umspannt. Für MRI bedeutet das nicht dass in Ruby keine concurrent Applikationen geschrieben werden können, denn sobald ein Thread auf eine blockierende Operation trifft (z.B. I/O) dann wird der GIL an einen anderen Thread vergeben. Zu einem späteren Zeitpunkt erhält der blockierte Thread den GIL wieder und kann die Daten weiterverarbeiten. Das bedeutet jedoch, dass in MRI Ruby Code nie parallel laufen kann \cite[p. 42]{Sto2013}. 
+Der GIL (Global Interpreter Lock) ist ein globaler Lock, um das parallele Ausführen von Ruby Code in einem Ruby Prozess zu verhindern. Das bedeutet, dass immer nur ein Ruby Thread pro Prozess einen Fortschritt machen kann. Wenn ein Thread einen Fortschritt machen möchte, muss er den GIL erhalten. Intern ist der GIL mit einem Mutex implementiert, welcher den gesamten Ruby Codes umspannt. Für MRI bedeutet das nicht, dass in Ruby keine concurrent Applikationen geschrieben werden können, denn sobald ein Thread auf eine blockierende Operation trifft, (z.B. I/O) wird der GIL an einen anderen Thread vergeben. Zu einem späteren Zeitpunkt erhält der blockierte Thread den GIL wieder und kann die Daten weiterverarbeiten. Das bedeutet jedoch, dass in MRI Ruby Code nie parallel laufen kann \cite[p. 42]{Sto2013}. 
 
 Die Funktionsweise des MRI kann man anhand der Berechnung der Fibonacci Zahl \footnote{Weiter Informationen zur Fibonacci Zahlenfolge finden Sie auf \url{http://de.wikipedia.org/wiki/Fibonacci-Folge}} erklären. Bei diesem Beispiel sollten 4 mal die Fibonacci Zahlen bis 35 berechnet werden:
 
@@ -140,20 +140,20 @@ end
 Fibonacci.new 4, 35
 \end{lstlisting}
 
-In Listing \ref{listing:fibonacci} wird die Fibonacci Zahl 4 mal berechnet. Dazu wird für jede Berechnung ein neuer Thread erstellt. Wird das Programm aus Listing \ref{listing:fibonacci} mit MRI ausgeführt so wird das Programm wie folgt ausgeführt \footnote{Es wird nur die Funktionsweise der Zeilen 3-4 Beschrieben} \cite[p. 45-46]{Sto2013}: 
+In Listing \ref{listing:fibonacci} wird die Fibonacci Zahl 4 mal berechnet. Dazu wird für jede Berechnung ein neuer Thread erstellt. Wird das Programm aus Listing \ref{listing:fibonacci} mit MRI ausgeführt so wird das Programm wie folgt ausgeführt \footnote{Es wird nur die Funktionsweise der Zeilen 3-4 beschrieben} \cite[p. 45-46]{Sto2013}: 
 
 \begin{itemize}
   \item In Zeile 3 wird ein neues Array erstellt, welches mit 4 Threads initialisiert wird \footnote{Die Threads heißen in weiterer Folge Thread 1-4}.
-  \item Jedem dieser Threads wird ein Block übergeben in dem die Funktion \emph{calculate} aufgerufen wird. Diese Funktion berechnet die Fibonacci Zahlen bis 35.
+  \item Jedem dieser Threads wird ein Block übergeben, in dem die Funktion \emph{calculate} aufgerufen wird. Diese Funktion berechnet die Fibonacci Zahlen bis 35.
   \item Alle 4 Threads möchten einen Fortschritt machen. Jedoch darf nur der Thread einen Fortschritt machen, der den GIL besitzt. Aus diesem Grund werden alle Threads in einen Schlafzustand versetzt.
   \item Der Ruby Interpreter entscheidet, dass der Thread 2 den GIL erhält und weckt diesen Thread auf.
   \item Der Thread 2 berechnet die Zahlenfolge bis er fertig ist und gibt den GIL zurück an den Ruby Interpreter.
-  \item Dieser entscheidet dass Thread 3 den GIL bekommt.
-  \item Hat Thread 3 die Berechnung abgeschlossen wiederholt sich die selbe Prozedur für Thread 1 und Thread 4.
+  \item Dieser entscheidet, dass Thread 3 den GIL bekommt.
+  \item Hat Thread 3 die Berechnung abgeschlossen, wiederholt sich die selbe Prozedur für Thread 1 und Thread 4.
   \item Haben alle Threads die Berechnung beendet, ist das Programm abgeschlossen.
 \end{itemize}
 
-Der GIL verhindert die Ausführung von parallelem Ruby Code. Rubinius und JRuby besitzen fein dosierte Locks wodurch ein GIL nicht erforderlich ist. Auch wenn der GIL eine große Beschränkung für das parallele Ausführen von Ruby Code darstellt gibt es Gründe, warum das Team von MRI am GIL festhalten möchte. Hauptsächlich möchte man das Problem von Race Conditions vermeiden. Es gab bereits Bestrebungen den GIL aus CRuby zu entfernen, jedoch führte dies zu einem signifikanten Performanceverlust bei Anwendungen welche nur einen Thread verwenden \cite[p. 48-49]{Sto2013}.
+Der GIL verhindert die Ausführung von parallelem Ruby Code. Rubinius und JRuby besitzen fein dosierte Locks, wodurch ein GIL nicht erforderlich ist. Auch wenn der GIL eine große Beschränkung für das parallele Ausführen von Ruby Code darstellt, gibt es Gründe, warum das Team von MRI am GIL festhalten möchte. Hauptsächlich möchte man das Problem von Race Conditions vermeiden. Es gab bereits Bestrebungen den GIL aus CRuby zu entfernen, jedoch führte dies zu einem signifikanten Performanceverlust bei Anwendungen, welche nur einen Thread verwenden \cite[p. 48-49]{Sto2013}.
 
 Auch wenn der GIL die Wahrscheinlichkeit einer Race Condition verringert, kann diese in Ruby MRI dennoch auftreten, wie Listing \ref{listing:ruby_race_condition} zeigt.
 
@@ -178,16 +178,16 @@ end.each(&:join)
 puts $counter
 \end{lstlisting}
 
-In Listing \ref{listing:ruby_race_condition} wird eine globale Variable \emph{\$counter} erstellt. Nun werden 100 Threads erzeugt, welche die Variable \emph{\$counter} 100 mal erhöht. Am Ende sollte das Programm 10000 ausgeben, jedoch enthält dieses Programm eine Race Condition und liefert daher meistens ein falsches Ergebnis. Um diese Race Condition hervorzurufen wird durch die blockierende Methode \emph{sleep} in Zeile 6 ein Context Switch hervorgerufen. Dadurch wird dem Interpreter mitgeteilt, dass er den Context zu einem anderen Thread ändern darf. Erhält der blockierte Thread den GIL wieder so ist der Wert von counter nicht der aktuelle Wert von  \emph{\$counter + 1}, sondern der veralteter Wert zum Zeitpunkt an dem der Thread pausiert wurde. Dadurch wird in Zeile 8 ein veralteter Wert der Variable \emph{\$counter} zugewiesen. Durch die Race Condition wird dieses erwartete Ergebnis von \emph{10 000}, mit einer ziemlich hohen Wahrscheinlichkeit nicht erreicht.
+In Listing \ref{listing:ruby_race_condition} wird eine globale Variable \emph{\$counter} erstellt. Nun werden 100 Threads erzeugt, welche die Variable \emph{\$counter} 100 mal erhöht. Am Ende sollte das Programm 10000 ausgeben, jedoch enthält dieses Programm eine Race Condition und liefert daher meistens ein falsches Ergebnis. Um diese Race Condition hervorzurufen wird durch die blockierende Methode \emph{sleep} in Zeile 6 ein Context Switch hervorgerufen. Dadurch wird dem Interpreter mitgeteilt, dass er den Context zu einem anderen Thread ändern darf. Erhält der blockierte Thread den GIL wieder, so ist der Wert von counter nicht der aktuelle Wert von  \emph{\$counter + 1}, sondern der veraltete Wert zum Zeitpunkt an dem der Thread pausiert wurde. Dadurch wird in Zeile 8 ein veralteter Wert der Variable \emph{\$counter} zugewiesen. Durch die Race Condition wird dieses erwartete Ergebnis von \emph{10 000}, mit einer ziemlich hohen Wahrscheinlichkeit nicht erreicht.
 
-Auch wenn ein solches Beispiel wie in Listing \ref{listing:ruby_race_condition} in der Praxis eher selten auftritt, zeigt es dass auch mit einem GIL Race Conditions entstehen können.
+Auch wenn ein solches Beispiel wie in Listing \ref{listing:ruby_race_condition} in der Praxis eher selten auftritt, zeigt es, dass auch mit einem GIL Race Conditions entstehen können.
 
 \subsubsection{Mutex}
-Ein Mutex ist ein Sprachkonstrukt, das das parallele Ausführen von einzelnen Teilen einer Applikation verhindert. Der Name Mutex kommt aus dem Englischen \emph{Mutual Exception}. Das bedeutet, dass eine Sektion welche von einem Mutex umschlossen wurde nur von einem Thread zum selben Zeitpunk ausgeführt werden darf \cite[p. 81]{Sto2013}. 
+Ein Mutex ist ein Sprachkonstrukt, das das parallele Ausführen von einzelnen Teilen einer Applikation verhindert. Der Name Mutex kommt aus dem Englischen \emph{Mutual Exception}. Das bedeutet, dass eine Sektion, welche von einem Mutex umschlossen wurde, nur von einem Thread zum selben Zeitpunk ausgeführt werden darf \cite[p. 81]{Sto2013}. 
 
 In Ruby kann ein Mutex mit der Klasse Mutex\footnote{Dokumentation unter:  \url{http://ruby-doc.org/core-2.2.0/Mutex.html}} implementiert werden.
 
-In Listing \ref{listing:ruby_race_condition} ist ein Algorithmus zu sehen, welcher eine Race Condition in CRuby, Rubinius und JRuby hervorruft. Um in diesem Listing ein richtiges Ergebnis zu erlangen muss der Zugriff auf die globale Variable \emph{\$counter} verwaltet werden. In Listing \ref{listing:race condition mutex} wird der Zugriff auf die Variable \emph{counter} durch einen Mutex geschützt. 
+In Listing \ref{listing:ruby_race_condition} ist ein Algorithmus zu sehen, welcher eine Race Condition in CRuby, Rubinius und JRuby hervorruft. Um in diesem Listing ein richtiges Ergebnis zu erlangen, muss der Zugriff auf die globale Variable \emph{\$counter} verwaltet werden. In Listing \ref{listing:race condition mutex} wird der Zugriff auf die Variable \emph{counter} durch einen Mutex geschützt. 
 
 \begin{lstlisting}[
   language=Ruby,
@@ -218,7 +218,7 @@ Durch das Sperren des kritischen Codes durch einen Mutex in Listing \ref{listing
 
 \begin{itemize}
   \item Trifft der erste Thread auf den Mutex nimmt er diesen und sperrt die Ausführung des Codes und wird zum Besitzer des Mutex.
-  \item Solange der erste Thread den Mutex besitzt darf kein andere Thread den Mutex für sich sperren. Dadurch kann kein anderer Thread den vom Mutex umschlossenen Code ausführen. 
+  \item Solange der erste Thread den Mutex besitzt, darf kein anderer Thread den Mutex für sich sperren. Dadurch kann kein anderer Thread den vom Mutex umschlossenen Code ausführen. 
   \item Hat der erste Thread den Code im Mutex ausgeführt, gibt er den Mutex frei. Dadurch ist der erste Thread nicht mehr Besitzer des Mutex und ein weiterer Thread kann den Mutex für sich sperren.
 \end{itemize}
 
@@ -229,9 +229,9 @@ Auf Linux kann ein Lock durch die C Funktion pthread\_mutex\_init(3) \footnote{\
 \subsection{Thread-Safe Datenstrukturen in Ruby}
 Die Klasse \emph{Queue} ist die einzige Datenstruktur welche in Ruby Thread-Safe ist. Die Klasse Queue besitzt einen blockierenden Charakter, was bedeutet, dass die Funktionen \emph{push} und \emph{pop} von einem Mutex umschlossen sind. Durch die Synchronisierung der Daten durch einen Mutex können keine korrupten Daten entstehen, da immer nur ein Thread die Operationen, welche vom Mutex umschlossen sind, ausführen darf. \cite[p. 110]{Sto2013}. 
 
-Array und Hash sind weder in MRI noch in Rubinius und JRuby Thread Safe. Der Grund dafür liegt daran, dass das Sperren einzelner Code Abschnitte zu einem signifikanten Performanceverlust in Applikationen führen kann, welche in einem Thread ausgeführt werden. Da ein Mutex Lock auf Kernel Ebene verwaltet wird ist ein Systemaufruf nötig, welcher einen weiteren Overhead hinzufügt \cite[p. 110]{Sto2013}.
+Array und Hash sind weder in MRI noch in Rubinius und JRuby Thread Safe. Der Grund dafür liegt daran, dass das Sperren einzelner Code Abschnitte zu einem signifikanten Performanceverlust in Applikationen führen kann, welche in einem Thread ausgeführt werden. Da ein Mutex Lock auf Kernel Ebene verwaltet wird, ist ein Systemaufruf nötig, welcher einen weiteren Overhead hinzufügt \cite[p. 110]{Sto2013}.
 
-Immutable Objekte sind Objekte, welche nicht verändert werden können sobald sie erstellt wurden. Daraus resultiert, dass diese Objekte Thread Safe sind. Ein Array, kann mit der Methode \emph{freeze} zu einem immutable Objekt konvertiert werden. Dadurch kann dem Array jedoch kein Element angefügt oder entfernt werden. Eine Modifikation des Arrays wird dadurch ebenfalls unterbunden. Listing \ref{listing:immutable} zeigt ein immutable Array welches, nicht modifiziert werden kann. 
+Immutable Objekte sind Objekte, welche nicht verändert werden können, sobald sie erstellt wurden. Daraus resultiert, dass diese Objekte Thread Safe sind. Ein Array kann mit der Methode \emph{freeze} zu einem immutablen Objekt konvertiert werden. Dadurch kann dem Array jedoch kein Element angefügt oder entfernt werden. Eine Modifikation des Arrays wird dadurch ebenfalls unterbunden. Listing \ref{listing:immutable} zeigt ein immutables Array, welches nicht modifiziert werden kann. 
 
 \begin{lstlisting}[
   language=Ruby,
@@ -242,7 +242,7 @@ Immutable Objekte sind Objekte, welche nicht verändert werden können sobald si
   array.push 4 # can't modify frozen Array (RuntimeError)
 \end{lstlisting}
 
-Eine Möglichkeit mit Immutable Datenstrukturen zu arbeiten bietet die Bibliothek \emph{hamster} \footnote{Dokumentation unter: \url{https://github.com/hamstergem/hamster}}. Dieses kopiert bei jeder Veränderung die originale Datenstruktur und verändert die Kopie. Nach der Veränderung wird das Objekt eingefroren und an den Aufrufer zurückgegeben. Dadurch bleibt die originale Struktur Datenstruktur immer gleich und es können keine Race Conditions auftreten. 
+Eine Möglichkeit mit immutablen Datenstrukturen zu arbeiten bietet die Bibliothek \emph{hamster} \footnote{Dokumentation unter: \url{https://github.com/hamstergem/hamster}}. Dieses kopiert bei jeder Veränderung die originale Datenstruktur und verändert die Kopie. Nach der Veränderung wird das Objekt eingefroren und an den Aufrufer zurückgegeben. Dadurch bleibt die originale Datenstruktur immer gleich und es können keine Race Conditions auftreten. 
 
 \begin{lstlisting}[
   language=Ruby,
@@ -259,13 +259,13 @@ Eine Möglichkeit mit Immutable Datenstrukturen zu arbeiten bietet die Bibliothe
   puts vector_transformed.object_id == vector_original.object_id # false
 \end{lstlisting}
 
-In Listing \ref{listing:immuteable hamster} wird ein Hamster Vector Objekt erstellt, welches mit einem Array vergleichbar ist. In Zeile 3 wird ein neues \emph{Hamster.vector} Objekt erzeugt und mit den Werten \emph{1,2 ,3} initialisiert. Wird auf das neu initialisierte Objekt die Methode \emph{push} aufgerufen, so kopiert die Methode das alte Objekt fügt das neue Element \emph{4} der Kopie hinzu und friert dieses ein. Nachdem aus dem Objekt ein Immutable Objekt geworden ist wird dieses Objekt zurückgegeben. In Zeile 8 wird die Objekt ID beider Objekte überprüft und daraus resultiert, dass beide Objekte auf eine unterschiedliche Stelle im Speicher zeigen. 
+In Listing \ref{listing:immuteable hamster} wird ein Hamster Vector Objekt erstellt, welches mit einem Array vergleichbar ist. In Zeile 3 wird ein neues \emph{Hamster.vector} Objekt erzeugt und mit den Werten \emph{1,2 und 3} initialisiert. Wird auf das neu initialisierte Objekt die Methode \emph{push} aufgerufen, so kopiert die Methode das alte Objekt, fügt das neue Element \emph{4} der Kopie hinzu und friert dieses ein. Nachdem aus dem Objekt ein Immutable Objekt geworden ist, wird dieses Objekt zurückgegeben. In Zeile 8 wird die Objekt ID beider Objekte überprüft und daraus resultiert, dass beide Objekte auf eine unterschiedliche Stelle im Speicher zeigen. 
 
 \subsection{Conditional Variables in Ruby}
 
-\emph{Conditional Variables} bieten die Möglichkeit anderen Threads zu signalisieren, wenn ein gewisses Ereignis eintritt. Angenommen in einer Applikation wartet ein Thread B auf das Ergebnis einer lang andauernden Berechnung in einem anderen Thread A. Thread B könnte in einem gewissen Interval kontinuierlich Thread A fragen, ob dieser mit der Berechnung schon fertig ist. Das Pollen nach einem Ergebnis birgt jedoch einen gewissen Overhead mit sich. Durch Conditional Variables kann das Pollen verhindert werden, indem Thread B in einem schlafenden Zustand versetzt wird. Nachdem Thread A die Berechnung abgeschlossen hat kann er Thread B über eine Conditional Variable signalisieren, das dass Resultat verfügbar ist \cite[p. 748]{tan09} \cite[p. 100]{Sto2013}. 
+\emph{Conditional Variables} bieten die Möglichkeit anderen Threads zu signalisieren, wenn ein gewisses Ereignis eintritt. Angenommen in einer Applikation wartet ein Thread B auf das Ergebnis einer lang andauernden Berechnung in einem anderen Thread A. Thread B könnte in einem gewissen Intervall kontinuierlich Thread A fragen, ob dieser mit der Berechnung schon fertig ist. Das Pollen nach einem Ergebnis birgt jedoch einen gewissen Overhead mit sich. Durch Conditional Variables kann das Pollen verhindert werden, indem Thread B in einem schlafenden Zustand versetzt wird. Nachdem Thread A die Berechnung abgeschlossen hat, kann er Thread B über eine Conditional Variable signalisieren, dass das Resultat verfügbar ist \cite[p. 748]{tan09} \cite[p. 100]{Sto2013}. 
 
 \subsection{Zusammenfassung}
-In diesem Kapitel wurden das Thema Concurrency in Ruby besprochen. Ruby besitzt unterschiedliche Implementierungen, welche sich im Bezug auf Concurrency unterscheiden. Ruby MRI besitzt einen GIL der das parallele Ausführen von Ruby Code verhindert. Der GIL ist intern mit einem Mutex implementiert der den ganzen Ruby Code umspannt. Der GIL wird verwendet um Race Conditions zu minimieren. Dennoch können Race Conditions nicht ausgeschlossen werden. JRuby und Rubinius benötigen keinen GIL da diese Implementierungen ein feingradiges Netz aus Mutex besitzen. Alle drei Implementierungen verwenden native Threads des Betriebssystems. 
+In diesem Kapitel wurde das Thema Concurrency in Ruby besprochen. Ruby besitzt unterschiedliche Implementierungen, welche sich in Bezug auf Concurrency unterscheiden. Ruby MRI besitzt einen GIL, der das parallele Ausführen von Ruby Code verhindert. Der GIL ist intern mit einem Mutex implementiert, der den ganzen Ruby Code umspannt. Der GIL wird verwendet, um Race Conditions zu minimieren. Dennoch können Race Conditions nicht ausgeschlossen werden. JRuby und Rubinius benötigen keinen GIL, da diese Implementierungen ein feingradiges Netz aus Mutex besitzen. Alle drei Implementierungen verwenden native Threads des Betriebssystems. 
 
-Threads können in Ruby über die Klasse \emph{Thread} erstellt werden, welche den übergebenen Block in einem Thread ausführt. Die Klasse \emph{Queue} ist die einzige Datenstruktur in Ruby welche in allen Implementierungen Thread Safe ist. Werden die Methoden \emph{push} oder \emph{pop} auf ein Objekt vom Typ \emph{Queue} aufgerufen so werden die Operationen mit einem Mutex synchronisiert.
+Threads können in Ruby über die Klasse \emph{Thread} erstellt werden, welche den übergebenen Block in einem Thread ausführt. Die Klasse \emph{Queue} ist die einzige Datenstruktur in Ruby, welche in allen Implementierungen Thread Safe ist. Werden die Methoden \emph{push} oder \emph{pop} auf ein Objekt vom Typ \emph{Queue} aufgerufen, so werden die Operationen mit einem Mutex synchronisiert.
