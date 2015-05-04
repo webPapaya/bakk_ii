@@ -155,7 +155,7 @@ In Listing \ref{listing:fibonacci} wird die Fibonacci Zahl 4 mal berechnet. Dazu
 
 Der GIL verhindert die Ausführung von parallelem Ruby Code. Rubinius und JRuby besitzen fein dosierte Locks wodurch ein GIL nicht erforderlich ist. Auch wenn der GIL eine große Beschränkung für das parallele Ausführen von Ruby Code darstellt gibt es Gründe, warum das Team von MRI am GIL festhalten möchte. Hauptsächlich möchte man das Problem von Race Conditions vermeiden. Es gab bereits Bestrebungen den GIL aus CRuby zu entfernen, jedoch führte dies zu einem signifikanten Performanceverlust bei Anwendungen welche nur einen Thread verwenden \cite[p. 48-49]{Sto2013}.
 
-Auch wenn der GIL die Wahrscheinlichkeit einer Race Condition verringert, kann diese auftreten, wie Listing \ref{listing:ruby_race_condition} zeigt.
+Auch wenn der GIL die Wahrscheinlichkeit einer Race Condition verringert, kann diese in Ruby MRI dennoch auftreten, wie Listing \ref{listing:ruby_race_condition} zeigt.
 
 \begin{lstlisting}[
   language=Ruby,
