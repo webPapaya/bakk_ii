@@ -45,7 +45,11 @@ In Ruby wird jedes Programm in einem Thread ausgeführt. Dieser Main Thread wird
 
 Um einen neuen Thread in Ruby zu erzeugen erstellt man ein neues Thread Objekt und übergibt diesem einen Block. 
 
-\begin{lstlisting}[language=Ruby,label=lst:thread_example]
+\begin{lstlisting}[
+  caption={Thread in Ruby}, 
+  language=Ruby,
+  label={lst:thread_example}
+  ]
 def long_running
   sleep 2
   puts "second"
@@ -62,7 +66,10 @@ puts "first"
 
 In Listing \ref{lst:thread_example} sieht man ein Ruby Script, welches einen Thread verwendet. Durch die Methode \emph{sleep} wird die Ausführung der Funktion \textit{long\_run\_running} zwei Sekunden gestoppt. Im Beispiel sieht man dass die Zeile 6 als erstes auf dem Monitor ausgegeben wird als die Zeile 3. 
 
-\begin{lstlisting}[language=Ruby,caption=Adaptiert von \cite{Sto2013}]
+\begin{lstlisting}[
+  language=Ruby,
+  caption=Adaptiert von \cite{Sto2013}
+]
   100.times do
     Thread.new { sleep }
   end
@@ -82,7 +89,8 @@ In Ruby kann ein Mutex mit der Klasse Mutex\footnote{Dokumentation unter:  \url{
 
 \begin{lstlisting}[
   language=Ruby,
-  label={listing:ruby_race_condition}
+  label={listing:ruby_race_condition},
+  caption={Eine Race Condition in Ruby}
 ]
 require 'thread'
 
@@ -104,7 +112,11 @@ Listing \ref{listing:ruby_race_condition} zeigt eine Race Condition, welche in a
 
 Um ein richtiges Ergebnis zu erlangen muss der Zugriff auf die globale Variable \emph{counter} verwaltet werden. In Listing \ref{listing:race condition mutex} wird der Zugriff auf die Variable \emph{counter} durch einen Mutex geschützt. 
 
-\begin{lstlisting}[language=Ruby,label={listing:race condition mutex}]
+\begin{lstlisting}[
+  language=Ruby,
+  label={listing:race condition mutex},
+  caption={Lösung der Race Condition aus Listing \ref{listing:ruby_race_condition}}
+]
 require 'thread'
 
 $counter = 0
@@ -211,7 +223,10 @@ Der GIL verhindert die Ausführung von parallelem Ruby Code. Rubinius und JRuby 
 
 Angenommen man besitzt folgendes Programm \footnote{Idee von: \url{http://stackoverflow.com/questions/19969551/why-no-race-condition-in-ruby}}: 
 
-\begin{lstlisting}[language=Ruby,label={listing:race condition}]
+\begin{lstlisting}[
+  language=Ruby,
+  label={listing:race condition}
+]
 
 class Calculator
   attr_accessor :counter
