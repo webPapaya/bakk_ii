@@ -1,14 +1,14 @@
 \subsection{Reactor Pattern}
 \label{section:Reactor Pattern}
 
-Das Reactor Pattern ist ein Design Pattern bei dem asynchrone auftretende Events, synchron abgearbeitet werden. Asynchrone Nachrichten/Events werden vom Reactor Pattern in einen synchronen Programmfluss gebracht. Neben dem Empfangen von asynchronen Nachrichten kann das Reactor Pattern verwendet werden um nicht blockierende I/O lastige Applikationen zu entwicklen. Da die Registrierung und der Aufruf von Ereignissen vom Reactor Pattern übernommen wird gibt es eine lose Koppelung zwischen dem lesenden und schreibenden I/O Operationen und der Business Logik. \cite[p. 1]{Sch95}
+Das Reactor Pattern ist ein Design Pattern bei dem asynchron auftretende Events, synchron abgearbeitet werden. Asynchrone Nachrichten/Events werden vom Reactor Pattern in einen synchronen Programmfluss gebracht. Neben dem Empfangen von asynchronen Nachrichten kann das Reactor Pattern verwendet werden, um nicht blockierende I/O lastige Applikationen zu entwicklen. Da die Registrierung und der Aufruf von Ereignissen vom Reactor Pattern übernommen wird, gibt es eine lose Koppelung zwischen den lesenden und schreibenden I/O Operationen und der Business Logik. \cite[p. 1]{Sch95}
 
 \subsubsection{Motivation}
 \label{section:reactor_motivation}
 
 Douglas C. Schmidt beschreibt einen Anwendungsfall für das Reactor Pattern, bei dem Logging Informationen in einem verteilten System an einen zentralen Server gesendet und dort gespeichert werden. Der Server soll in der Lage sein Logging Informationen zu jederzeit speichern zu können. Dabei kann es vorkommen, dass Informationen auch von mehreren Clients gleichzeitig an den Server gesendet werden \cite[p. 1]{Sch95}. 
 
-Eine Möglichkeit um mehrere Verbindungen auf einmal zu verarbeiten bietet Multithreading. Laut D. Schmidt können bei der Verwendung von Multithreading folgende Probleme auftreten \cite[p. 1]{Sch95}: 
+Eine Möglichkeit, um mehrere Verbindungen auf einmal zu verarbeiten, bietet Multithreading. Laut D. Schmidt können bei der Verwendung von Multithreading folgende Probleme auftreten \cite[p. 1]{Sch95}: 
 
 \begin{itemize}
   \item benötigt ein komplexes concurrency Schema
@@ -16,11 +16,11 @@ Eine Möglichkeit um mehrere Verbindungen auf einmal zu verarbeiten bietet Multi
   \item es könnte nicht auf allen Betriebssystemen verfügbar sein.
 \end{itemize}
 
-Die Nachteile 2 und 3 können 20 Jahre nach dem Erscheinen dieses Papers als hinfällig angesehen werden, da mittlerweile multicore Prozessoren im Consumer Bereich angekommen sind und jedes relevante Betriebssystem Threads unterstützt. Das Problem Nummer 1 mit dem komplexen concurrency Schema bei der Verwendung von Multithreading bleibt bis heute bestehen. Das Reactor Pattern wurde 1995 entwickelt und probiert alle drei dieser Probleme zu lösen indem es auf Multithreading verzichtet.
+Die Nachteile 2 und 3 können 20 Jahre nach dem Erscheinen dieses Papers als hinfällig angesehen werden, da mittlerweile multicore Prozessoren im Consumer Bereich angekommen sind und jedes relevante Betriebssystem Threads unterstützt. Das Problem Nummer 1 mit dem komplexen concurrency Schema bei der Verwendung von Multithreading bleibt bis heute bestehen. Das Reactor Pattern wurde 1995 entwickelt und probiert alle drei dieser Probleme zu lösen, indem es auf Multithreading verzichtet.
 
 \subsubsection{Funktionsweise}
 
-Das Reactor Pattern implementiert eine Event Loop, welche sich um das Versenden und Empfangen von Events kümmert. Die Event Loop ist eine nicht endende Schleife, die Events von außerhalb empfangen kann und dieser an den richtigen Empfänger weiterleitet. Um auf einen Ereignistyp reagieren zu können verwendet das Reactor Pattern Callback Funktionen, welche aufgerufen werden sobald ein Ereignis eintritt. Dadurch kann eine Applikation nur auf Ereignisse reagieren, für welche eine Callback Funktion verfügbar ist. Da das Reactor Pattern auf Multithreading verzichtet, kann immer nur eine Operation zu einem Zeitpunkt ausgeführt werden. I/O Operationen können jedoch gleichzeitig behandelt werden. In der Regel werden Callback Funktionen ausgeführt, wenn eine blockierende I/O Operation abgeschlossen ist. Folgende typische Ereignisse können im Reactor Pattern auftreten \footnote{Die Liste ist angelehnt an folgenden Blog-Post: \url{http://pltconfusion.com/2014/10/20/eventmachine_internals_and_the_reactor_pattern/}}:
+Das Reactor Pattern implementiert eine Eventloop, welche sich um das Versenden und Empfangen von Events kümmert. Die Eventloop ist eine nicht endende Schleife, die Events von außerhalb empfangen kann und dieser an den richtigen Empfänger weiterleitet. Um auf einen Ereignistyp reagieren zu können, verwendet das Reactor Pattern Callback Funktionen, welche aufgerufen werden, sobald ein Ereignis eintritt. Dadurch kann eine Applikation nur auf Ereignisse reagieren, für welche eine Callback Funktion verfügbar ist. Da das Reactor Pattern auf Multithreading verzichtet, kann immer nur eine Operation zu einem Zeitpunkt ausgeführt werden. I/O Operationen können jedoch gleichzeitig behandelt werden. In der Regel werden Callback Funktionen ausgeführt, wenn eine blockierende I/O Operation abgeschlossen ist. Folgende typische Ereignisse können im Reactor Pattern auftreten \footnote{Die Liste ist angelehnt an folgenden Blog-Post: \url{http://pltconfusion.com/2014/10/20/eventmachine_internals_and_the_reactor_pattern/}}:
 
 \begin{itemize}
   \item eine Datei wurde von einem Filesystem gelesen
@@ -41,13 +41,13 @@ Der genaue Lebenszyklus des Reactor Patterns ist in Abbildung \ref{figure:reacto
   \label{figure:reactor_cycle}
 \end{figure}
 
-In der Initialisierung wird der Reactor in der \emph{main} Methode erstellt. Nachdem ein Reactor erstellt wurde, können sich unterschiedliche \emph{Event Handler} beim Reactor registrieren. Ein \emph{Event Handler} ist eine Klasse, die auf ein bestimmtes Ereignis reagieren kann. Diese \emph{EventHandler} besitzt eine \emph{getHandler} Methode, welches die Callback Methode für ein Ereignis zurückliefert. Sind alle Handler beim Reactor registriert startet die Eventloop und wartet auf Ereignisse. Sobald ein Event eintritt wird die Callback Methode ausgeführt. Im letzten Schritt wird der Handler geschlossen und die Eventloop wartet auf die nächsten Ereignisse. 
+In der Initialisierung wird der Reactor in der \emph{main} Methode erstellt. Nachdem ein Reactor erstellt wurde, können sich unterschiedliche \emph{Event Handler} beim Reactor registrieren. Ein \emph{Event Handler} ist eine Klasse, die auf ein bestimmtes Ereignis reagieren kann. Diese \emph{EventHandler} besitzt eine \emph{getHandler} Methode, welches die Callback Methode für ein Ereignis zurückliefert. Sind alle Handler beim Reactor registriert, startet die Eventloop und wartet auf Ereignisse. Sobald ein Ereignis eintritt, wird die Callback Methode ausgeführt. Im letzten Schritt wird der Handler geschlossen und die Eventloop wartet auf die nächsten Ereignisse. 
 
-Wie genau die Eventloop einzelne Ereignisse behandelt, variiert zwischen den einzelnen Implementierungen. Eine mögliche Implementierung ist das Ereignis an das Ende einer Queue zu geben und bei jedem Durchlauf der Eventloop wird genau ein Ergebnis von der Queue genommen und behandelt.
+Wie genau die Eventloop einzelne Ereignisse behandelt, variiert zwischen den einzelnen Implementierungen. Eine mögliche Implementierung ist das Ereignis an das Ende einer Queue zu geben und bei jedem Durchlauf wird der Eventloop genau ein Ergebnis von der Queue genommen und behandelt.
 
-Der Ablauf, der in Abbildung \ref{figure:reactor_cycle} beschrieben ist richtet sich sehr an statische Programmiersprachen wie C++\footnote{In Kapitel \ref{section:implementation} wird das Reactor Pattern in Ruby Implementiert.}.
+Der Ablauf, der in Abbildung \ref{figure:reactor_cycle} beschrieben ist, richtet sich sehr an statische Programmiersprachen wie C++\footnote{In Kapitel \ref{section:implementation} wird das Reactor Pattern in Ruby Implementiert.}.
 
-Durch die Verwendung des Reactor Patterns wird eine enge Koppelung zwischen unabhängigen Teilen der Applikation und Applikations abhängigen teilen gelöst. Dadurch werden die Tief liegenden und komplexen Komponenten wie das Empfangen und Versenden von Events, von der EventLoop übernommen \cite[p. 2]{Sch95}.
+Durch die Verwendung des Reactor Patterns wird eine enge Koppelung zwischen unabhängigen Teilen der Applikation und Applikationsabhängigen Teilen gelöst. Dadurch werden die tiefliegenden und komplexen Komponenten, wie das Empfangen und Versenden von Events, von der EventLoop übernommen \cite[p. 2]{Sch95}.
 
 \subsubsection{Reactor - Design Pattern}
 
@@ -68,7 +68,7 @@ In Abbildung \ref{figure:reactor_otm} wird die OTM Notation verwendet \footnote[
  Die Reactor Klasse ist für das Registrieren, Entfernen und Versenden von Ereignissen verantwortlich. Die Eventloop, welche Callback Methoden von Ereignissen ausführt, befindet sich ebenfalls in dieser Klasse. Der Reactor ist unabhängig von der Applikation und kann deswegen in anderen Applikationen wiederverwendet werden. 
 
 \emph{Event Handler:}
-Die Eventhandler Klasse bietet ein Interface für einen konkreten EventHandler. In dynamischen Sprachen wie Ruby oder JavaScript, die keine Interfaces bieten ist diese Klasse hinfällig. 
+Die Eventhandler Klasse bietet ein Interface für einen konkreten EventHandler. In dynamischen Sprachen wie Ruby oder JavaScript, die keine Interfaces bieten, ist diese Klasse hinfällig. 
 
 \emph{ConcreteEventHandler:}
 Der ConcreteEventHandler implementiert das Interface des Event Handlers. Dabei muss der Eventhandler folgende drei Methoden beinhalten: GetHandle, HandleEvent und StopEvent.
@@ -86,6 +86,6 @@ Douglas Schmidt beschreibt in seiner Thesis folgende Anwendungsgebiete für das 
 
 \subsubsection{Zusammenfassung}
 
-Das Reactor Pattern bietet die Möglichkeit asynchron auftretende Ereignisse synchron zu verarbeiten. Durch den bewussten Verzicht auf Multithreading werden Probleme wie Deadlocks oder Race Conditions verhindert. Um dennoch mehrere Ereignisse gleichzeitig bearbeiten zu können, verwendet das Reactor Pattern eine bis zum Ende des Prozesses laufende Schleife. Diese Event Loop kümmert sich um das Empfangen und Versenden von Ereignissen. Dadurch werden asynchron auftretende Ereignisse wie sie bei einem Webserver auftreten können in einen synchronen Kontrollfluss gebracht. 
+Das Reactor Pattern bietet die Möglichkeit asynchron auftretende Ereignisse synchron zu verarbeiten. Durch den bewussten Verzicht auf Multithreading werden Probleme wie Deadlocks oder Race Conditions verhindert. Um dennoch mehrere Ereignisse gleichzeitig bearbeiten zu können, verwendet das Reactor Pattern eine bis zum Ende des Prozesses laufende Schleife. Diese Eventloop kümmert sich um das Empfangen und Versenden von Ereignissen. Dadurch werden asynchron auftretende Ereignisse, wie sie bei einem Webserver auftreten können in einen synchronen Kontrollfluss gebracht. 
 
-Das Reactor Pattern findet seine Einsatz in Applikationen welche durch viele blockierende I/O Operation abhängig sind. Durch die Verwendung des Reactor Patterns wird der Prozess nicht blockiert und somit in keinen Ruhezustand versetzt.
+Das Reactor Pattern findet seinen Einsatz in Applikationen, welche durch viele blockierende I/O Operationen abhängig sind. Durch die Verwendung des Reactor Patterns wird der Prozess nicht blockiert und somit in keinen Ruhezustand versetzt.

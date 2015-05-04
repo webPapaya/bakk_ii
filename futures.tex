@@ -1,25 +1,25 @@
 \subsection{Futures}
 \label{section:futures}
 
-Ein Future \footnote{Im Javascript Bereich findet man Futures unter dem Begriff defferred} ist ein Platzhalterobjekt Objekt für die Berechnung eines Wertes der in Zukunft verfügbar sein kann. Der Wert eines Futures wird asynchron im Hintergrund berechnet. Dabei darf der Wert eines Futures nur einmal gesetzt werden und im Anschluss nicht mehr verändert werden. Möchte eine Funktion den Wert eines Futures erhalten, so kann der Wert bereits verfügbar sein und wird somit sofort zurückgegeben. Wird der Wert noch berechnet so wird der Thread des Aufrufers so lange blockiert bis der Wert verfügbar ist. Durch Futures können Werte parallel berechnet werden, was zu einem asynchronen, nicht blockierenden Programmfluss führt \cite[]{ScalaFutures}. 
+Ein Future \footnote{Im Javascript Bereich findet man Futures unter dem Begriff defferred} ist ein Platzhalterobjekt für die Berechnung eines Wertes der in Zukunft verfügbar sein kann. Der Wert eines Futures wird asynchron im Hintergrund berechnet. Dabei darf der Wert eines Futures nur einmal gesetzt werden und im Anschluss nicht mehr verändert werden. Möchte eine Funktion den Wert eines Futures erhalten, so kann der Wert bereits verfügbar sein und wird somit sofort zurückgegeben. Wird der Wert noch berechnet, so wird der Thread des Aufrufers so lange blockiert bis der Wert verfügbar ist. Durch Futures können Werte parallel berechnet werden, was zu einem asynchronen, nicht blockierenden Programmfluss führt \cite[]{ScalaFutures}. 
 
 \subsubsection{Funktionsweise} 
 
-Ein Future ist ein Objekt welches einen Wert repräsentiert, welches in der Zukunft verfügbar sein kann. Dabei kann ein Future grundsätzlich drei Status besitzen: 
+Ein Future ist ein Objekt, welches einen Wert repräsentiert, der in der Zukunft verfügbar sein kann. Dabei kann ein Future grundsätzlich drei Status besitzen: 
 
 \begin{itemize}
   \item working
   \item completed
   \item error
 \end{itemize}  
-Besitzt das Future den Status \emph{working} so ist die Prozedur, welche den Wert des Futures berechnet noch nicht beendet. Sobald die Berechnung beendet ist wird der Wert des Futures auf das Resultat der Berechnung gesetzt. Der Status wird in diesem Schritt auf \emph{completed} gesetzt und der Wert wird in ein unveränderbares Objekt (en. immutable) verwandelt. Tritt bei der Berechnung ein Fehler auf wird der Status auf \emph{Error} gesetzt \cite[]{ScalaFutures}. 
+Besitzt das Future den Status \emph{working} so ist die Prozedur, welche den Wert des Futures berechnet, noch nicht beendet. Sobald die Berechnung beendet ist, wird der Wert des Futures auf das Resultat der Berechnung gesetzt. Der Status wird in diesem Schritt auf \emph{completed} gesetzt und der Wert wird in ein unveränderbares Objekt (en. immutable) verwandelt. Tritt bei der Berechnung ein Fehler, auf wird der Status auf \emph{Error} gesetzt \cite[]{ScalaFutures}. 
 
-Möchte eine Applikation auf den Wert eines Futures zugreifen so gibt es zwei Möglichkeiten wie sich die Applikation verhalten kann. Wenn der Status des Futures \emph{completed} ist, so wird der Wert der Variable direkt zurückgeliefert. Ist die Berechnung noch nicht beendet so wird der Thread des Aufrufers so lange blockiert, bis der Wert verfügbar ist \cite[]{ScalaFutures}.
+Möchte eine Applikation auf den Wert eines Futures zugreifen, so gibt es zwei Möglichkeiten,wie sich die Applikation verhalten kann. Wenn der Status des Futures \emph{completed} ist, so wird der Wert der Variable direkt zurückgeliefert. Ist die Berechnung noch nicht beendet, so wird der Thread des Aufrufers so lange blockiert, bis der Wert verfügbar ist \cite[]{ScalaFutures}.
 
-In manchen Implementierungen kann man Callback Funktionen hinterlegen, welche aufgerufen werden sobald der Wert eine Futures verfügbar ist. 
+In manchen Implementierungen kann man Callback Funktionen hinterlegen, welche aufgerufen werden, sobald der Wert eine Futures verfügbar ist. 
 
 \subsubsection{Schlüsse}
-Futures bieten die Möglichkeit Prozeduren im Hintergrund berechnen zu lassen und diese bei Bedarf mit dem Thread des Aufrufers zu synchronisieren. Wenn man ein Future als isolierten Container betrachtet, welcher keinen Status mit der Applikation teilt, dann sind Futures Thread-Safe und können keine Race Conditions beinhalten. Deadlocks sind bei Futures nicht auszuschließen, wenn zum Beispiel Future A auf den Wert von Future B wartet und umgekehrt.
+Futures bieten die Möglichkeit, Prozeduren im Hintergrund berechnen zu lassen und diese bei Bedarf mit dem Thread des Aufrufers zu synchronisieren. Wenn man ein Future als isolierten Container betrachtet, welcher keinen Status mit der Applikation teilt, dann sind Futures Thread-Safe und können keine Race Conditions beinhalten. Deadlocks sind bei Futures nicht auszuschließen, wenn zum Beispiel Future A auf den Wert von Future B wartet und umgekehrt.
 
 \subsubsection{Implementierungen}
 Futures können entweder als Sprachkonzept direkt in die Programmiersprache eingebettet sein oder als Bibliothek zu einer bestehenden Programmiersprache hinzugefügt werden. Die folgende Liste gibt einen Aufschluss über Programmiersprachen, die Futures direkt in die Programmiersprache integriert haben \footnote{Diese Lister erhebt keinen Anspruch auf Vollständigkeit. Eine erweiterte Liste findet sich auf \url{http://en.wikipedia.org/wiki/Futures_and_promises#List_of_implementation}}:
