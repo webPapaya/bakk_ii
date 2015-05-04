@@ -310,7 +310,7 @@ In Listing \ref{listing:em_download} wird die Klasse \emph{ImageDownloader} dekl
 
 Die Methode \emph{callback} wird aufgerufen, sobald der HTTP Request erfolgreich abgeschlossen ist. Die \emph{errback} wird aufgerufen sobald ein Fehler aufgetreten ist.
 
-EventMachine besitzt eine \emph{Eventloop welche nur angehalten wird, wenn sie durch einen äußeren Einfluss gestoppt wird. Ein solcher Einfluss kann entstehen, wenn der Ruby Prozesses beendet wird oder wenn die Methode \emph{stop} auf das globale \emph{EM} Objekt aufgerufen wird. Für das Herunterladen mehrerer Bilder ist dieses Verhalten jedoch nicht gewünscht. Aus diesem Grund gibt es die \emph{ImageManager} Klasse, welche die einzelnen \emph{ImageDownloader} Objekte erstellt und die \emph{EventLoop} stoppt, sobald alle Bilder heruntergeladen wurden. 
+EventMachine besitzt eine \emph{Eventloop} welche nur angehalten wird, wenn sie durch einen äußeren Einfluss gestoppt wird. Ein solcher Einfluss kann entstehen, wenn der Ruby Prozesses beendet wird oder wenn die Methode \emph{stop} auf das globale \emph{EM} Objekt aufgerufen wird. Für das Herunterladen mehrerer Bilder ist dieses Verhalten jedoch nicht gewünscht. Aus diesem Grund gibt es die \emph{ImageManager} Klasse, welche die einzelnen \emph{ImageDownloader} Objekte erstellt und die \emph{EventLoop} stoppt, sobald alle Bilder heruntergeladen wurden. 
 
 \subsection{Zusammenfassung}
 
