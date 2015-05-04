@@ -3,12 +3,10 @@
 
 Die vorliegende Arbeit beschäftigt sich mit dem Thema \emph{Concurrency in Ruby}. Dabei werden grundlegende Konzepte und Design Patterns für gleichzeitige und parallele Programmierung vorgestellt. Im weiteren Verlauf dieser Arbeit werden diese Konzepte in der Programmiersprache Ruby umgesetzt. 
 
-Die Programmiersprache Ruby ist nicht für ihre Concurrency Features bekannt. Der Mythos, dass parallele Programmierung in Ruby unmöglich ist hält sich bis heute. Lediglich eine Implementierung, Ruby MRI, besitzt einen GIL (Global Interpreter Lock) der tatsächlich das parallele Ausführen von Ruby unterbindet. Dennoch kann auch Ruby MRI mehrere Operationen gleichzeitig behandeln. Andere Interpreter wie Rubinius oder JRuby besitzen aufgrund deren Architektur keinen GIL und können daher Code problemlos parallel ausführen. In dieser Arbeit werden Anhand von 
+Die Programmiersprache Ruby ist nicht für ihre Concurrency Features bekannt. Der Mythos, dass parallele Programmierung in Ruby unmöglich ist, hält sich bis heute. Lediglich eine Implementierung, Ruby MRI, besitzt einen GIL (Global Interpreter Lock) der tatsächlich das parallele Ausführen von Ruby unterbindet. Dennoch kann auch Ruby MRI mehrere Operationen gleichzeitig behandeln. Andere Interpreter wie Rubinius oder JRuby besitzen aufgrund deren Architektur keinen GIL und können daher Code problemlos parallel ausführen. An Hand von Beispielen werden Probleme erklärt, welche im Zusammenhang mit Concurrency und paralleler Programmierung entstehen. 
 
-An Hand von Beispielen werden Probleme erklärt welche im Zusammenhang mit Concurrency und paralleler Programmierung entstehen. 
+Zu Beginn dieser Arbeit wird ein genereller Überblick über das Thema Concurrency und parallele Programmierung  gegeben. Im zweiten Teil werden Design Pattern vorgestellt, welche mit dem Thema der Arbeit in Zusammenhang stehen. 
 
-Zu Beginn dieser Arbeit wird ein genereller Überblick über das Thema Concurrency und parallele Programmierung  gegeben. Im zweiten Teil werden Design Pattern vorgestellt welche mit dem Thema der Arbeit in Zusammenhang stehen. 
-
-Im dritten Teil dieser Arbeit wird speziell auf die Programmiersprache Ruby und deren Concurrency Model eingegangen. Im letzten Teil werden Referenzimplementierungen der Design Patterns in Ruby vorgestellt. Ein persönliches Fazit schließt diese Arbeit ab.
+Im dritten Teil dieser Arbeit wird speziell auf die Programmiersprache Ruby und deren Concurrency Modell eingegangen. Im letzten Teil werden Referenzimplementierungen der Design Patterns in Ruby vorgestellt. Ein persönliches Fazit schließt diese Arbeit ab.
 
 \paragraph{Schlagwörter: Ruby, Concurrency, Reactor Pattern, Futures, Actor Based Model, Rubinius, Ruby, MRI}

@@ -56,7 +56,7 @@ Bei blockierenden oder nicht blockierenden Prozeduren geht es um die Art und Wei
   \label{figure:synchron_blocking}
 \end{figure}
 
-\subsubsection{Das blockierenden und synchrone Modell}
+\subsubsection{Das blockierende und synchrone Modell}
 Im blockierenden und synchronen Modell werden einzelne Operationen sequentiell abgearbeitet. Wird in diesem Modell eine blockierende Operation ausgeführt, wird die Prozedur so lange pausiert bis die blockierende Prozedur abgeschlossen ist. Danach wird der Programmfluss weiter ausgeführt bis die nächste blockierende Operation auftritt oder das Programm terminiert.
 
 Ruft ein Prozess eine blockierende I/O Operation auf so wird der Prozess so lange pausiert, bis das Betriebssystem die Daten vollständig gelesen hat. Durch das blockierende und synchrone Modell wird die CPU nicht optimal ausgelastet. Da blockierende I/O Operationen den Prozess pausieren. In vielen Applikationen spielen I/O Operationen nur eine nebensächliche Rolle. Für Applikationen, welche viele I/O Operationen benötigen ist dieses Modell nur bedingt geeignet \cite[p. 48]{Erb2012}.
