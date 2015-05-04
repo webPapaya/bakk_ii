@@ -68,7 +68,8 @@ In Listing \ref{lst:thread_example} sieht man ein Ruby Script, welches einen Thr
 
 \begin{lstlisting}[
   language=Ruby,
-  caption=Adaptiert von \cite{Sto2013}
+  label={listing:ruby_threads_amount}
+  caption={Anzahl der Threads pro Ruby Prozess. Adaptiert von \cite{Sto2013}}
 ]
   100.times do
     Thread.new { sleep }
@@ -78,11 +79,9 @@ In Listing \ref{lst:thread_example} sieht man ein Ruby Script, welches einen Thr
   sleep
 \end{lstlisting} 
 
-Dieses Programm erstellt 100 Threads und versetzt diese in einen schlafenden Zustand. Nachdem alle Threads erstellt wurden, wird der Main Thread in einen schlafenden Zustand versetzt. Führt man die Ausgabe auf der Konsole in einem weiteren Terminal Fenster aus erkennt man dass CRuby 101 Threads verwendet. CRuby besitzt in diesem Fall einen Main Thread und weitere Threads.
+In Listing \ref{listing:ruby_threads_amount} werden 100 Threads erstellt und in einen schlafenden Zustand versetzt. Nachdem alle Threads erstellt wurden, wird der Main Thread in einen schlafenden Zustand versetzt. Führt man die Ausgabe auf der Konsole in einem weiteren Terminal Fenster aus erkennt man dass CRuby 101 Threads verwendet. CRuby besitzt in diesem Fall einen Main Thread und 100 weitere Threads.
 
 Vergleicht man die unterschiedlichen Implementierungen von Ruby so kann man erkennen dass Rubinius, und JRuby weitere Threads zum Verwalten von Ruby verwendet. Dabei richtet sich die Anzahl an Threads zum verwalten von Ruby an die Anzahl der Kerne in der CPU.
-
-
 
 \subsubsection{Race Condition in Ruby}
 
