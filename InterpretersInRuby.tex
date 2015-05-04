@@ -183,11 +183,11 @@ In Listing \ref{listing:ruby_race_condition} wird eine globale Variable \emph{\$
 Auch wenn ein solches Beispiel wie in Listing \ref{listing:ruby_race_condition} in der Praxis eher selten auftritt, zeigt es dass auch mit einem GIL Race Conditions entstehen können.
 
 \subsubsection{Mutex}
-Ein Mutex ist ein Sprachkonstrukt, die das parallele Ausführen von einzelnen Teilen einer Applikation verhindert. Der Name Mutex kommt aus dem Englischen \emph{Mutual Exception}. Das bedeutet, dass eine Sektion welche von einem Mutex umschlossen wurde nur von einem Thread zum selben Zeitpunk ausgeführt werden darf \cite[p. 81]{Sto2013}. 
+Ein Mutex ist ein Sprachkonstrukt, das das parallele Ausführen von einzelnen Teilen einer Applikation verhindert. Der Name Mutex kommt aus dem Englischen \emph{Mutual Exception}. Das bedeutet, dass eine Sektion welche von einem Mutex umschlossen wurde nur von einem Thread zum selben Zeitpunk ausgeführt werden darf \cite[p. 81]{Sto2013}. 
 
 In Ruby kann ein Mutex mit der Klasse Mutex\footnote{Dokumentation unter:  \url{http://ruby-doc.org/core-2.2.0/Mutex.html}} implementiert werden.
 
-In Listing \ref{listing:ruby_race_condition} ist ein Algorithmus zu sehen, welcher eine Race Condition hervorruft. Um in diesem Listing ein richtiges Ergebnis zu erlangen muss der Zugriff auf die globale Variable \emph{\$counter} verwaltet werden. In Listing \ref{listing:race condition mutex} wird der Zugriff auf die Variable \emph{counter} durch einen Mutex geschützt. 
+In Listing \ref{listing:ruby_race_condition} ist ein Algorithmus zu sehen, welcher eine Race Condition in CRuby, Rubinius und JRuby hervorruft. Um in diesem Listing ein richtiges Ergebnis zu erlangen muss der Zugriff auf die globale Variable \emph{\$counter} verwaltet werden. In Listing \ref{listing:race condition mutex} wird der Zugriff auf die Variable \emph{counter} durch einen Mutex geschützt. 
 
 \begin{lstlisting}[
   language=Ruby,
@@ -214,7 +214,7 @@ end.each(&:join)
 puts $counter # 10000
 \end{lstlisting}
 
-Durch das Sperren des kritischen Codes durch einen Mutex in Listing \ref{listing:race condition mutex} wird eine Race Condition verhindert. Die Funktionsweise des Mutex ist wie folgt \cite[p. 83-84]{Sto2013}: 
+Durch das Sperren des kritischen Codes durch einen Mutex in Listing \ref{listing:race condition mutex}, wird eine Race Condition verhindert. Die Funktionsweise des Mutex ist wie folgt \cite[p. 83-84]{Sto2013}: 
 
 \begin{itemize}
   \item Trifft der erste Thread auf den Mutex nimmt er diesen und sperrt die Ausführung des Codes und wird zum Besitzer des Mutex.
@@ -225,10 +225,6 @@ Durch das Sperren des kritischen Codes durch einen Mutex in Listing \ref{listing
 Das Sperren und Freigeben des Mutex wird direkt vom Betriebssystem verwaltet. Dabei gibt das Betriebssystem die Garantie dafür, dass kein anderer Thread diese Operation zur exakt selben Zeit ausführt. Durch die Verwendung von Mutex in Listing \ref{listing:race condition mutex} wird die Operation \emph{Thread-Safe}.
 
 Auf Linux kann ein Lock durch die C Funktion pthread\_mutex\_init(3) \footnote{\url{http://linux.die.net/man/3/pthread_mutex_init}} erstellt werden. Diese Funktion wird auch in MRI verwendet, um einen Mutex zu erstellen \cite[p. 83-84]{Sto2013}. \footnote{Die Zeile in der ein Mutex in MRI erstellt wird: \url{https://github.com/ruby/ruby/blob/40564c1e3b187fc593001ae80522e577dbb8eb50/thread_pthread.c#L242}}.
-
-\subsection{Conditional Variables in Ruby}
-
-\emph{Conditional Variables} bieten die Möglichkeit anderen Threads zu signalisieren, wenn ein gewisses Ereignis eintritt. Angenommen in einer Applikation wartet ein Thread B auf das Ergebnis einer lang andauernden Berechnung in einem anderen Thread A. Thread B könnte in einem gewissen Interval kontinuierlich Thread A fragen, ob dieser mit der Berechnung schon fertig ist. Das Pollen nach einem Ergebnis birgt jedoch einen gewissen Overhead mit sich. Durch Conditional Variables kann das Pollen verhindert werden, indem Thread B in einem schlafenden Zustand versetzt wird. Nachdem Thread A die Berechnung abgeschlossen hat kann er Thread B über eine Conditional Variable signalisieren, das dass Resultat verfügbar ist \cite[p. 748]{tan09} \cite[p. 100]{Sto2013}. 
 
 \subsection{Thread-Safe Datenstrukturen in Ruby}
 Die Klasse \emph{Queue} ist die einzige Datenstruktur welche in Ruby Thread-Safe ist. Die Klasse Queue besitzt einen blockierenden Charakter, was bedeutet, dass die Funktionen \emph{push} und \emph{pop} von einem Mutex umschlossen sind. Durch die Synchronisierung der Daten durch einen Mutex können keine korrupten Daten entstehen, da immer nur ein Thread die Operationen, welche vom Mutex umschlossen sind, ausführen darf. \cite[p. 110]{Sto2013}. 
@@ -264,6 +260,10 @@ Eine Möglichkeit mit Immutable Datenstrukturen zu arbeiten bietet die Bibliothe
 \end{lstlisting}
 
 In Listing \ref{listing:immuteable hamster} wird ein Hamster Vector Objekt erstellt, welches mit einem Array vergleichbar ist. In Zeile 3 wird ein neues \emph{Hamster.vector} Objekt erzeugt und mit den Werten \emph{1,2 ,3} initialisiert. Wird auf das neu initialisierte Objekt die Methode \emph{push} aufgerufen, so kopiert die Methode das alte Objekt fügt das neue Element \emph{4} der Kopie hinzu und friert dieses ein. Nachdem aus dem Objekt ein Immutable Objekt geworden ist wird dieses Objekt zurückgegeben. In Zeile 8 wird die Objekt ID beider Objekte überprüft und daraus resultiert, dass beide Objekte auf eine unterschiedliche Stelle im Speicher zeigen. 
+
+\subsection{Conditional Variables in Ruby}
+
+\emph{Conditional Variables} bieten die Möglichkeit anderen Threads zu signalisieren, wenn ein gewisses Ereignis eintritt. Angenommen in einer Applikation wartet ein Thread B auf das Ergebnis einer lang andauernden Berechnung in einem anderen Thread A. Thread B könnte in einem gewissen Interval kontinuierlich Thread A fragen, ob dieser mit der Berechnung schon fertig ist. Das Pollen nach einem Ergebnis birgt jedoch einen gewissen Overhead mit sich. Durch Conditional Variables kann das Pollen verhindert werden, indem Thread B in einem schlafenden Zustand versetzt wird. Nachdem Thread A die Berechnung abgeschlossen hat kann er Thread B über eine Conditional Variable signalisieren, das dass Resultat verfügbar ist \cite[p. 748]{tan09} \cite[p. 100]{Sto2013}. 
 
 \subsection{Zusammenfassung}
 In diesem Kapitel wurden das Thema Concurrency in Ruby besprochen. Ruby besitzt unterschiedliche Implementierungen, welche sich im Bezug auf Concurrency unterscheiden. Ruby MRI besitzt einen GIL der das parallele Ausführen von Ruby Code verhindert. Der GIL ist intern mit einem Mutex implementiert der den ganzen Ruby Code umspannt. Der GIL wird verwendet um Race Conditions zu minimieren. Dennoch können Race Conditions nicht ausgeschlossen werden. JRuby und Rubinius benötigen keinen GIL da diese Implementierungen ein feingradiges Netz aus Mutex besitzen. Alle drei Implementierungen verwenden native Threads des Betriebssystems. 
