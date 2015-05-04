@@ -3,7 +3,7 @@
 
 Die Programmiersprache Ruby ist nicht für ihre Concurrency Features bekannt. In webbasierten Applikationen ist dieses Thema wichtiger denn je. Die Themen Event Loop, Asynchronous vs. Synchronous und Blocking vs. Non-Blocking sind Stichwörter, welche sich in vielen web-relevanten Artikeln und Blog Posts finden. Wenige dieser Artikel befassen sich jedoch mit den Grundlagen und Hintergründen dieser Begriffe. 
 
-Mit der Bewegung Applikationen vom Desktop in die Cloud zu bringen, müssen sich immer mehr EntwicklerInnen von Backend Applikationen Gedanken über Performance und Skalierbarkeit ihrer Applikation machen. BenutzerInnen von Web-Applikationen erwarten sich geringste Latenzen selbst bei der Ausführung von komplexen Berechnungen auf dem Server. I/O lastige Operationen, die viele Dateien lesen und schreiben müssen, verschwenden wertvolle Server Ressourcen, wenn das Lesen und Schreiben sequentiell vorgenommen wird. In vielen Fällen wird  die Performance für den/die EndbenutzerIn verringert
+Mit der Bewegung Applikationen vom Desktop in die Cloud zu bringen, müssen sich immer mehr EntwicklerInnen von Backend Applikationen Gedanken über Performance und Skalierbarkeit ihrer Applikation machen. BenutzerInnen von Web-Applikationen erwarten sich geringste Latenzen selbst bei der Ausführung von komplexen Berechnungen auf dem Server. I/O lastige Operationen, die viele Dateien lesen und schreiben müssen, verschwenden wertvolle Server Ressourcen, wenn das Lesen und Schreiben sequentiell vorgenommen wird. 
 
 \subsection{Concurrency}
 \label{section:concurrency}
@@ -18,7 +18,7 @@ Werden zwei Prozeduren gleichzeitig behandelt, gibt es mehrere Möglichkeiten, w
   \item Sie werden parallel abgearbeitet
 \end{enumerate}
 
-Alle drei Punkte können als Concurrency bezeichnet werden. Jedoch ist der letzte Punkt eine besondere Form von Concurrency, welcher sich Parallelismus nennt. 
+Alle drei Punkte können als Concurrency bezeichnet werden. Jedoch ist der letzte Punkt eine spezielle Form von Concurrency, welcher sich Parallelismus nennt. 
 
 \subsection{Parallelismus}
 
@@ -26,7 +26,7 @@ Parallelismus ist eine eine spezielle Form von Concurrency bei der zwei oder meh
 
 \subsection{Concurrency vs. Parallelismus}
 
-In der Literatur finden sich unterschiedliche Definitionen über Parallelismus und Concurrency. Oft wird zwischen diesen beiden Definitionen jedoch nicht unterschieden. 
+In der Literatur finden sich unterschiedliche Definitionen über Parallelismus und Concurrency. Oft wird zwischen diesen beiden Definitionen nicht unterschieden. 
 
 Rob Pike ein Software Entwickler von GoLang\footnote{Konferenz Talk von Rob Pike: \url{https://vimeo.com/49718712}}, versteht unter dem Begriff Concurrency das Behandeln von mehreren Dingen zu einem Zeitpunkt. Unter dem Begriff Parallelismus versteht er den Vorgang, wenn zwei Prozeduren zur exakt selben Zeit auf der CPU ausgeführt werden \cite[]{Pik2013}.
 
@@ -41,7 +41,7 @@ Prozeduren können in folgenden Umgebungen ausgeführt werden \cite[p. 14]{Erb20
 
 Da ein Single Core Prozessor nur eine Operation zu einem Zeitpunkt ausführen kann, ist es nicht möglich Parallelität darauf zu erreichen. Auf allen anderen genannten Umgebungen ist Parallelität möglich. 
 
-In dieser Arbeit wird von Concurrency gesprochen, wenn mehrere Operationen zur selben Zeit behandelt werden.  Von Parallelität wird gesprochen, wenn zwei Prozeduren zum exakt selben Zeitpunkt einen Fortschritt machen. Eine Form des Parallelismus ist virtueller Parallelismus, bei dem Threads abwechselnd ausgeführt werden.
+In dieser Arbeit wird von Concurrency gesprochen, wenn mehrere Operationen zur selben Zeit behandelt werden.  Von Parallelität wird gesprochen, wenn zwei Prozeduren zum exakt selben Zeitpunkt einen Fortschritt machen. Eine Form des Parallelismus ist virtueller Parallelismus, bei dem Threads abwechselnd ausgeführt werden. Virtueller Parallelismus wird in dieser Arbeit nicht behandelt. 
 
 \subsection{Performance}
 
@@ -73,6 +73,6 @@ Das gleichzeitige Behandeln von mehreren Operationen kann zu einer gesteigerten 
 
 Eine Aufgabe eines Betriebssystems ist die Verwaltung von Ein- und Ausgabe (I/O = Input/Output). I/O Operationen bezeichnet die Kommunikation zwischen der Hardware und dem Betriebssystem. Das Lesen einer Datei von einer Festplatte ist eine typische I/O Operation, welche vom Betriebssystem verwaltet wird. Eine Applikation, welche eine Datei von der Festplatte lesen möchte, kann einen \emph{Read-Aufruf} tätigen, welcher dem Betriebssystem mitteilt, dass es eine Datei lesen möchte \cite[p. 292]{tan09}.
 
-I/O Operationen sind im Vergleich zur CPU relativ langsam. In der Zeit, in der die Datei eingelesen wird, steht die gesamte Applikation still und kann keine weiteren Aufgaben ausführen. Müssen für eine Applikation viele Dateien von einer Festplatte oder über das Netzwerk eingelesen werden, kann dies zu einer erheblichen Erhöhung der Antwortzeit einer Applikation führen \cite[p. 307]{tan09}. 
+I/O Operationen sind im Vergleich zur CPU relativ langsam. In der Zeit, in der die Datei eingelesen wird, steht die gesamte Applikation still und kann keine weiteren Aufgaben ausführen. Müssen für eine Applikation viele Dateien von einer Festplatte oder über das Netzwerk eingelesen werden, kann dies zu einer erheblichen Erhöhung der Antwortzeit führen \cite[p. 307]{tan09}. 
 
-Um dies zu verdeutlichen, gibt die nachfolgende Tabelle eine Übersicht über die benötigte Zeit einzelner I/O Operationen. In Spalte 3 wird die Zeit einer I/O Operation mit 1 Milliarde multipliziert, um einen Vergleich mit alltäglichen Dingen des Lebens zu geben. Diese Tabelle beruht auf keinen wissenschaftlichen Quellen und sollte lediglich als Referenz für die Dauer von I/O Operationen dienen. Die Tabelle beruht auf den Zahlen von Peter Norvig \cite[]{Nor98}, einem Director of Research bei Google, und den Vergleichen des Github Benutzers hellerbarde \footnote{Die Tabelle befindet sich im Anhang. (Abbildung \ref{figure:syncron_vs_async}). Latency numbers every programmer should know: \url{https://gist.github.com/hellerbarde/2843375}}.
+Um dies zu verdeutlichen, gibt die Tabelle im Anhang eine Übersicht über die benötigte Zeit einzelner I/O Operationen. In Spalte 3 wird die Zeit einer I/O Operation mit 1 Milliarde multipliziert, um einen Vergleich mit alltäglichen Dingen des Lebens zu geben. Diese Tabelle beruht auf keinen wissenschaftlichen Quellen und sollte lediglich als Referenz für die Dauer von I/O Operationen dienen. Die Tabelle beruht auf den Zahlen von Peter Norvig \cite[]{Nor98}, einem Director of Research bei Google, und den Vergleichen des Github Benutzers hellerbarde \footnote{Die Tabelle befindet sich im Anhang. (Abbildung \ref{figure:syncron_vs_async}). Latency numbers every programmer should know: \url{https://gist.github.com/hellerbarde/2843375}}.

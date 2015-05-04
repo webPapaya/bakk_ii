@@ -12,7 +12,7 @@ Ein Future ist ein Objekt, welches einen Wert repräsentiert, der in der Zukunft
   \item completed
   \item error
 \end{itemize}  
-Besitzt das Future den Status \emph{working} so ist die Prozedur, welche den Wert des Futures berechnet, noch nicht beendet. Sobald die Berechnung beendet ist, wird der Wert des Futures auf das Resultat der Berechnung gesetzt. Der Status wird in diesem Schritt auf \emph{completed} gesetzt und der Wert wird in ein unveränderbares Objekt (en. immutable) verwandelt. Tritt bei der Berechnung ein Fehler, auf wird der Status auf \emph{Error} gesetzt \cite[]{ScalaFutures}. 
+Besitzt das Future den Status \emph{working} so ist die Prozedur, welche den Wert des Futures berechnet, noch nicht beendet. Sobald die Berechnung beendet ist, wird der Wert des Futures auf das Resultat der Berechnung gesetzt. Der Status wird in diesem Schritt auf \emph{completed} gesetzt und der Wert wird in ein unveränderbares Objekt (eng. immutable) verwandelt. Tritt bei der Berechnung ein Fehler, auf wird der Status auf \emph{Error} gesetzt \cite[]{ScalaFutures}. 
 
 Möchte eine Applikation auf den Wert eines Futures zugreifen, so gibt es zwei Möglichkeiten,wie sich die Applikation verhalten kann. Wenn der Status des Futures \emph{completed} ist, so wird der Wert der Variable direkt zurückgeliefert. Ist die Berechnung noch nicht beendet, so wird der Thread des Aufrufers so lange blockiert, bis der Wert verfügbar ist \cite[]{ScalaFutures}.
 

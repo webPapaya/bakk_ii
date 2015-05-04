@@ -1,6 +1,6 @@
 \section{Prozesse und Threads}
 
-Viele moderne Betriebssysteme können mehrere Operationen gleichzeitig ausführen. Das Ausführen eines Browsers und eines Textverarbeitungsprogramm stellt für moderne Betriebssysteme keine Schwierigkeit mehr dar. Dieses Kapitel gibt einen Überblick über grundlegende Konzepte von concurrency und paralleler Programmierung. Um einen tieferen Einblick in dieses Thema zu erlangen, bietet sich das Kapitel 2 aus dem Buch Moderne Betriebssysteme von Andrew S. Tannenbaum an. 
+Viele moderne Betriebssysteme können mehrere Operationen gleichzeitig ausführen. Das Ausführen eines Browsers und eines Textverarbeitungsprogramm stellt für moderne Betriebssysteme keine Schwierigkeit dar. Dieses Kapitel gibt einen Überblick über grundlegende Konzepte von concurrency und paralleler Programmierung. Um einen tieferen Einblick in dieses Thema zu erlangen, bietet sich das Kapitel 2 aus dem Buch Moderne Betriebssysteme von Andrew S. Tannenbaum an. 
 
 \subsection{Prozess}
 \label{section: Prozess}
@@ -18,7 +18,7 @@ Bei der Realisierung von Threads kann man prinzipiell zwischen drei Arten unters
   \item Hybride Realisierung von Threads
 \end{itemize}
 
-Werden Threads im Benutzerraum implementiert so weiß das Betriebssystem nichts von den einzelnen Threads. Das Erstellen, Löschen und Scheduling dieser Threads muss von der Laufzeitumgebung  behandelt werden. Die Laufzeitumgebung muss dafür eine eigene Thread Tabelle verwalten. Die Implementierung von Threads im Benutzeradressraum wird auch als Green-Threads bezeichnet. Green Threads können schneller sein als Betriebssystem Threads, da sie einen für den Anwendungsfall angepassten Scheduling Algorithmus besitzen können \cite[p. 106-108]{tan09}.
+Werden Threads im Benutzerraum implementiert so weiß das Betriebssystem nichts von den einzelnen Threads. Das Erstellen, Löschen und Scheduling dieser Threads muss von der Laufzeitumgebung  behandelt werden. Die Laufzeitumgebung muss dafür eine eigene Thread Tabelle verwalten. Die Implementierung von Threads im Benutzeradressraum wird auch als Green-Threads bezeichnet. Green-Threads können schneller sein als Betriebssystem Threads, da sie einen für den Anwendungsfall angepassten Scheduling Algorithmus besitzen können \cite[p. 106-108]{tan09}.
 
 Bei Kernel-Threads werden die Threads direkt vom Kernel des Betriebssystems verwaltet. Um einen neuen Thread zu erstellen oder zerstören, muss ein Systemaufruf getätigt werden. Möchte ein Prozess einen Systemaufruf tätigen, übergibt der Prozess die Kontrolle an das Betriebssystem. Der Wechsel vom Benutzeradressraum in den Kernel verursacht eine kurze Unterbrechung. Aus diesem Grund zerstören manche Betriebssysteme Threads nicht wirklich, sondern reaktivieren diese sobald ein neuer Thread erstellt werden soll \cite[p. 59, p. 106-108]{tan09}.
 
@@ -92,6 +92,6 @@ Das Problem bei dieser Implementierung ist die Möglichkeit eines Deadlocks. Die
 Das \emph{Dining Philosophers Problem} kann auf die Informatik angewendet werden bei dem mehrere parallel laufende Threads oder Prozesse auf geteilte Ressourcen warten, welche vom jeweils anderen Thread blockiert wird.
 
 \subsection{Zusammenfassung}
-In diesem Kapitel wurden die Grundlagen von Prozessen und Threads näher erläutert. Prozesse können als Programme bezeichnet werden, welche sich in Ausführung befinden. Dabei kann ein Betriebssystem mehrere Programme gleichzeitig ausführen. Dabei besitzen Prozesse einen linearen Programmfluss. Prozesse besitzen einen linearen Programmfluss, der durch Threads aufgebrochen werden kann.
+In diesem Kapitel wurden die Grundlagen von Prozessen und Threads näher erläutert. Prozesse können als Programme bezeichnet werden, welche sich in Ausführung befinden. Dabei kann ein Betriebssystem mehrere Prozesse gleichzeitig ausführen. Dabei besitzen Prozesse einen linearen Programmfluss. Prozesse besitzen einen linearen Programmfluss, der durch Threads aufgebrochen werden kann.
 
 Durch den nichtlinearen Programmierfluss und das gleichzeitige Behandeln mehrere Prozeduren im selben Adressraum können Race Conditions auftreten. Dabei werden Speicherstellen unerwartet verändert und führen zu korrupten Daten. Deadlocks sind ein weiteres Problem, welche im Zusammenhang von paralleler Programmierung auftreten kann. Diese treten auf, wenn mehrere Prozeduren auf eine Ressource warten, welche vom jeweils anderen für sich alleine beansprucht wird. Dadurch macht keiner der Prozeduren einen Fortschritt.

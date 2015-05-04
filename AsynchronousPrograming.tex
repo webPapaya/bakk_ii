@@ -6,13 +6,13 @@ In der Literatur wird zwischen den Begriffen Blocking und synchroner Programmier
 
 \emph{CPU Bound Operations}: Sind Prozeduren die primär CPU Ressourcen benötigen. In vielen Fällen sind das Algorithmen, welche mit Daten aus dem Arbeitsspeicher arbeiten. Das Berechnen der Fibonacci Zahl oder das Rendern eines HTML Templates sind CPU intensive Aufgabe und fallen dadurch in die Kategorie der CPU Bound Operations \cite[p. 70]{Erb2012}. 
 
-\emph{I/O Bound Operations}: Sind Prozeduren, welche grundsätzlich von blockierenden I/O Operationen abhängig sind. Beim Lesen solcher Dateien wird der Prozess in einen schlafenden Zustand versetzt bis die Datei fertig in den Arbeitsspeicher gelesen wurde. Das Lesen einer Datei aus dem Dateisystem oder eine Datenbankabfrage fällt in die Kategorie der I/O Bound Operations \cite[p. 70]{Erb2012}. 
+\emph{I/O Bound Operations}: Sind Prozeduren, welche grundsätzlich von blockierenden I/O Operationen abhängig sind. Beim Lesen solcher Dateien wird der Prozess in einen schlafenden Zustand versetzt, bis die Datei fertig in den Arbeitsspeicher gelesen wurde. Das Lesen einer Datei aus dem Dateisystem oder eine Datenbankabfrage fällt in die Kategorie der I/O Bound Operations \cite[p. 70]{Erb2012}. 
 
 \subsection{Synchron vs. Asynchron}
 
 Im \emph{synchronen} Modell werden Aufgaben sequentiell abgearbeitet. Dabei wird eine Initialaufgabe aufgerufen und von dieser ausgehend, alle anderen Aufgaben sequentiell abgearbeitet. Ist eine Aufgabe fertig wird die nächste Aufgabe ausgeführt. Sind alle Aufgaben abgeschlossen, so terminiert das Programm. Der Programmverlauf ist im synchronen Modell linear und kann in einer Zeitachse wie in Abbildung \ref{figure:syncron_vs_async_} dargestellt werden \cite[]{Pet2015}.
 
-Im asynchronen Modell wird der lineare Programmfluss um einen zweiten Fluss erweitert. Eine asynchrone Funktion erstellt einen neuen Programmfluss, der nach einer gewissen Zeit mit dem Hauptfluss wieder synchronisiert wird. Dabei ist der genaue Zeitpunkt der Synchronisation nicht definiert. 
+Im asynchronen Modell wird der lineare Programmfluss um einen zweiten Fluss erweitert. Eine asynchrone Funktion erstellt einen neuen Programmfluss, der nach einer gewissen Zeit mit dem Hauptfluss wieder synchronisiert wird. Dabei ist der genaue Zeitpunkt der Synchronisation nicht definiert \cite[]{Pet2015}. 
 
 \begin{figure}[!htb]
   \centering
@@ -29,7 +29,7 @@ Abbildung \ref{figure:syncron_vs_async_} zeigt den Unterschied zwischen synchron
 
 Unter einer blockierenden Prozedur versteht man eine Prozedur, welche den Aufrufer so lange blockiert bis diese abgeschlossen ist. Generell besitzt jeder Aufruf einer Prozedur in einem linearen Programmfluss einen blockierenden Charakter. Der Aufrufer einer Funktion wartet so lange bis die Funktion wieder zum Aufrufer zurückkehrt. 
 
-Unter einer nicht blockierenden (en. non-blocking) Prozedur versteht man eine Prozedur, die nicht auf den Abschluss einer Operation wartet, sondern sofort zum Aufrufer zurückspringt. Dabei werden mehrere Aufgaben gleichzeitig behandelt.  
+Unter einer nicht blockierenden (eng. non-blocking) Prozedur versteht man eine Prozedur, die nicht auf den Abschluss einer Operation wartet, sondern sofort zum Aufrufer zurückspringt. Dabei werden mehrere Aufgaben gleichzeitig behandelt.  
 
 In vielen Fällen wird eine blockierende Funktion im Zusammenhang mit I/O Operation gebracht, da diese Operationen nicht an die CPU eines Prozesses gebunden sind. Angenommen eine Prozedur soll eine Datei von der Festplatte einlesen. Die Prozedur fordert dazu das Betriebssystem auf die Datei einzulesen. Dabei kann die Datei entweder blockierend oder nicht blockierend eingelesen werden. Wird die blockierende Variante gewählt, so wird die Prozedur so lange pausiert bis die Datei vollständig eingelesen wurde. Wird die nicht blockierende Variante gewählt, so fordert die Prozedur das Betriebssystem auf die Datei zu lesen. Während das Betriebssystem die Datei noch einliest, wird die Prozedur fortgesetzt. Bei nicht blockierenden Prozeduren ist die aufrufende Prozedur selbst für die Synchronisation der Daten verantwortlich \cite[p. 47]{Erb2012}.
 
@@ -45,7 +45,7 @@ In vielen Fällen wird eine blockierende Funktion im Zusammenhang mit I/O Operat
 Abbildung \ref{figure:blocking_vs_non_blocking} zeigt die Unterschiede zwischen blockierenden und nicht blockierenden Prozeduren.
 
 \subsection{Kombinationen}
-Bei blockierenden oder nicht blockierenden Prozeduren geht es um die Art und Weise wie eine Prozedur auf dem Rechner ausgeführt wird. Bei synchronen oder asynchronen Prozeduren geht es um den Programmfluss. Kombiniert man die vorher genannten Konzepte so ergeben sich daraus vier unterschiedliche Kombinationen \cite[p. 48]{Erb2012}. Abbildung \ref{figure:synchron_blocking} zeigt alle 4 Kombinationen auf einer Zeitachse. 
+Bei blockierenden oder nicht blockierenden Prozeduren geht es um die Art und Weise wie eine Prozedur auf dem Rechner ausgeführt wird. Bei synchronen oder asynchronen Prozeduren geht es um den Programmfluss. Kombiniert man die vorher genannten Konzepte so ergeben sich daraus vier unterschiedliche Kombinationen \cite[p. 48]{Erb2012}. Abbildung \ref{figure:synchron_blocking} zeigt alle vier Kombinationen auf einer Zeitachse. 
 
 \begin{figure}[!htb]
   \centering
@@ -82,7 +82,7 @@ Im asynchronen nicht blockierenden Modell kann die Applikation die Aufgabe 1 aus
 
 \subsection{Zusammenfassung}
 
-In diesem Kapitel wurden die Grundlagen für asynchrone Programmierung besprochen. Dabei kann man asynchrone Programme in vier unterschiedliche Kategorien einteilen:
+In diesem Kapitel wurden die Grundlagen für asynchrone Programmierung besprochen. Dabei kann man Programme grundsätzlich in vier unterschiedliche Kategorien einteilen:
 
 \begin{itemize}
   \item blockierend und synchron
