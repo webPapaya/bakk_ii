@@ -26,14 +26,14 @@ Neben der Referenzimplementierung des ISO Standards gibt es noch weitere Impleme
 \end{itemize}
 
 \subsubsection{CRuby}
-CRuby oder MRI (Matz's Ruby Interpreter) ist die Referenzimplementierung des Standards ISO/IEC 30170. CRuby wurde 1995 veröffentlicht und wird aktuell auf Github als OpenSource Projekt entwickelt. CRuby ist in C geschrieben und besitzt eine API mit der Extensions in C geschrieben werden können. Viele Bibliotheken wie Nokogiri (XML Parser) oder Psych (YAML Parser) verwenden in C geschriebene Bibliotheken. Nachdem viele dieser Bibliotheken nicht Thread-Safe sind, besitzt CRuby einen GIL (Global Interpreter Lock), welcher das parallele Ausführen von Ruby Code verhindert. I/O Operationen können jedoch gleichzeitig behandelt werden. Seit Version 1.9 verwendet Ruby Native Threads des Betriebssystems. CRuby ist die am meisten verwendete Ruby Implementierung und ist für mehrere Plattformen verfügbar \footnote{Eine List an unterstützten Plattformen findet sich unter: \url{http://en.wikipedia.org/wiki/Ruby_MRI#Operating_systems}}.
+CRuby oder MRI (Matz's Ruby Interpreter) ist die Referenzimplementierung des Standards ISO/IEC 30170. CRuby wurde 1995 veröffentlicht und wird aktuell auf Github als OpenSource Projekt entwickelt. CRuby ist in C geschrieben und besitzt eine API mit der Extensions in C geschrieben werden können. Viele Bibliotheken wie Nokogiri (XML Parser) oder Psych (YAML Parser) verwenden in C geschriebene Bibliotheken. Nachdem viele dieser Bibliotheken nicht Thread-Safe sind, besitzt CRuby einen GIL (Global Interpreter Lock), welcher das parallele Ausführen von Ruby Code verhindert. I/O Operationen können jedoch gleichzeitig behandelt werden. Seit Version 1.9 verwendet Ruby Native Threads des Betriebssystems. CRuby ist die am meisten verwendete Ruby Implementierung und ist für mehrere Plattformen verfügbar \footnote{Eine List an unterstützten Plattformen findet sich unter: \url{http://en.wikipedia.org/wiki/Ruby_MRI#Operating_systems}. Referenz: \url{https://github.com/ruby/ruby} Accessed: 27.03.2015}.
 
 \subsubsection{JRuby}
 
-JRuby ist eine Implementierung von Ruby, welche auf der JVM (Java Virtual Maschine) läuft. JRuby besitzt keine Möglichkeit auf C Extensions zurückzugreifen, jedoch besitzt die Implementierung eine API für Java Bibliotheken. JRuby probiert so gut wie möglich die Kompatibilität mit CRuby zu behalten, jedoch gibt es einige Punkte bei denen beide Implementierungen voneinander abweichen \footnote{Eine Liste von Unterschieden findet sich auf: \url{https://github.com/jruby/jruby/wiki/DifferencesBetweenMriAndJruby}}. 
+JRuby ist eine Implementierung von Ruby, welche auf der JVM (Java Virtual Maschine) läuft. JRuby besitzt keine Möglichkeit auf C Extensions zurückzugreifen, jedoch besitzt die Implementierung eine API für Java Bibliotheken. JRuby probiert so gut wie möglich die Kompatibilität mit CRuby zu behalten, jedoch gibt es einige Punkte bei denen beide Implementierungen voneinander abweichen \footnote{Eine Liste von Unterschieden findet sich auf: \url{https://github.com/jruby/jruby/wiki/DifferencesBetweenMriAndJruby}, Referenz: \url{https://github.com/jruby/jruby} Accessed: 27.03.2015}. 
 
 \subsubsection{Rubinius}
-Rubinius ist eine Implementierung von Ruby, welche sich auf Concurrency spezialisiert hat. Dabei verwendet es native Threads, um Ruby Code auf allen CPUs laufen zu lassen. Rubinius wird nicht interpretiert, sondern besitzt einen JIT (Just In Time) Compiler. Dabei wird der Ruby Code in Bytecode transformiert, welcher von der Rubinius Virtual Maschine ausgeführt wird. Die virtuelle Maschine ist in C und C++ geschrieben und verwendet Teile wie den Ruby Parser von MRI. Die VM ist in C++ geschrieben und die Sprachfeatures von Ruby sind selbst in Ruby geschrieben. Dadurch ist Rubinius eine Implementierung die zu einem großen Teil in Ruby implementiert ist. 
+Rubinius ist eine Implementierung von Ruby, welche sich auf Concurrency spezialisiert hat. Dabei verwendet es native Threads, um Ruby Code auf allen CPUs laufen zu lassen. Rubinius wird nicht interpretiert, sondern besitzt einen JIT (Just In Time) Compiler. Dabei wird der Ruby Code in Bytecode transformiert, welcher von der Rubinius Virtual Maschine ausgeführt wird. Die virtuelle Maschine ist in C und C++ geschrieben und verwendet Teile wie den Ruby Parser von MRI. Die VM ist in C++ geschrieben und die Sprachfeatures von Ruby sind selbst in Ruby geschrieben. Dadurch ist Rubinius eine Implementierung die zu einem großen Teil in Ruby implementiert ist. \footnote{Referenz: \url{https://github.com/rubinius/rubinius} Accessed: 27.03.2015}. 
 
 \subsection{Concurrency in Ruby}
 Der Standard von Ruby beinhaltet einige Features um concurrency und paralleles Programmieren zu ermöglichen.
@@ -69,7 +69,7 @@ In Listing \ref{lst:thread_example} sieht man ein Ruby Script, welches einen Thr
 \begin{lstlisting}[
   language=Ruby,
   label={listing:ruby_threads_amount},
-  caption={Anzahl der Threads pro Ruby Prozess. Adaptiert von \cite{Sto2013}}
+  caption={Anzahl der Threads pro Ruby Prozess. Adaptiert von \cite[]{Sto2013}}
 ]
   100.times do
     Thread.new { sleep }
@@ -81,7 +81,7 @@ In Listing \ref{lst:thread_example} sieht man ein Ruby Script, welches einen Thr
 
 In Listing \ref{listing:ruby_threads_amount} werden 100 Threads erstellt und in einen schlafenden Zustand versetzt. Nachdem alle Threads erstellt wurden, wird der Main Thread in einen schlafenden Zustand versetzt. Führt man die Ausgabe auf der Konsole in einem weiteren Terminal Fenster aus, erkennt man dass CRuby 101 Threads verwendet. CRuby besitzt in diesem Fall einen Main Thread und 100 weitere Threads.
 
-Vergleicht man die unterschiedlichen Implementierungen von Ruby, so kann man erkennen, dass Rubinius, und JRuby weitere Threads zum Verwalten von Ruby verwendet. Dabei richtet sich die Anzahl an Threads zum Verwalten von Ruby an die Anzahl der Kerne in der CPU.
+Vergleicht man die unterschiedlichen Implementierungen von Ruby, so kann man erkennen, dass Rubinius, und JRuby weitere Threads zum Verwalten von Ruby verwendet. Dabei richtet sich die Anzahl an Threads zum Verwalten von Ruby an die Anzahl der Kerne in der CPU. \cite[]{Sto2013}
 
 \subsubsection{Race Condition in Ruby}
 
