@@ -3,22 +3,22 @@
 
 Die Programmiersprache Ruby ist nicht für ihre Concurrency Features bekannt. In webbasierten Applikationen ist dieses Thema wichtiger denn je. Die Themen Event Loop, Asynchronous vs. Synchronous und Blocking vs. Non-Blocking sind Stichwörter, welche sich in vielen web-relevanten Artikeln und Blog Posts finden. Wenige dieser Artikel befassen sich jedoch mit den Grundlagen und Hintergründen dieser Begriffe. 
 
-Mit der Bewegung Applikationen vom Desktop in die Cloud zu bringen, müssen sich immer mehr EntwicklerInnen von Backend Applikationen über Performance und Skalierbarkeit ihrer Applikation Gedanken machen. BenutzerInnen von Web-Applikationen erwarten sich geringste Latenzen selbst bei der Ausführung von komplexen Berechnungen auf dem Server. I/O lastige Operationen, welche viele Dateien lesen und schreiben müssen, verschwenden wertvolle Server Ressourcen wenn das Lesen und Schreiben sequentiell vorgenommen wird. In vielen Fällen wird  die Performance für den EndbenutzerIn verringert
+Mit der Bewegung Applikationen vom Desktop in die Cloud zu bringen, müssen sich immer mehr EntwicklerInnen von Backend Applikationen Gedanken über Performance und Skalierbarkeit ihrer Applikation machen. BenutzerInnen von Web-Applikationen erwarten sich geringste Latenzen selbst bei der Ausführung von komplexen Berechnungen auf dem Server. I/O lastige Operationen, die viele Dateien lesen und schreiben müssen, verschwenden wertvolle Server Ressourcen, wenn das Lesen und Schreiben sequentiell vorgenommen wird. In vielen Fällen wird  die Performance für den/die EndbenutzerIn verringert
 
 \subsection{Concurrency}
 \label{section:concurrency}
 
-Concurrency laut Robert Pike ist das Behandeln von mehreren Operationen zur selben Zeit. Wenn zwei oder mehrere Prozeduren gleichzeitig behandelt werden, bedeutet das nicht zwangsweise, dass diese parallel ausgeführt werden. Durch Concurrency erhält eine Applikationen einen nicht linearen Programmfluss, da mehrere Operationen zur selben Zeit ausgeführt werden \cite[]{Pik2013}.
+Concurrency ist laut Robert Pike das Behandeln von mehreren Operationen zur selben Zeit. Wenn zwei oder mehrere Prozeduren gleichzeitig behandelt werden, bedeutet das nicht zwangsweise, dass diese parallel ausgeführt werden. Durch Concurrency erhält eine Applikationen einen nicht linearen Programmfluss, da mehrere Operationen zur selben Zeit ausgeführt werden \cite[]{Pik2013}.
 
-Werden zwei Prozeduren gleichzeitig behandelt so gibt es mehrere Möglichkeiten wie diese auf der CPU ausgeführt werden \cite[p. 14]{Erb2012}:
+Werden zwei Prozeduren gleichzeitig behandelt, gibt es mehrere Möglichkeiten, wie diese auf der CPU ausgeführt werden \cite[p. 14]{Erb2012}:
 
-\begin{itemize}
+\begin{enumerate}
   \item Sie werden sequenziell abgearbeitet (die Reihenfolge spielt dabei keine Rolle)
   \item Sie werden abwechselnd abgearbeitet
   \item Sie werden parallel abgearbeitet
-\end{itemize}
+\end{enumerate}
 
-Alle drei Punkte können als Concurrency bezeichnet werden. Jedoch ist Punkt drei eine besondere Form von Concurrency, welcher sich Parallelismus nennt. 
+Alle drei Punkte können als Concurrency bezeichnet werden. Jedoch ist der letzte Punkt eine besondere Form von Concurrency, welcher sich Parallelismus nennt. 
 
 \subsection{Parallelismus}
 
@@ -28,7 +28,7 @@ Parallelismus ist eine eine spezielle Form von Concurrency bei der zwei oder meh
 
 In der Literatur finden sich unterschiedliche Definitionen über Parallelismus und Concurrency. Oft wird zwischen diesen beiden Definitionen jedoch nicht unterschieden. 
 
-Rob Pike ein Software Entwickler von GoLang\footnote{Konferenz Talk von Rob Pike: \url{https://vimeo.com/49718712}}, versteht unter dem Begriff Concurrency das Behandeln von mehreren Dingen zu einem Zeitpunkt. Unter dem Begriff Parallelismus versteht er, wenn zwei Prozeduren zur exakt selben Zeit auf der CPU ausgeführt werden \cite[]{Pik2013}.
+Rob Pike ein Software Entwickler von GoLang\footnote{Konferenz Talk von Rob Pike: \url{https://vimeo.com/49718712}}, versteht unter dem Begriff Concurrency das Behandeln von mehreren Dingen zu einem Zeitpunkt. Unter dem Begriff Parallelismus versteht er den Vorgang, wenn zwei Prozeduren zur exakt selben Zeit auf der CPU ausgeführt werden \cite[]{Pik2013}.
 
 Prozeduren können in folgenden Umgebungen ausgeführt werden \cite[p. 14]{Erb2012}:
 
@@ -41,38 +41,38 @@ Prozeduren können in folgenden Umgebungen ausgeführt werden \cite[p. 14]{Erb20
 
 Da ein Single Core Prozessor nur eine Operation zu einem Zeitpunkt ausführen kann, ist es nicht möglich Parallelität darauf zu erreichen. Auf allen anderen genannten Umgebungen ist Parallelität möglich. 
 
-In dieser Arbeit wird von Concurrency gesprochen, wenn mehrere Operationen zur selben Zeit behandelt werden.  Von Parallelität wird gesprochen, wenn zwei Prozeduren zum exakt selben Zeitpunkt einen Fortschritt machen. Virtueller Parallelismus bei dem Threads durch Time-Slicing abwechselnd ausgeführt werden, wird in dieser Thesis nicht als Parallelismus bezeichnet.
+In dieser Arbeit wird von Concurrency gesprochen, wenn mehrere Operationen zur selben Zeit behandelt werden.  Von Parallelität wird gesprochen, wenn zwei Prozeduren zum exakt selben Zeitpunkt einen Fortschritt machen. Eine Form des Parallelismus ist virtueller Parallelismus, bei dem Threads abwechselnd ausgeführt werden.
 
 \subsection{Performance}
 
-In der Literatur findet sich keine klare Definition von Performance. Man kann sagen, dass eine Applikation performant ist, wenn diese eine Aufgabe für einen/einer EndbenutzerIn ausführt, ohne dass die Applikation eine unangemessene Wartezeit hervorruft. Daraus kann man schließen, dass Performance im Auge des/der BetrachtersIn liegt. Neben dieser vagen Definition von Performance gibt es einzelne Kategorien an denen man die Performance von zwei Applikationen vergleichen kann \cite[p. 2]{Mol2009}. 
+In der Literatur findet sich keine klare Definition von Performance. Man kann sagen, dass eine Applikation performant ist, wenn diese eine Aufgabe für einen/eine EndbenutzerIn ausführt, ohne dass die Applikation eine unangemessene Wartezeit hervorruft. Daraus kann man schließen, dass Performance im Auge des/der BetrachtersIn liegt. Neben dieser vagen Definition von Performance gibt es einzelne Kategorien, an denen man die Performance von zwei Applikationen vergleichen kann \cite[p. 2]{Mol2009}. 
 
 \subsubsection{Service orientierte Performance}
 
-\emph{Service orientierte Performance} beschreibt wie gut eine Applikation eine Aufgabe für den/die EndbenutzerIn zur Verfügung stellt \cite[p. 2]{Mol2009}:
+\emph{Service orientierte Performance} beschreibt, wie gut eine Applikation eine Aufgabe für den/die EndbenutzerIn zur Verfügung stellt \cite[p. 2]{Mol2009}:
 
 \begin{itemize}
-  \item {Verfügbarkeit:} beschreibt die Menge an Zeit in welcher eine Applikation für den/die EndbenutzerIn verfügbar ist.
-  \item \emph{Antwortzeit:} beschreibt die Zeit die eine Applikation benötigt um eine Anfrage zu beantworten.
+  \item {Verfügbarkeit:} beschreibt die Menge an Zeit, in welcher eine Applikation für den/die EndbenutzerIn verfügbar ist.
+  \item \emph{Antwortzeit:} beschreibt die Zeit, die eine Applikation benötigt, um eine Anfrage zu beantworten.
 \end{itemize}
 
 
 \subsubsection{Effektiv orientierte Performance}
 
-\emph{Effektiv orientierte Performance} beschreibt wie gut eine Applikation die Ausführungsumgebung verwendet \cite[p. 2]{Mol2009}:
+\emph{Effektiv orientierte Performance} beschreibt, wie gut eine Applikation die Ausführungsumgebung verwendet \cite[p. 2]{Mol2009}:
 
 \begin{itemize}
   \item \emph{Durchsatz:} Wie viele Anfragen eine Applikation in einer Zeiteinheit verarbeiten kann.
   \item \emph{Ressourcenverbrauch:} Wie viel Prozent der verfügbaren Ressourcen eine Applikation verwendet.
 \end{itemize}
 
-Das gleichzeitige Behandeln von mehreren Operationen kann zu einer gesteigerten Performance führen. Dabei können mehrere Prozeduren zur selben Zeit behandelt werden, was zu einer besseren Verteilung des Ressourcenverbrauch führen kann. Durch die Verbesserung der \emph{Effekt orientierten Performance} kann die Antwortzeit für den/die EndbenutzerIn verringert werden.
+Das gleichzeitige Behandeln von mehreren Operationen kann zu einer gesteigerten Performance führen. Dabei können mehrere Prozeduren zur selben Zeit behandelt werden, was zu einer besseren Verteilung des Ressourcenverbrauchs führen kann. Durch die Verbesserung der \emph{Effekt orientierten Performance} kann die Antwortzeit für den/die EndbenutzerIn verringert werden.
 
 \subsection{I/O Operations}
 \label{subsection: io_operationen}
 
-Eine Aufgabe eines Betriebssystems ist die Verwaltung von Ein- und Ausgabe (I/O = Input/Output). I/O Operationen bezeichnet die Kommunikation zwischen der Hardware und dem Betriebssystem. Das Lesen einer Datei von einer Festplatte ist eine typische I/O Operation, welche vom Betriebssystem verwaltet wird. Eine Applikation, welche eine Datei von der Festplatte lesen möchte kann einen \emph{read} Aufruf tätigen, welcher dem Betriebssystem mitteilt, dass es eine Datei lesen möchte \cite[p. 292]{tan09}.
+Eine Aufgabe eines Betriebssystems ist die Verwaltung von Ein- und Ausgabe (I/O = Input/Output). I/O Operationen bezeichnet die Kommunikation zwischen der Hardware und dem Betriebssystem. Das Lesen einer Datei von einer Festplatte ist eine typische I/O Operation, welche vom Betriebssystem verwaltet wird. Eine Applikation, welche eine Datei von der Festplatte lesen möchte, kann einen \emph{Read-Aufruf} tätigen, welcher dem Betriebssystem mitteilt, dass es eine Datei lesen möchte \cite[p. 292]{tan09}.
 
-I/O Operationen sind im Vergleich zur CPU relativ langsam. In der Zeit in der die Datei eingelesen wird steht die gesamte Applikation still und kann keine weiteren Aufgaben ausführen. Müssen für eine Applikation viele Dateien von einer Festplatte oder über das Netzwerk eingelesen werden, kann dies zu einer erheblichen Erhöhung der Antwortzeit einer Applikation führen \cite[p. 307]{tan09}. 
+I/O Operationen sind im Vergleich zur CPU relativ langsam. In der Zeit, in der die Datei eingelesen wird, steht die gesamte Applikation still und kann keine weiteren Aufgaben ausführen. Müssen für eine Applikation viele Dateien von einer Festplatte oder über das Netzwerk eingelesen werden, kann dies zu einer erheblichen Erhöhung der Antwortzeit einer Applikation führen \cite[p. 307]{tan09}. 
 
-Um dies zu verdeutlichen gibt die nachfolgende Tabelle eine Übersicht über die benötigte Zeit einzelner I/O Operationen. In Spalte 3 wird die Zeit einer I/O Operation mit 1 Milliarde multipliziert um einen Vergleich mit alltäglichen Dingen des Lebens zu geben. Diese Tabelle beruht auf keinen wissenschaftlichen Quellen und sollte lediglich als Referenz für die Dauer von I/O Operationen dienen. Die Tabelle beruht auf den Zahlen von Peter Norvig \cite[]{Nor98} einem Director of Research bei Google und den Vergleichen des Github Benutzers hellerbarde \footnote{Die Tabelle befindet sich im Anhang. Latency numbers every programmer should know: \url{https://gist.github.com/hellerbarde/2843375}}.
+Um dies zu verdeutlichen, gibt die nachfolgende Tabelle eine Übersicht über die benötigte Zeit einzelner I/O Operationen. In Spalte 3 wird die Zeit einer I/O Operation mit 1 Milliarde multipliziert, um einen Vergleich mit alltäglichen Dingen des Lebens zu geben. Diese Tabelle beruht auf keinen wissenschaftlichen Quellen und sollte lediglich als Referenz für die Dauer von I/O Operationen dienen. Die Tabelle beruht auf den Zahlen von Peter Norvig \cite[]{Nor98}, einem Director of Research bei Google, und den Vergleichen des Github Benutzers hellerbarde \footnote{Die Tabelle befindet sich im Anhang. Latency numbers every programmer should know: \url{https://gist.github.com/hellerbarde/2843375}}.
