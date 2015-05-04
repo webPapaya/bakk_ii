@@ -25,7 +25,6 @@ Neben der Referenzimplementierung des ISO Standards gibt es noch weitere Impleme
   \item Ruby Enterprise Edition
 \end{itemize}
 
-
 \subsubsection{CRuby}
 CRuby oder MRI (Matz's Ruby Interpreter) ist die Referenzimplementierung des Standards ISO/IEC 30170. CRuby wurde 1995 veröffentlicht und wird aktuell auf Github als OpenSource Projekt entwickelt. CRuby ist in C geschrieben und besitzt eine API mit der Extensions in C geschrieben werden können. Viele Bibliotheken wie Nokogiri (XML Parser) oder Psych (YAML Parser) verwenden in C geschriebene Bibliotheken. Nachdem viele dieser Bibliotheken nicht Thread-Safe sind, besitzt CRuby einen GIL (Global Interpreter Lock), welcher das parallele Ausführen von Ruby Code verhindert. I/O Operationen können jedoch gleichzeitig behandelt werden. Seit Version 1.9 verwendet Ruby Native Threads des Betriebssystems. CRuby ist die am meisten verwendete Ruby Implementierung und ist für mehrere Plattformen verfügbar \footnote{Eine List an unterstützten Plattformen findet sich unter: \url{http://en.wikipedia.org/wiki/Ruby_MRI#Operating_systems}}.
 
@@ -234,7 +233,7 @@ puts calculator.counter
 
 \end{lstlisting}
 
-In Listing \ref{listing:race condition} werden zwei Threads verwendet um eine Zahl \emph{200 000} mal zu erhöhen. Das Resultat der Berechnung sollte \emph{200 000} sein. Wird die Funktion mit MRI ausgeführt erhält man den Wert \emph{200 000}. Wird das Programm mit Rubinius oder JRuby ausgeführt erhält man den Wert \emph{200 000} nicht. Führt man das Programm mit Ruby MRI aus entsteht durch den GIL keine Race Condition, da jeweils nur ein Thread einen fortschritt machen darf.
+In Listing \ref{listing:ruby_race_condition} werden zwei Threads verwendet um eine Zahl \emph{200 000} mal zu erhöhen. Das Resultat der Berechnung sollte \emph{200 000} sein. Wird die Funktion mit MRI ausgeführt erhält man den Wert \emph{200 000}. Wird das Programm mit Rubinius oder JRuby ausgeführt erhält man den Wert \emph{200 000} nicht. Führt man das Programm mit Ruby MRI aus entsteht durch den GIL keine Race Condition, da jeweils nur ein Thread einen fortschritt machen darf.
 
 Auch wenn der GIL Race Conditions verhindert, sind diese nicht ausgeschlossen. Listing \ref{listing:race condition mri} zeigt eine Race Condition in Ruby MRI \footnote{Adaptiert von \url{http://stackoverflow.com/a/18576777/3002239}}:
 
