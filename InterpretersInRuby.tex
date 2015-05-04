@@ -160,14 +160,22 @@ Array und Hash sind weder in MRI noch in Rubinius und JRuby Thread Safe. Der Gru
 
 Immutable Objekte sind Objekte, welche nicht verändert werden können sobald sie erstellt wurden. Daraus resultiert, dass diese Objekte Thread Safe sind. Ein Array, kann mit der Methode \emph{freeze} zu einem immutable Objekt konvertiert werden. Dadurch kann dem Array jedoch kein Element angefügt oder entfernt werden. Eine Modifikation des Arrays wird dadurch ebenfalls unterbunden. Listing \ref{listing:immutable} zeigt ein immutable Array welches, nicht modifiziert werden kann. 
 
-\begin{lstlisting}[language=Ruby,label={listing:immutable}]
+\begin{lstlisting}[
+  language=Ruby,
+  label={listing:immutable},
+  caption={Unveränderbare Datenstrukturen in Ruby}
+]
   array = [1,2,3].freeze
   array.push 4 # can't modify frozen Array (RuntimeError)
 \end{lstlisting}
 
 Eine Möglichkeit mit Immutable Datenstrukturen zu arbeiten bietet die Bibliothek \emph{hamster} \footnote{Dokumentation unter: \url{https://github.com/hamstergem/hamster}}. Dieses kopiert bei jeder Veränderung die originale Datenstruktur und verändert die Kopie. Nach der Veränderung wird das Objekt eingefroren und an den Aufrufer zurückgegeben. Dadurch bleibt die originale Struktur Datenstruktur immer gleich und es können keine Race Conditions auftreten. 
 
-\begin{lstlisting}[language=Ruby,label={listing:immuteable hamster}]
+\begin{lstlisting}[
+  language=Ruby,
+  label={listing:immuteable hamster},
+  caption={Unveränderbare Datenstrukturen mit der Bibliothek Hamster}
+]
   require "hamster/vector"
 
   vector_original     = Hamster.vector 1, 2, 3
@@ -187,7 +195,11 @@ Der GIL (Global Interpreter Lock) ist ein globaler Lock um das parallele Ausfüh
 
 Die Funktionsweise des MRI kann man anhand der Berechnung der Fibonacci Zahl \footnote{Weiter Informationen zur Fibonacci Zahlenfolge finden Sie auf \url{http://de.wikipedia.org/wiki/Fibonacci-Folge}} erklären. Bei diesem Beispiel sollten 4 mal die Fibonacci Zahlen bis 35 berechnet werden:
 
-\begin{lstlisting}[language=Ruby,label={listing:fibonacci},caption={Adaptiert von \cite{Sto2013}, Seite 21}]
+\begin{lstlisting}[
+  language=Ruby,
+  label={listing:fibonacci},
+  caption={Berechnung der Fibonacci Zahlen. Adaptiert von \cite{Sto2013}, Seite 21}
+]
 class Fibonacci
   def initialize(threads, number)
     @threads = Array.new(threads) { Thread.new {calculate number}}
@@ -225,9 +237,9 @@ Angenommen man besitzt folgendes Programm \footnote{Idee von: \url{http://stacko
 
 \begin{lstlisting}[
   language=Ruby,
-  label={listing:race condition}
+  label={listing:race condition},
+  caption={Race Condition in Ruby}
 ]
-
 class Calculator
   attr_accessor :counter
   def initialize
